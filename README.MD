@@ -15,7 +15,7 @@ npm install discogs-marketplace-api-nodejs
 In Typescript
 
 ```ts
-import DiscogsMarketplace, { EType, IOutputSuccess, IOutputError } from 'discogs-markeplace-api-test'
+import DiscogsMarketplace, { EType, IOutputSuccess, IOutputError } from 'discogs-marketplace-api-nodejs'
 
 DiscogsMarketplace.search({ searchType: EType.ARTIST, searchValue: 244819 })
     .then((res: IOutputSuccess) => {
@@ -29,8 +29,8 @@ DiscogsMarketplace.search({ searchType: EType.ARTIST, searchValue: 244819 })
 In plain Javascript
 
 ```js
-const DiscogsMarketplace = require('discogs-markeplace-api-test').default
-const { EType } = require('discogs-markeplace-api-test')
+const DiscogsMarketplace = require('discogs-marketplace-api-nodejs').default
+const { EType } = require('discogs-marketplace-api-nodejs')
 
 DiscogsMarketplace.search({ searchType: EType.ARTIST, searchValue: 244819 })
     .then(res => {
@@ -141,8 +141,8 @@ interface IOutputSuccess {
 interface IItem {
     title: string | null | undefined,
     url: string | null | undefined,
-    labels: (string | null)[] | null | undefined,
-    catnos: string[] | null | undefined,
+    labels: (string | null)[] | undefined,
+    catnos: (string | null)[] | undefined,
     imageUrl: string | null | undefined,
     description: string | null | undefined,
     isAcceptingOffer: boolean | null | undefined,
