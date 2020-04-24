@@ -1,0 +1,40 @@
+{
+  "name": "discogs-marketplace-api-nodejs",
+  "version": "0.0.1",
+  "description": "Another (better ?) NodeJs library to fetch data from Discog's marketplace",
+  "keywords": [
+    "discogs",
+    "marketplace",
+    "api"
+  ],
+  "homepage": "https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS"
+  },
+  "bugs:": "https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/issues",
+  "author": "KirianCaumes",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon -r tsconfig-paths/register ./lib/index.ts",
+    "build": "ttsc",
+    "test": "echo \"No test specified\"",
+    "prepublish": "npm run build"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@types/jsdom": "^16.2.1",
+    "@types/user-agents": "^1.0.0",
+    "axios": "^0.19.2",
+    "jsdom": "^16.2.2",
+    "ts-node": "^8.9.0",
+    "tsconfig-paths": "^3.9.0",
+    "user-agents": "^1.0.559"
+  },
+  "devDependencies": {
+    "ttypescript": "^1.5.10",
+    "typescript": "^3.8.3",
+    "typescript-transform-paths": "^1.1.14"
+  }
+}
