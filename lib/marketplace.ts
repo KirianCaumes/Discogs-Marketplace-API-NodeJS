@@ -25,17 +25,18 @@ import UserAgent from 'user-agents'
 export default class Marketplace implements IInput {
     searchType: EType
     searchValue: string | number | undefined
-    currency: ECurrency | undefined
-    genre: EGenre | undefined
-    style: EStyle[]
-    format: EFormat[]
-    formatDescription: EFormatDescription[]
-    mediaCondition: EMediaCondition[]
-    year: number | undefined
-    years: IYears | undefined
+    currency?: ECurrency
+    genre?: EGenre
+    style?: EStyle[]
+    format?: EFormat[]
+    formatDescription?: EFormatDescription[]
+    mediaCondition?: EMediaCondition[]
+    year?: number
+    years?: IYears
     isAudioSample: boolean
     isMakeAnOfferOnly: boolean
-    from: EFrom | undefined
+    from?: EFrom
+    seller?: string
     sort: ESort
     limit: TLimit
     page: number
@@ -60,6 +61,7 @@ export default class Marketplace implements IInput {
         isAudioSample = false,
         isMakeAnOfferOnly = false,
         from = undefined,
+        seller = undefined,
         sort = ESort.LISTED_NEWEST,
         limit = 25,
         page = 1,
@@ -78,6 +80,7 @@ export default class Marketplace implements IInput {
         this.isAudioSample = isAudioSample
         this.isMakeAnOfferOnly = isMakeAnOfferOnly
         this.from = from
+        this.seller = seller
         this.sort = sort
         this.limit = limit
         this.page = page
@@ -92,7 +95,7 @@ export default class Marketplace implements IInput {
      */
     public async search(): Promise<IOutputSuccess> {
         return await new Promise((resolve, reject) => {
-            axios.get(`https://www.discogs.com/${this.lang}/sell/${this.searchType === EType.USER ? 'mywants' : 'list'}`, {
+            axios.get(this._generateUrl(), {
                 /** @type {any} Custom headers */
                 headers: {
                     'User-Agent': (new UserAgent()).toString()
@@ -102,10 +105,10 @@ export default class Marketplace implements IInput {
                     [this.searchType]: this.searchValue,
                     currency: this.currency,
                     genre: this.genre,
-                    style: this.style.length ? this.style : undefined,
-                    format: this.format.length ? this.format[0] : undefined,
-                    format_desc: this.formatDescription.length ? this.formatDescription[0] : undefined,
-                    condition: this.mediaCondition.length ? this.mediaCondition[0] : undefined,
+                    style: this.style?.length ? this.style : undefined,
+                    format: this.format?.length ? this.format?.[0] : undefined,
+                    format_desc: this.formatDescription?.length ? this.formatDescription[0] : undefined,
+                    condition: this.mediaCondition?.length ? this.mediaCondition[0] : undefined,
                     year: this.year && !this.years ? this.year : undefined,
                     year1: this.years?.min && !this.year ? this.years?.min : undefined,
                     year2: this.years?.max && !this.year ? this.years?.max : undefined,
@@ -117,30 +120,11 @@ export default class Marketplace implements IInput {
                     sort: this.sort,
                 },
                 /** @function paramsSerializer Need to handle manually discogs params */
-                paramsSerializer: (params: any): string => {
-                    let param: string[] = []
-                    for (let key in params) {
-                        if (params[key] === undefined || params[key] === null) {
-                            continue
-                        } else if (Array.isArray(params[key])) {
-                            /** Custom handle for array */
-                            if (params[key].length > 0) {
-                                for (const el of params[key]) {
-                                    param.push(key + "=" + encodeURIComponent(el))
-                                }
-                            } else {
-                                continue
-                            }
-                        } else {
-                            param.push(key + "=" + encodeURIComponent(params[key]))
-                        }
-                    }
-                    return param.join('&')
-                }
+                paramsSerializer: this._serializeParams
             })
                 .then((res: AxiosResponse) => {
                     const { data, request } = res
-                    this.url = `${request.res.req.agent.protocol}//${request.res.connection._host}${request.path}`
+                    this.url = `${request.res?.req?.agent?.protocol ?? request.options?.protocol}//${request.res?.connection?._host ?? request.options?.hostname}${request.path}`
                     let result: IOutputSuccess = this._format((new JSDOM(data)).window.document)
                     resolve(result)
                 })
@@ -153,6 +137,48 @@ export default class Marketplace implements IInput {
                     reject(result)
                 })
         })
+    }
+
+    /**
+     * Generate URL to be parsed
+     * @returns {string} Url
+     */
+    private _generateUrl(): string {
+        let url = `https://www.discogs.com/${this.lang}/`
+        if (this.seller) {
+            url += `seller/${this.seller}/`
+            url += this.searchType === EType.USER ? `mywants` : 'profile'
+        } else {
+            url += `sell/`
+            url += this.searchType === EType.USER ? `mywants` : `list`
+        }
+        return url
+    }
+
+    /**
+     * Serialize params URL
+     * @param {any} params Object of GET parameters
+     * @returns {string} Url
+     */
+    private _serializeParams(params: any): string {
+        let param: string[] = []
+        for (let key in params) {
+            if (params[key] === undefined || params[key] === null) {
+                continue
+            } else if (Array.isArray(params[key])) {
+                /** Custom handle for array */
+                if (params[key].length > 0) {
+                    for (const el of params[key]) {
+                        param.push(key + "=" + encodeURIComponent(el))
+                    }
+                } else {
+                    continue
+                }
+            } else {
+                param.push(key + "=" + encodeURIComponent(params[key]))
+            }
+        }
+        return param.join('&')
     }
 
     /**

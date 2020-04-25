@@ -11,7 +11,7 @@ export enum EType {
     /** 
      * Master's id search
      */
-    MASTER = "master",
+    MASTER = "master_id",
     /** 
      * Release's id search
      */

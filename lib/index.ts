@@ -8,7 +8,7 @@ import { EMediaCondition } from '@enum/EMediaCondition'
 import { ESort } from '@enum/ESort'
 import { EStyle } from '@enum/EStyle'
 import { EType } from '@enum/EType'
-import {IDiscogsMarketplace} from '@interface/IDiscogsMarketplace'
+import { IDiscogsMarketplace } from '@interface/IDiscogsMarketplace'
 import IInput from '@interface/IInput'
 import IItem from '@interface/IItem'
 import IOutputError from '@interface/IOutputError'
@@ -36,6 +36,7 @@ export {
     IOutputError,
     IOutputSuccess,
     IYears,
+    IDiscogsMarketplace
 }
 
 export {

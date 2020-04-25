@@ -1,21 +1,40 @@
 {
-    "compilerOptions": {
-      "target": "es6",
-      "module": "commonjs",
-      "declaration": true,
-      "outDir": "./dist",
-      "strict": true,
-      "esModuleInterop": true,
-      "baseUrl": "./",
-      "paths": {
-        "@enum/*": [ "lib/enum/*" ],
-        "@interface/*": [ "lib/interface/*" ],
-        "@type/*": [ "lib/type/*" ],
-        "@main/*": [ "lib/*" ],
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "@enum/*": [
+        "lib/enum/*"
+      ],
+      "@interface/*": [
+        "lib/interface/*"
+      ],
+      "@type/*": [
+        "lib/type/*"
+      ],
+      "@main/*": [
+        "lib/*"
+      ],
+    },
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths"
       },
-      "plugins": [
-        { "transform": "typescript-transform-paths" },
-        { "transform": "typescript-transform-paths", "afterDeclarations": true }
-      ]
-    }
-  }
+      {
+        "transform": "typescript-transform-paths",
+        "afterDeclarations": true
+      }
+    ]
+  },
+  "include": [
+    "lib/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

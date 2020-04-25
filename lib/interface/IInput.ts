@@ -26,11 +26,11 @@ export default interface IInput {
     /**
      * Currency
      */
-    currency?: ECurrency | undefined,
+    currency?: ECurrency,
     /**
      * Genre
      */
-    genre?: EGenre | undefined,
+    genre?: EGenre,
     /**
      * Styles
      */
@@ -50,11 +50,11 @@ export default interface IInput {
     /**
      * Year (Do not use it with years)
      */
-    year?: number | undefined,
+    year?: number,
     /**
      * Interval of years (Do not use it with year)
      */
-    years?: IYears | undefined,
+    years?: IYears,
     /**
      * Is audio sample ?
      */
@@ -66,7 +66,11 @@ export default interface IInput {
     /**
      * Expedition country
      */
-    from?: EFrom | undefined,
+    from?: EFrom,
+    /**
+     * Seller name
+     */
+    seller?: string,
     /**
      * Sort elements by
      */
