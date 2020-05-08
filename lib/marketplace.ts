@@ -129,13 +129,13 @@ export default class Marketplace implements IInput {
                     sort: this.sort,
                 })}`
             )
-            
+
             /** Get url */
             this.url = page.url()
 
             /** Get HTML */
             const bodyHTML = await page.evaluate(() => document.body.innerHTML)
-            
+
             /** Close browser */
             await browser.close()
 
@@ -247,7 +247,7 @@ export default class Marketplace implements IInput {
 
         return {
             result: [...document.querySelectorAll('table.table_block tbody tr')]?.map(el => {
-                let shipping: any = this._convertDevise(el.querySelector('.item_shipping')?.textContent?.replace(/\s+/g, " ")?.split('+')?.[1]?.split(' ')?.[0]!)
+                let shipping: any = this._convertDevise(el.querySelector('.item_shipping')?.childNodes?.[0]?.textContent?.replace(/(\s+|\+)/g, " ")?.trim()?.replace(',', '.')!)
                 let have: number = parseInt(el.querySelector('.community_summary .community_result:nth-child(1) .community_number')?.textContent!)
                 let want: number = parseInt(el.querySelector('.community_summary .community_result:nth-child(2) .community_number')?.textContent!)
 
@@ -277,7 +277,7 @@ export default class Marketplace implements IInput {
                     },
                     price: {
                         base: this._convertDevise(el.querySelector('.price')?.textContent?.replace(/\s+/g, " ")?.replace(/,/, '.')!),
-                        shipping: isNaN(shipping) ? null : shipping,
+                        shipping: isNaN(parseFloat(shipping)) ? null : shipping,
                         from: el.querySelector('.seller_info li:nth-child(3)')?.textContent?.split(':')?.[1]
                     },
                     community: {
