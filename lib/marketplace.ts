@@ -211,20 +211,21 @@ export default class Marketplace implements IInput {
         const data: any = {
             "\$US": "USD",
             "£GB": "GBP",
-            "€": "EUR",
             "\$CA": "CAD",
-            "$AU": "AUD",
+            "\$AU": "AUD",
             "JPY": "JPY",
             "CHF": "CHF",
             "MX\$": "MXN",
-            "R\$": "BRL",
             "\$NZ": "NZD",
             "SEK": "SEK",
             "ZAR": "ZAR",
+            "CA\$": "AUD",
+            "A\$": "AUD",
+            "R\$": "BRL",
+            "€": "EUR",
             "\$": "USD",
             "£": "GBP",
             "¥": "JPY",
-            "A$": "AUD",
         }
         Object.keys(data).forEach(x => {
             if (str.includes(`${x}`)) {
