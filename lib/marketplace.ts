@@ -14,14 +14,8 @@ import IOutputSuccess from '@interface/IOutputSuccess'
 import IYears from '@interface/IYears'
 import { TLimit } from '@type/TLimit'
 import { JSDOM } from 'jsdom'
-import puppeteer from 'puppeteer-extra'
-import StealthPlugin from 'puppeteer-extra-plugin-stealth'
+import puppeteer, { Request } from 'puppeteer'
 import UserAgent from 'user-agents'
-
-puppeteer.use(StealthPlugin())
-puppeteer.use(require('puppeteer-extra-plugin-block-resources')({
-    blockedTypes: new Set(['stylesheet', 'image', 'media', 'font', 'script', 'texttrack', 'xhr', 'fetch', 'eventsource', 'websocket', 'manifest', 'other'])
-}))
 
 /**
  * Discogs Marketplace 
@@ -102,8 +96,14 @@ export default class Marketplace implements IInput {
     public async search(): Promise<IOutputSuccess> {
         return await new Promise(async (resolve, reject) => {
             /** Init browser */
-            const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox',] })
+            const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] })
             const page = await browser.newPage()
+
+            /** Block useless ressources */
+            await page.setRequestInterception(true)
+            page.on('request', (req: Request) => {
+                ['stylesheet', 'image', 'media', 'font', 'script', 'texttrack', 'xhr', 'fetch', 'eventsource', 'websocket', 'manifest', 'other'].includes(req.resourceType()) ? req.abort() : req.continue()
+            })
 
             /** Init user agent */
             await page.setUserAgent((new UserAgent()).toString())
@@ -149,7 +149,7 @@ export default class Marketplace implements IInput {
                 let result: IOutputSuccess = this._format((new JSDOM(res.document)).window.document)
                 return result
             })
-            .catch((err) => {
+            .catch((err: any) => {
                 const { document } = (new JSDOM(err.document)).window
                 let result: IOutputError = {
                     message: document.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occured',
