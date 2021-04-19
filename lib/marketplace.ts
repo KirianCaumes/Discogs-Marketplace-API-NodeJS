@@ -2,6 +2,7 @@ import { ECurrency } from '@enum/ECurrency'
 import { EFormat } from '@enum/EFormat'
 import { EFormatDescription } from '@enum/EFormatDescription'
 import { EFrom } from '@enum/EFrom'
+import { EFromIso } from '@enum/EFromIso'
 import { EGenre } from '@enum/EGenre'
 import { ELang } from '@enum/ELang'
 import { EMediaCondition } from '@enum/EMediaCondition'
@@ -14,7 +15,7 @@ import IOutputSuccess from '@interface/IOutputSuccess'
 import IYears from '@interface/IYears'
 import { TLimit } from '@type/TLimit'
 import { JSDOM } from 'jsdom'
-import puppeteer, { Request } from 'puppeteer'
+import puppeteer from 'puppeteer'
 import UserAgent from 'user-agents'
 
 /**
@@ -101,7 +102,7 @@ export default class Marketplace implements IInput {
 
             /** Block useless ressources */
             await page.setRequestInterception(true)
-            page.on('request', (req: Request) => {
+            page.on('request', (req) => {
                 ['stylesheet', 'image', 'media', 'font', 'script', 'texttrack', 'xhr', 'fetch', 'eventsource', 'websocket', 'manifest', 'other'].includes(req.resourceType()) ? req.abort() : req.continue()
             })
 
@@ -247,9 +248,10 @@ export default class Marketplace implements IInput {
 
         return {
             result: [...document.querySelectorAll('table.table_block tbody tr')]?.map(el => {
-                let shipping: any = this._convertDevise(el.querySelector('.item_shipping')?.childNodes?.[0]?.textContent?.replace(/(\s+|\+)/g, " ")?.trim()?.replace(',', '.')!)
-                let have: number = parseInt(el.querySelector('.community_summary .community_result:nth-child(1) .community_number')?.textContent!)
-                let want: number = parseInt(el.querySelector('.community_summary .community_result:nth-child(2) .community_number')?.textContent!)
+                const shipping: any = this._convertDevise(el.querySelector('.item_shipping')?.childNodes?.[0]?.textContent?.replace(/(\s+|\+)/g, " ")?.trim()?.replace(',', '.')!)
+                const have: number = parseInt(el.querySelector('.community_summary .community_result:nth-child(1) .community_number')?.textContent!)
+                const want: number = parseInt(el.querySelector('.community_summary .community_result:nth-child(2) .community_number')?.textContent!)
+                const country:any = el.querySelector('.seller_info li:nth-child(3)')?.textContent?.split(':')?.[1]
 
                 return {
                     title: el.querySelector('.item_description_title')?.textContent,
@@ -278,7 +280,7 @@ export default class Marketplace implements IInput {
                     price: {
                         base: this._convertDevise(el.querySelector('.price')?.textContent?.replace(/\s+/g, " ")?.replace(/,/, '.')!),
                         shipping: isNaN(parseFloat(shipping)) ? null : shipping,
-                        from: el.querySelector('.seller_info li:nth-child(3)')?.textContent?.split(':')?.[1]
+                        from: (EFromIso as any)[country] ?? country ?? ""
                     },
                     community: {
                         have: isNaN(have) ? null : have,
