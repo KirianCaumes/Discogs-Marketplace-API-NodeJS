@@ -169,7 +169,8 @@ interface IItem {
     price: {
         base: string | null | undefined,
         shipping: string | null | undefined,
-        from: string | null | undefined
+        from: string | null | undefined,
+        isoFrom: string | null | undefined,
     },
     community: {
         have: number | null | undefined,

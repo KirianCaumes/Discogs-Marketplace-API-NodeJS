@@ -1,6 +1,6 @@
 {
   "name": "discogs-marketplace-api-nodejs",
-  "version": "1.2.3",
+  "version": "1.2.5",
   "description": "Another (better ?) NodeJs library to fetch data from Discog's marketplace",
   "keywords": [
     "discogs",
@@ -19,7 +19,7 @@
     "start": "nodemon -r tsconfig-paths/register ./lib/index.ts",
     "build": "ttsc",
     "test": "jest",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

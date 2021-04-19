@@ -280,7 +280,8 @@ export default class Marketplace implements IInput {
                     price: {
                         base: this._convertDevise(el.querySelector('.price')?.textContent?.replace(/\s+/g, " ")?.replace(/,/, '.')!),
                         shipping: isNaN(parseFloat(shipping)) ? null : shipping,
-                        from: (EFromIso as any)[country] ?? country ?? ""
+                        from: country,
+                        isoFrom: (EFromIso as any)[country] ?? country ?? ""                        
                     },
                     community: {
                         have: isNaN(have) ? null : have,
