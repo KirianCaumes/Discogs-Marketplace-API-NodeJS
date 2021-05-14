@@ -1,6 +1,6 @@
 {
   "name": "discogs-marketplace-api-nodejs",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Another (better ?) NodeJs library to fetch data from Discog's marketplace",
   "keywords": [
     "discogs",
@@ -24,18 +24,18 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@types/jsdom": "^16.2.2",
-    "@types/puppeteer": "^2.1.0",
-    "@types/user-agents": "^1.0.0",
     "jsdom": "^16.5.1",
     "puppeteer": "^8.0.0",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
-    "user-agents": "^1.0.590"
+    "user-agents": "^1.0.652"
   },
   "devDependencies": {
-    "@types/jest": "^25.2.2",
-    "@types/node": "^13.13.6",
+    "@types/jest": "^25.2.3",
+    "@types/jsdom": "^16.2.2",
+    "@types/node": "^13.13.52",
+    "@types/puppeteer": "^2.1.0",
+    "@types/user-agents": "^1.0.1",
     "jest": "^25.4.0",
     "nock": "^12.0.3",
     "ts-jest": "^25.5.1",

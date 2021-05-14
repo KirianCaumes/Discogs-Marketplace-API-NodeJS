@@ -260,7 +260,7 @@ export default class Marketplace implements IInput {
                     catnos: el.querySelector('.label_and_cat .item_catno')?.textContent?.replace(/\s+/g, " ")?.split(', ')?.filter(x => x !== 'none'),
                     imageUrl: el.querySelector('.marketplace_image')?.getAttribute('data-src'),
                     description: el.querySelector('.item_description > p.hide_mobile:not(.label_and_cat)')?.textContent?.replace(/\s+/g, " ")?.trim(),
-                    isAcceptingOffer: el.querySelector('.item_add_to_cart p strong a')?.textContent?.split("/")?.length! > 1,
+                    isAcceptingOffer: el.querySelector('.item_add_to_cart p a strong')?.textContent?.split("/")?.length! > 1,
                     isAvailable: !el.classList?.contains('unavailable'),
                     condition: {
                         media: {
