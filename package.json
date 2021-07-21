@@ -17,7 +17,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon -r tsconfig-paths/register ./lib/index.ts",
-    "build": "ttsc",
+    "build": "ttsc --project tsconfig.build.json ",
     "test": "jest",
     "prepare": "npm run build"
   },
