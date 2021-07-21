@@ -37,7 +37,7 @@ describe('Test marketplace.ts', () => {
     test('should return error value', async (done) => {
         try {
             await service.search({ searchType: EType.STRING, searchValue: "error" })
-        } catch (err) {
+        } catch (err: any) {
             expect(err.code).toBe(404)
             expect(err.message).toBe("An error occured")
         } finally {

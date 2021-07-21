@@ -24,23 +24,22 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "jsdom": "^16.5.1",
+    "jsdom": "^16.6.0",
     "puppeteer": "^8.0.0",
     "ts-node": "^9.1.1",
-    "tsconfig-paths": "^3.9.0",
-    "user-agents": "^1.0.652"
+    "tsconfig-paths": "^3.10.1",
+    "user-agents": "^1.0.719"
   },
   "devDependencies": {
     "@types/jest": "^25.2.3",
-    "@types/jsdom": "^16.2.2",
+    "@types/jsdom": "^16.2.13",
     "@types/node": "^13.13.52",
-    "@types/puppeteer": "^2.1.0",
-    "@types/user-agents": "^1.0.1",
+    "@types/puppeteer": "^2.1.6",
+    "@types/user-agents": "^1.0.2",
     "jest": "^25.4.0",
-    "nock": "^12.0.3",
     "ts-jest": "^25.5.1",
     "ttypescript": "^1.5.12",
-    "typescript": "^4.1.5",
-    "typescript-transform-paths": "^2.2.3"
+    "typescript": "^4.3.5",
+    "typescript-transform-paths": "^2.2.4"
   }
 }

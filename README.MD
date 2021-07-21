@@ -143,7 +143,11 @@ interface IOutputSuccess {
 }
 
 interface IItem {
-    title: string | null | undefined,
+    title: {
+        original: string | null | undefined,
+        artist: string | null | undefined,
+        item: string | null | undefined,
+    },
     url: string | null | undefined,
     labels: (string | null)[] | undefined,
     catnos: (string | null)[] | undefined,
@@ -180,7 +184,7 @@ interface IItem {
 }
 ```
 
-If error, it will return :
+If error, it will throw :
 
 ```ts
 interface IOutputError {

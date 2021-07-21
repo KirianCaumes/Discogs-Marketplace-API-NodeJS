@@ -2,7 +2,11 @@
  * @interface IItem One item from discogs
  */
 export default interface IItem {
-    title: string | null | undefined,
+    title: {
+        original: string | null | undefined,
+        artist: string | null | undefined,
+        item: string | null | undefined,
+    },
     url: string | null | undefined,
     labels: (string | null)[] | undefined,
     catnos: (string | null)[] | undefined,
