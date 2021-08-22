@@ -17,7 +17,7 @@ describe('Test marketplace.ts', () => {
     const service: IDiscogsMarketplace = DiscogsMarketplace
     const timeout = 10000
 
-    test('should return success value', async (done) => {
+    test('It should return success value', async (done) => {
         const res: IOutputSuccess = await service.search({ searchType: EType.STRING, searchValue: "" })
 
         expect(res.result).not.toBe(null)
@@ -31,10 +31,36 @@ describe('Test marketplace.ts', () => {
         expect(res.search?.value).not.toBe(null)
         expect(res.search?.type).not.toBe(null)
         expect(res.url_generated).not.toBe(null)
+        expect(res.result[0]?.title?.original).not.toBe(null)
+        expect(res.result[0]?.title?.artist).not.toBe(null)
+        expect(res.result[0]?.url).not.toBe(null)
+        expect(res.result[0]?.labels).not.toBe(null)
+        expect(res.result[0]?.catnos).not.toBe(null)
+        expect(res.result[0]?.imageUrl).not.toBe(null)
+        expect(res.result[0]?.description).not.toBe(null)
+        expect(res.result[0]?.isAcceptingOffer).not.toBe(null)
+        expect(res.result[0]?.isAvailable).not.toBe(null)
+        expect(res.result[0]?.condition?.media).not.toBe(null)
+        expect(res.result[0]?.condition?.media?.full).not.toBe(null)
+        expect(res.result[0]?.condition?.media?.short).not.toBe(null)
+        expect(res.result[0]?.condition?.sleeve).not.toBe(null)
+        expect(res.result[0]?.condition?.sleeve?.full).not.toBe(null)
+        expect(res.result[0]?.condition?.sleeve?.short).not.toBe(null)
+        expect(res.result[0]?.seller?.name).not.toBe(null)
+        expect(res.result[0]?.seller?.notes).not.toBe(null)
+        expect(res.result[0]?.seller?.score).not.toBe(null)
+        expect(res.result[0]?.price?.base).not.toBe(null)
+        expect(res.result[0]?.price?.shipping).not.toBe(null)
+        expect(res.result[0]?.from?.countryName).not.toBe(null)
+        expect(res.result[0]?.from?.isoCountryName).not.toBe(null)
+        expect(res.result[0]?.from?.isoCode).not.toBe(null)
+        expect(res.result[0]?.community?.have).not.toBe(null)
+        expect(res.result[0]?.community?.want).not.toBe(null)
+        expect(res.result[0]?.releaseUrl).not.toBe(null)
         done()
     }, timeout)
 
-    test('should return error value', async (done) => {
+    test('It should return error value', async (done) => {
         try {
             await service.search({ searchType: EType.STRING, searchValue: "error" })
         } catch (err: any) {
@@ -45,7 +71,7 @@ describe('Test marketplace.ts', () => {
         }
     }, timeout)
 
-    test('should return success value with artist', async (done) => {
+    test('It should return success value with artist', async (done) => {
         const res: IOutputSuccess = await service.search({ searchType: EType.ARTIST, searchValue: 123456 })
         expect(res.result).not.toBe(null)
         expect(res.page).not.toBe(null)
@@ -61,7 +87,7 @@ describe('Test marketplace.ts', () => {
         done()
     }, timeout)
 
-    test('should return good params with artist', async (done) => {
+    test('It should return good params with artist', async (done) => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.ARTIST,
             searchValue: 123456,
@@ -104,7 +130,7 @@ describe('Test marketplace.ts', () => {
         done()
     }, timeout)
 
-    test('should return good params with complex search', async (done) => {
+    test('It should return good params with complex search', async (done) => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.STRING,
             searchValue: "test",
@@ -147,7 +173,7 @@ describe('Test marketplace.ts', () => {
         done()
     }, timeout)
 
-    test('should return good params with complex search and years interval', async (done) => {
+    test('It should return good params with complex search and years interval', async (done) => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.STRING,
             searchValue: "test",
@@ -190,7 +216,7 @@ describe('Test marketplace.ts', () => {
         done()
     }, timeout)
 
-    test('should return good params with user\'s wantlist search', async (done) => {
+    test('It should return good params with user\'s wantlist search', async (done) => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.USER,
             searchValue: "TheUser"
@@ -203,7 +229,7 @@ describe('Test marketplace.ts', () => {
         done()
     }, timeout)
 
-    test('should return good params with user\'s selling search', async (done) => {
+    test('It should return good params with user\'s selling search', async (done) => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.STRING,
             searchValue: "",
@@ -217,7 +243,7 @@ describe('Test marketplace.ts', () => {
         done()
     }, timeout)
 
-    test('should return good params with user\'s wantlist search against user\'s selling items', async (done) => {
+    test('It should return good params with user\'s wantlist search against user\'s selling items', async (done) => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.USER,
             searchValue: "TheUser",

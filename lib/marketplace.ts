@@ -2,7 +2,7 @@ import { ECurrency } from '@enum/ECurrency'
 import { EFormat } from '@enum/EFormat'
 import { EFormatDescription } from '@enum/EFormatDescription'
 import { EFrom } from '@enum/EFrom'
-import { EFromIso } from '@enum/EFromIso'
+import { EFromIsoCode, EFromIso } from '@enum/EFromIso'
 import { EGenre } from '@enum/EGenre'
 import { ELang } from '@enum/ELang'
 import { EMediaCondition } from '@enum/EMediaCondition'
@@ -241,15 +241,14 @@ export default class Marketplace {
      * @returns {IOutputSuccess} Items found
      */
     private _format(document: Document): IOutputSuccess {
-        let totalItems: any = document.querySelector('.pagination_total')?.textContent?.split(' ')?.filter((x: any) => x)
-        totalItems = parseFloat(totalItems?.[totalItems?.length - 1]?.replace(/(\,|\.|\s)/g, '')) || 0
+        const totalItems = parseFloat(document.querySelector('.pagination_total')?.textContent?.split(' ')?.filter((x: any) => x).pop()?.replace(/(\,|\.|\s)/g, '') || '0')
 
         return {
             result: [...document.querySelectorAll('table.table_block tbody tr')]?.map(el => {
                 const shipping: any = this._convertDevise(el.querySelector('.item_shipping')?.childNodes?.[0]?.textContent?.replace(/(\s+|\+)/g, ' ')?.trim()?.replace(',', '.')!)
                 const have: number = parseInt(el.querySelector('.community_summary .community_result:nth-child(1) .community_number')?.textContent!)
                 const want: number = parseInt(el.querySelector('.community_summary .community_result:nth-child(2) .community_number')?.textContent!)
-                const country:any = el.querySelector('.seller_info li:nth-child(3)')?.textContent?.split(':')?.[1]
+                const country: any = el.querySelector('.seller_info li:nth-child(3)')?.textContent?.split(':')?.[1]
 
                 return {
                     title: {
@@ -282,14 +281,17 @@ export default class Marketplace {
                     price: {
                         base: this._convertDevise(el.querySelector('.price')?.textContent?.replace(/\s+/g, ' ')?.replace(/,/, '.')!),
                         shipping: isNaN(parseFloat(shipping)) ? null : shipping,
-                        from: country,
-                        isoFrom: (EFromIso as any)[country] ?? country ?? ''                        
+                    },
+                    from: {
+                        countryName: country,
+                        isoCountryName: (EFromIso as any)[country] ?? country ?? '',
+                        isoCode: (EFromIsoCode as any)[(EFromIso as any)[country] ?? country ?? ''],
                     },
                     community: {
                         have: isNaN(have) ? null : have,
                         want: isNaN(want) ? null : want
                     },
-                    release_url: `https://www.discogs.com${(<HTMLLinkElement>el.querySelector('a.item_release_link'))?.href}`
+                    releaseUrl: `https://www.discogs.com${(<HTMLLinkElement>el.querySelector('a.item_release_link'))?.href}`
                 }
             }) || [],
             page: {

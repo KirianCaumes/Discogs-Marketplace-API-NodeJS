@@ -173,14 +173,17 @@ interface IItem {
     price: {
         base: string | null | undefined,
         shipping: string | null | undefined,
-        from: string | null | undefined,
-        isoFrom: string | null | undefined,
+    },
+    from: {
+        countryName: string | null | undefined,
+        isoCountryName: string | null | undefined,
+        isoCode: string | null | undefined,
     },
     community: {
         have: number | null | undefined,
         want: number | null | undefined
     },
-    release_url: string | null | undefined
+    releaseUrl: string | null | undefined
 }
 ```
 
