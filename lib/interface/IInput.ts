@@ -18,19 +18,19 @@ export default interface IInput {
     /**
      * Type of elements to search
      */
-    searchType: EType,
+    searchType: EType
     /**
      * Value to search corresponding to searchType
      */
-    searchValue: string | number | undefined,
+    searchValue: string | number | undefined
     /**
      * Currency
      */
-    currency?: ECurrency,
+    currency?: ECurrency
     /**
      * Genre
      */
-    genre?: EGenre,
+    genre?: EGenre
     /**
      * Styles
      */
@@ -50,39 +50,39 @@ export default interface IInput {
     /**
      * Year (Do not use it with years)
      */
-    year?: number,
+    year?: number
     /**
      * Interval of years (Do not use it with year)
      */
-    years?: IYears,
+    years?: IYears
     /**
      * Is audio sample ?
      */
-    isAudioSample?: boolean,
+    isAudioSample?: boolean
     /**
      * Is make an offer only ?
      */
-    isMakeAnOfferOnly?: boolean,
+    isMakeAnOfferOnly?: boolean
     /**
      * Expedition country
      */
-    from?: EFrom,
+    from?: EFrom
     /**
      * Seller name
      */
-    seller?: string,
+    seller?: string
     /**
      * Sort elements by
      */
-    sort?: ESort,
+    sort?: ESort
     /**
      * Limit of elements to search (25 | 50 | 100 | 250)
      */
-    limit?: TLimit,
+    limit?: TLimit
     /**
      * Page (Must be < 401 or discogs will return an error 404)
      */
-    page?: number,
+    page?: number
     /**
      * Lang to use for Discogs
      */

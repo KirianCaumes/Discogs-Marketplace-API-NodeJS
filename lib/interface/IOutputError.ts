@@ -2,6 +2,6 @@
  * @interface IOutputError Result provided to user
  */
 export default interface IOutputError {
-    message: string,
-    code: number | undefined
+    message: string
+    code: number
 }

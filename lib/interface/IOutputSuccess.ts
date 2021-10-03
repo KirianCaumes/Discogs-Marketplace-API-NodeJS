@@ -5,18 +5,18 @@ import { EType } from '@enum/EType'
  * @interface IOutputSuccess Result provided to user
  */
 export default interface IOutputSuccess {
-    result: IItem[],
+    result: IItem[]
     page: {
-        current: number,
+        current: number
         total: number
-    },
+    }
     item: {
-        total: number,
-        per_page: number,
-    },
+        total: number
+        perPage: number
+    }
     search: {
-        value: string | number | undefined,
+        value: string | number
         type: EType
-    },
-    url_generated: string | null,
+    }
+    urlGenerated: string
 }

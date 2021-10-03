@@ -133,57 +133,57 @@ interface IOutputSuccess {
     },
     item: {
         total: number,
-        per_page: number,
+        perPage: number,
     },
     search: {
-        value: string | number | undefined,
+        value: string | number,
         type: EType
     },
-    url_generated: string | null,
+    urlGenerated: string,
 }
 
 interface IItem {
     title: {
-        original: string | null | undefined,
-        artist: string | null | undefined,
-        item: string | null | undefined,
+        original: string,
+        artist: string,
+        item: string,
     },
-    url: string | null | undefined,
-    labels: (string | null)[] | undefined,
-    catnos: (string | null)[] | undefined,
-    imageUrl: string | null | undefined,
-    description: string | null | undefined,
-    isAcceptingOffer: boolean | null | undefined,
-    isAvailable: boolean | null | undefined,
+    url: string,
+    labels: string[],
+    catnos: string[],
+    imageUrl: string,
+    description: string,
+    isAcceptingOffer: boolean,
+    isAvailable: boolean,
     condition: {
         media: {
-            full: string | null | undefined,
-            short: string | null | undefined
+            full: string,
+            short: string
         },
         sleeve: {
-            full: string | null | undefined,
-            short: string | null | undefined
+            full: string,
+            short: string
         }
     },
     seller: {
-        name: string | null | undefined,
-        score: string | null | undefined,
-        notes: string | null | undefined
+        name: string,
+        score: string,
+        notes: string
     },
     price: {
-        base: string | null | undefined,
-        shipping: string | null | undefined,
+        base: string,
+        shipping: string,
     },
     from: {
-        countryName: string | null | undefined,
-        isoCountryName: string | null | undefined,
-        isoCode: string | null | undefined,
+        countryName: string,
+        isoCountryName: string,
+        isoCode: string,
     },
     community: {
-        have: number | null | undefined,
-        want: number | null | undefined
+        have: number,
+        want: number
     },
-    releaseUrl: string | null | undefined
+    releaseUrl: string
 }
 ```
 
@@ -192,6 +192,6 @@ If error, it will throw :
 ```ts
 interface IOutputError {
     message: string,
-    code: number | undefined
+    code: number
 }
 ```

@@ -2,45 +2,47 @@
  * @interface IItem One item from discogs
  */
 export default interface IItem {
+    itemId: number
     title: {
-        original: string | null | undefined,
-        artist: string | null | undefined,
-        item: string | null | undefined,
-    },
-    url: string | null | undefined,
-    labels: (string | null)[] | undefined,
-    catnos: (string | null)[] | undefined,
-    imageUrl: string | null | undefined,
-    description: string | null | undefined,
-    isAcceptingOffer: boolean | null | undefined,
-    isAvailable: boolean | null | undefined,
+        original: string
+        artist: string
+        item: string
+    }
+    url: string
+    labels: string[]
+    catnos: string[]
+    imageUrl: string
+    description: string
+    isAcceptingOffer: boolean
+    isAvailable: boolean
     condition: {
         media: {
-            full: string | null | undefined,
-            short: string | null | undefined
-        },
-        sleeve: {
-            full: string | null | undefined,
-            short: string | null | undefined
+            full: string
+            short: string
         }
-    },
+        sleeve: {
+            full: string
+            short: string
+        }
+    }
     seller: {
-        name: string | null | undefined,
-        score: string | null | undefined,
-        notes: string | null | undefined
-    },
+        name: string
+        score: string
+        notes: string
+    }
     price: {
-        base: string | null | undefined,
-        shipping: string | null | undefined,
-    },
+        base: string
+        shipping: string
+    }
     from: {
-        countryName: string | null | undefined,
-        isoCountryName: string | null | undefined,
-        isoCode: string | null | undefined,
-    },
+        countryName: string
+        isoCountryName: string
+        isoCode: string
+    }
     community: {
-        have: number | null | undefined,
-        want: number | null | undefined
-    },
-    releaseUrl: string | null | undefined
+        have: number
+        want: number
+    }
+    releaseUrl: string
+    releaseId: number
 }

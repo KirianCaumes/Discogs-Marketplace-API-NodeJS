@@ -17,20 +17,22 @@ describe('Test marketplace.ts', () => {
     const service: IDiscogsMarketplace = DiscogsMarketplace
     const timeout = 10000
 
-    test('It should return success value', async (done) => {
+    // @ts-ignore https://jestjs.io/blog/2020/05/05/jest-26
+    it('It should return success value', async (done) => {
         const res: IOutputSuccess = await service.search({ searchType: EType.STRING, searchValue: "" })
-
+        
         expect(res.result).not.toBe(null)
         expect(res.page).not.toBe(null)
         expect(res.page?.current).not.toBe(null)
         expect(res.page?.total).not.toBe(null)
         expect(res.item).not.toBe(null)
         expect(res.item?.total).not.toBe(null)
-        expect(res.item?.per_page).not.toBe(null)
+        expect(res.item?.perPage).not.toBe(null)
         expect(res.search).not.toBe(null)
         expect(res.search?.value).not.toBe(null)
         expect(res.search?.type).not.toBe(null)
-        expect(res.url_generated).not.toBe(null)
+        expect(res.urlGenerated).not.toBe(null)
+        expect(res.result[0]?.itemId).not.toBe(null)
         expect(res.result[0]?.title?.original).not.toBe(null)
         expect(res.result[0]?.title?.artist).not.toBe(null)
         expect(res.result[0]?.url).not.toBe(null)
@@ -57,9 +59,11 @@ describe('Test marketplace.ts', () => {
         expect(res.result[0]?.community?.have).not.toBe(null)
         expect(res.result[0]?.community?.want).not.toBe(null)
         expect(res.result[0]?.releaseUrl).not.toBe(null)
+        expect(res.result[0]?.releaseId).not.toBe(null)
         done()
     }, timeout)
 
+    // @ts-ignore 
     test('It should return error value', async (done) => {
         try {
             await service.search({ searchType: EType.STRING, searchValue: "error" })
@@ -71,6 +75,7 @@ describe('Test marketplace.ts', () => {
         }
     }, timeout)
 
+    // @ts-ignore 
     test('It should return success value with artist', async (done) => {
         const res: IOutputSuccess = await service.search({ searchType: EType.ARTIST, searchValue: 123456 })
         expect(res.result).not.toBe(null)
@@ -79,14 +84,15 @@ describe('Test marketplace.ts', () => {
         expect(res.page?.total).not.toBe(null)
         expect(res.item).not.toBe(null)
         expect(res.item?.total).not.toBe(null)
-        expect(res.item?.per_page).not.toBe(null)
+        expect(res.item?.perPage).not.toBe(null)
         expect(res.search).not.toBe(null)
         expect(res.search?.value).not.toBe(null)
         expect(res.search?.type).not.toBe(null)
-        expect(res.url_generated).not.toBe(null)
+        expect(res.urlGenerated).not.toBe(null)
         done()
     }, timeout)
 
+    // @ts-ignore 
     test('It should return good params with artist', async (done) => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.ARTIST,
@@ -109,7 +115,7 @@ describe('Test marketplace.ts', () => {
             lang: ELang.ENGLISH
         })
 
-        const params = url.parse(res.url_generated!, true)?.query
+        const params = url.parse(res.urlGenerated!, true)?.query
         expect(params).not.toBe(null)
         expect(params[EType.ARTIST]).toBe("123456")
         expect(params.currency).toBe(undefined)
@@ -130,6 +136,7 @@ describe('Test marketplace.ts', () => {
         done()
     }, timeout)
 
+    // @ts-ignore 
     test('It should return good params with complex search', async (done) => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.STRING,
@@ -152,7 +159,7 @@ describe('Test marketplace.ts', () => {
             lang: ELang.FRENCH
         })
 
-        const params = url.parse(res.url_generated!, true)?.query
+        const params = url.parse(res.urlGenerated!, true)?.query
         expect(params).not.toBe(null)
         expect(params[EType.STRING]).toBe("test")
         expect(params.currency).toBe(ECurrency.EUR)
@@ -173,6 +180,7 @@ describe('Test marketplace.ts', () => {
         done()
     }, timeout)
 
+    // @ts-ignore 
     test('It should return good params with complex search and years interval', async (done) => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.STRING,
@@ -195,7 +203,7 @@ describe('Test marketplace.ts', () => {
             lang: ELang.FRENCH
         })
 
-        const params = url.parse(res.url_generated!, true)?.query
+        const params = url.parse(res.urlGenerated!, true)?.query
         expect(params).not.toBe(null)
         expect(params[EType.STRING]).toBe("test")
         expect(params.currency).toBe(ECurrency.EUR)
@@ -216,19 +224,21 @@ describe('Test marketplace.ts', () => {
         done()
     }, timeout)
 
+    // @ts-ignore 
     test('It should return good params with user\'s wantlist search', async (done) => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.USER,
             searchValue: "TheUser"
         })
 
-        const params = url.parse(res.url_generated!, true)?.query
-        expect(res.url_generated!.includes('/mywants')).toBe(true)
-        expect(res.url_generated!.includes('/list')).toBe(false)
+        const params = url.parse(res.urlGenerated!, true)?.query
+        expect(res.urlGenerated!.includes('/mywants')).toBe(true)
+        expect(res.urlGenerated!.includes('/list')).toBe(false)
         expect(params.user).toBe("TheUser")
         done()
     }, timeout)
 
+    // @ts-ignore 
     test('It should return good params with user\'s selling search', async (done) => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.STRING,
@@ -236,13 +246,14 @@ describe('Test marketplace.ts', () => {
             seller: "TheSeller"
         })
 
-        expect(res.url_generated!.includes('/seller/TheSeller/')).toBe(true)
-        expect(res.url_generated!.includes('/sell/')).toBe(false)
-        expect(res.url_generated!.includes('/mywants')).toBe(false)
-        expect(res.url_generated!.includes('/profile')).toBe(true)
+        expect(res.urlGenerated!.includes('/seller/TheSeller/')).toBe(true)
+        expect(res.urlGenerated!.includes('/sell/')).toBe(false)
+        expect(res.urlGenerated!.includes('/mywants')).toBe(false)
+        expect(res.urlGenerated!.includes('/profile')).toBe(true)
         done()
     }, timeout)
 
+    // @ts-ignore 
     test('It should return good params with user\'s wantlist search against user\'s selling items', async (done) => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.USER,
@@ -250,11 +261,11 @@ describe('Test marketplace.ts', () => {
             seller: "TheSeller"
         })
 
-        const params = url.parse(res.url_generated!, true)?.query
-        expect(res.url_generated!.includes('/seller/TheSeller/')).toBe(true)
-        expect(res.url_generated!.includes('/sell/')).toBe(false)
-        expect(res.url_generated!.includes('/mywants')).toBe(true)
-        expect(res.url_generated!.includes('/profile')).toBe(false)
+        const params = url.parse(res.urlGenerated!, true)?.query
+        expect(res.urlGenerated!.includes('/seller/TheSeller/')).toBe(true)
+        expect(res.urlGenerated!.includes('/sell/')).toBe(false)
+        expect(res.urlGenerated!.includes('/mywants')).toBe(true)
+        expect(res.urlGenerated!.includes('/profile')).toBe(false)
         expect(params.user).toBe("TheUser")
         done()
     }, timeout)
