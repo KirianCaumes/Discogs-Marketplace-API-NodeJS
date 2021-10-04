@@ -15,7 +15,7 @@ import IOutputSuccess from '@interface/IOutputSuccess'
 import IYears from '@interface/IYears'
 import { TLimit } from '@type/TLimit'
 import { JSDOM } from 'jsdom'
-import puppeteer from 'puppeteer'
+import { chromium as playwright } from 'playwright-chromium'
 import UserAgent from 'user-agents'
 
 /**
@@ -91,21 +91,33 @@ export default class Marketplace {
      * @returns {Promise<IOutputSuccess>} Items found
      */
     public async search(): Promise<IOutputSuccess> {
-        return await new Promise(async (resolve, reject) => {
+        try {
             /** Init browser */
-            const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] })
-            const page = await browser.newPage()
+            const browser = await playwright.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] })
 
-            /** Block useless ressources */
-            await page.setRequestInterception(true)
-            page.on('request', (req) => {
-                ['stylesheet', 'image', 'media', 'font', 'script', 'texttrack', 'xhr', 'fetch', 'eventsource', 'websocket', 'manifest', 'other'].includes(req.resourceType())
-                    ? req.abort()
-                    : req.continue()
+            /** Init context */
+            const context = await browser.newContext({
+                userAgent: new UserAgent().toString(),
             })
 
-            /** Init user agent */
-            await page.setUserAgent((new UserAgent()).toString())
+            /** Init page */
+            const page = await context.newPage()
+
+            /** Block useless ressources */
+            await page.route('**/*', route => ([
+                'stylesheet',
+                'image',
+                'media',
+                'font',
+                'script',
+                'texttrack',
+                'xhr',
+                'fetch',
+                'eventsource',
+                'websocket',
+                'manifest',
+                'other',
+            ].includes(route.request().resourceType()) ? route.abort() : route.continue()))
 
             /** Init page */
             const response = await page.goto(
@@ -139,23 +151,22 @@ export default class Marketplace {
             await browser.close()
 
             /** If error, reject */
-            if (response?.headers()?.status && parseInt(response?.headers()?.status) >= 400) reject({ document: bodyHTML, status: response?.headers()?.status })
+            if ((response?.status() ?? 0) >= 400)
+                throw { document: bodyHTML, status: response?.status() ?? 0 }
 
-            /** resolve */
-            resolve({ document: bodyHTML })
-        })
-            .then((res: any) => {
-                let result: IOutputSuccess = this.getItem((new JSDOM(res.document)).window.document)
-                return result
-            })
-            .catch((err: any) => {
-                const { document } = (new JSDOM(err.document)).window
-                let result: IOutputError = {
-                    message: document.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occured',
-                    code: err.status
-                }
-                throw result
-            })
+            return this.getItem((new JSDOM(bodyHTML)).window.document)
+        } catch (error: any) {
+            if (error?.document && error.status)
+                throw {
+                    message: (new JSDOM(error?.document))?.window?.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occured',
+                    code: error.status
+                } as IOutputError
+
+            throw {
+                message: 'An error occured',
+                code: 500
+            } as IOutputError
+        }
     }
 
     /**
