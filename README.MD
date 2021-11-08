@@ -147,6 +147,7 @@ interface IItem {
         original: string,
         artist: string,
         item: string,
+        formats: string[],
     },
     url: string,
     labels: string[],

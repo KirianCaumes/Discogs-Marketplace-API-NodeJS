@@ -263,12 +263,19 @@ export default class Marketplace {
                 const releaseId: number = parseInt(el.querySelector<HTMLLinkElement>('a.item_release_link')?.href.split('release/')?.pop()?.split('-')?.shift() ?? '0')
                 const itemId: number = parseInt(el.querySelector<HTMLLinkElement>('a.item_description_title')?.href?.split('/').pop() ?? '0')
 
+                const originalTitle = el.querySelector('a.item_description_title')?.textContent
+                const firstIndexOfDash = originalTitle?.lastIndexOf(' - ') ?? -1
+                const lastIndexOfParenthesis = originalTitle?.lastIndexOf(' (') ?? -1
+
                 return {
                     itemId: isNaN(itemId) ? 0 : itemId,
                     title: {
-                        original: el.querySelector('a.item_description_title')?.textContent!,
-                        artist: el.querySelector('a.item_description_title')?.textContent?.split(/ - (.+)/)?.[0]!,
-                        item: el.querySelector('a.item_description_title')?.textContent?.split(/ - (.+)/)?.[1]!,
+                        original: originalTitle!,
+                        artist: originalTitle?.substring(0, firstIndexOfDash)!,
+                        item: firstIndexOfDash > -1 && lastIndexOfParenthesis > -1 ?
+                            originalTitle?.substring(firstIndexOfDash + 3, lastIndexOfParenthesis)! : '',
+                        formats: lastIndexOfParenthesis > -1 ?
+                            (originalTitle?.substring(lastIndexOfParenthesis + 2, originalTitle.length - 1)?.split(', ') ?? []) : [],
                     },
                     url: `https://www.discogs.com${el.querySelector<HTMLLinkElement>('a.item_description_title')?.href}`,
                     labels: [...new Set([...el.querySelectorAll('.label_and_cat a[href^=\'https://www.discogs.com/\']')]?.map(x => x?.textContent!))],
