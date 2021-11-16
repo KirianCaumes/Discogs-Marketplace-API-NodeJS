@@ -264,7 +264,7 @@ export default class Marketplace {
                 const itemId: number = parseInt(el.querySelector<HTMLLinkElement>('a.item_description_title')?.href?.split('/').pop() ?? '0')
 
                 const originalTitle = el.querySelector('a.item_description_title')?.textContent
-                const firstIndexOfDash = originalTitle?.lastIndexOf(' - ') ?? -1
+                const firstIndexOfDash = originalTitle?.indexOf(' - ') ?? -1
                 const lastIndexOfParenthesis = originalTitle?.lastIndexOf(' (') ?? -1
 
                 return {
