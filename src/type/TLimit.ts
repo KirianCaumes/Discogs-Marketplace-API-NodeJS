@@ -3,6 +3,6 @@
  * @type {number[]}
  * @readonly
  */
-export type TLimit = 25 | 50 | 100 | 250
+type TLimit = 25 | 50 | 100 | 250
 
-
+export default TLimit

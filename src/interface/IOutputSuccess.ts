@@ -1,5 +1,5 @@
 import IItem from '@interface/IItem'
-import { EType } from '@enum/EType'
+import EType from '@enum/EType'
 
 /**
  * @interface IOutputSuccess Result provided to user

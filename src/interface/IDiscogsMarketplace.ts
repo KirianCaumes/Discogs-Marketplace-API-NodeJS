@@ -1,5 +1,5 @@
-import IOutputSuccess from "@interface/IOutputSuccess"
-import IInput from "@interface/IInput"
+import IOutputSuccess from '@interface/IOutputSuccess'
+import IInput from '@interface/IInput'
 
 /**
  * @interface IDiscogsMarketplace Public interface

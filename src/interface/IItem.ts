@@ -29,7 +29,7 @@ export default interface IItem {
     seller: {
         name: string
         score: string
-        notes: string
+        notes: number
     }
     price: {
         base: string

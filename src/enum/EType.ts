@@ -1,31 +1,33 @@
 /**
  * Types of search
- * @type {Object.<string, string>} 
+ * @type {Object.<string, string>}
  * @readonly
  */
-export enum EType {
-    /** 
+enum EType {
+    /**
      * String search
      */
-    STRING = "q",
-    /** 
+    STRING = 'q',
+    /**
      * Master's id search
      */
-    MASTER = "master_id",
-    /** 
+    MASTER = 'master_id',
+    /**
      * Release's id search
      */
-    RELEASE = "release_id",
-    /** 
+    RELEASE = 'release_id',
+    /**
      * Label's id search
      */
-    LABEL = "label_id",
-    /** 
+    LABEL = 'label_id',
+    /**
      * Artist's id search
      */
-    ARTIST = "artist_id",
-    /** 
+    ARTIST = 'artist_id',
+    /**
      * User's name search into his wantlist
      */
-    USER = "user"
+    USER = 'user',
 }
+
+export default EType

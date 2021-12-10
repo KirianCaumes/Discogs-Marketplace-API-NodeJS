@@ -43,7 +43,7 @@ DiscogsMarketplace.search({ searchType: EType.ARTIST, searchValue: 244819 })
 
 ### Data format
 
-Data that must provided to the search function must looks like this (other interfaces can be found in "*lib/enum*" ) :
+Data that must provided to the search function must looks like this (other interfaces can be found in "*src/enum*" ) :
 
 ```ts
 interface IInput {
@@ -169,7 +169,7 @@ interface IItem {
     seller: {
         name: string,
         score: string,
-        notes: string
+        notes: number
     },
     price: {
         base: string,

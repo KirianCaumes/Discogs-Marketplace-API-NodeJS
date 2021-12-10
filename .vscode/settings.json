@@ -1,0 +1,15 @@
+{
+	"editor.formatOnSave": true,
+	"[typescript]": {
+		"editor.tabSize": 4,
+		"editor.detectIndentation": false
+	},
+	"editor.codeActionsOnSave": {
+		"source.fixAll": true
+	},
+	"eslint.workingDirectories": [
+		"./src"
+	],
+	"eslint.alwaysShowStatus": true,
+	"versionlens.suggestions.showOnStartup": true
+}

@@ -9,18 +9,17 @@ import DiscogsMarketplace, {
     EMediaCondition,
     ESort,
     EStyle,
-    EType
-} from "@main/index"
+    EType,
+} from '@main/index'
 import url from 'url'
 
 describe('Test marketplace.ts', () => {
     const service: IDiscogsMarketplace = DiscogsMarketplace
     const timeout = 10000
 
-    // @ts-ignore https://jestjs.io/blog/2020/05/05/jest-26
-    it('It should return success value', async (done) => {
-        const res: IOutputSuccess = await service.search({ searchType: EType.STRING, searchValue: "" })
-        
+    it('It should return success value', async () => {
+        const res: IOutputSuccess = await service.search({ searchType: EType.STRING, searchValue: '' })
+
         expect(res.result).not.toBe(null)
         expect(res.page).not.toBe(null)
         expect(res.page?.current).not.toBe(null)
@@ -63,23 +62,18 @@ describe('Test marketplace.ts', () => {
         expect(res.result[0]?.community?.want).not.toBe(null)
         expect(res.result[0]?.releaseUrl).not.toBe(null)
         expect(res.result[0]?.releaseId).not.toBe(null)
-        done()
     }, timeout)
 
-    // @ts-ignore 
-    test('It should return error value', async (done) => {
+    test('It should return error value', async () => {
         try {
-            await service.search({ searchType: EType.STRING, searchValue: "error" })
+            await service.search({ searchType: EType.STRING, searchValue: 'error' })
         } catch (err: any) {
             expect(err.code).toBe(404)
-            expect(err.message).toBe("An error occured")
-        } finally {
-            done()
+            expect(err.message).toBe('An error occured')
         }
     }, timeout)
 
-    // @ts-ignore 
-    test('It should return success value with artist', async (done) => {
+    test('It should return success value with artist', async () => {
         const res: IOutputSuccess = await service.search({ searchType: EType.ARTIST, searchValue: 123456 })
         expect(res.result).not.toBe(null)
         expect(res.page).not.toBe(null)
@@ -92,11 +86,9 @@ describe('Test marketplace.ts', () => {
         expect(res.search?.value).not.toBe(null)
         expect(res.search?.type).not.toBe(null)
         expect(res.urlGenerated).not.toBe(null)
-        done()
     }, timeout)
 
-    // @ts-ignore 
-    test('It should return good params with artist', async (done) => {
+    test('It should return good params with artist', async () => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.ARTIST,
             searchValue: 123456,
@@ -115,12 +107,12 @@ describe('Test marketplace.ts', () => {
             sort: ESort.LISTED_NEWEST,
             limit: 25,
             page: 1,
-            lang: ELang.ENGLISH
+            lang: ELang.ENGLISH,
         })
 
-        const params = url.parse(res.urlGenerated!, true)?.query
+        const params = url.parse(res.urlGenerated, true)?.query
         expect(params).not.toBe(null)
-        expect(params[EType.ARTIST]).toBe("123456")
+        expect(params[EType.ARTIST]).toBe('123456')
         expect(params.currency).toBe(undefined)
         expect(params.genre).toBe(undefined)
         expect(params.style).toBe(undefined)
@@ -130,20 +122,18 @@ describe('Test marketplace.ts', () => {
         expect(params.year).toBe(undefined)
         expect(params.year1).toBe(undefined)
         expect(params.year2).toBe(undefined)
-        expect(params.audio).toBe("0")
-        expect(params.offers).toBe("0")
+        expect(params.audio).toBe('0')
+        expect(params.offers).toBe('0')
         expect(params.ships_from).toBe(undefined)
-        expect(params.limit).toBe("25")
-        expect(params.page).toBe("1")
+        expect(params.limit).toBe('25')
+        expect(params.page).toBe('1')
         expect(params.sort).toBe(ESort.LISTED_NEWEST)
-        done()
     }, timeout)
 
-    // @ts-ignore 
-    test('It should return good params with complex search', async (done) => {
+    test('It should return good params with complex search', async () => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.STRING,
-            searchValue: "test",
+            searchValue: 'test',
             currency: ECurrency.EUR,
             genre: EGenre.ROCK,
             style: [EStyle.DEATHMETAL, EStyle.HEAVYMETAL],
@@ -159,35 +149,33 @@ describe('Test marketplace.ts', () => {
             sort: ESort.LISTED_OLDEST,
             limit: 50,
             page: 2,
-            lang: ELang.FRENCH
+            lang: ELang.FRENCH,
         })
 
-        const params = url.parse(res.urlGenerated!, true)?.query
+        const params = url.parse(res.urlGenerated, true)?.query
         expect(params).not.toBe(null)
-        expect(params[EType.STRING]).toBe("test")
+        expect(params[EType.STRING]).toBe('test')
         expect(params.currency).toBe(ECurrency.EUR)
         expect(params.genre).toBe(EGenre.ROCK)
         expect(params.style).toEqual([EStyle.DEATHMETAL, EStyle.HEAVYMETAL])
         expect(params.format).toBe(EFormat.CD)
         expect(params.format_desc).toBe(EFormatDescription.PROMO)
         expect(params.condition).toBe(EMediaCondition.MINT)
-        expect(params.year).toBe("2019")
+        expect(params.year).toBe('2019')
         expect(params.year1).toBe(undefined)
         expect(params.year2).toBe(undefined)
-        expect(params.audio).toBe("1")
-        expect(params.offers).toBe("1")
+        expect(params.audio).toBe('1')
+        expect(params.offers).toBe('1')
         expect(params.ships_from).toBe(EFrom.FRANCE)
-        expect(params.limit).toBe("50")
-        expect(params.page).toBe("2")
+        expect(params.limit).toBe('50')
+        expect(params.page).toBe('2')
         expect(params.sort).toBe(ESort.LISTED_OLDEST)
-        done()
     }, timeout)
 
-    // @ts-ignore 
-    test('It should return good params with complex search and years interval', async (done) => {
+    test('It should return good params with complex search and years interval', async () => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.STRING,
-            searchValue: "test",
+            searchValue: 'test',
             currency: ECurrency.EUR,
             genre: EGenre.ROCK,
             style: [EStyle.DEATHMETAL, EStyle.HEAVYMETAL],
@@ -203,12 +191,12 @@ describe('Test marketplace.ts', () => {
             sort: ESort.LISTED_OLDEST,
             limit: 50,
             page: 2,
-            lang: ELang.FRENCH
+            lang: ELang.FRENCH,
         })
 
-        const params = url.parse(res.urlGenerated!, true)?.query
+        const params = url.parse(res.urlGenerated, true)?.query
         expect(params).not.toBe(null)
-        expect(params[EType.STRING]).toBe("test")
+        expect(params[EType.STRING]).toBe('test')
         expect(params.currency).toBe(ECurrency.EUR)
         expect(params.genre).toBe(EGenre.ROCK)
         expect(params.style).toEqual([EStyle.DEATHMETAL, EStyle.HEAVYMETAL])
@@ -216,60 +204,53 @@ describe('Test marketplace.ts', () => {
         expect(params.format_desc).toBe(EFormatDescription.PROMO)
         expect(params.condition).toBe(EMediaCondition.MINT)
         expect(params.year).toBe(undefined)
-        expect(params.year1).toBe("2015")
-        expect(params.year2).toBe("2016")
-        expect(params.audio).toBe("1")
-        expect(params.offers).toBe("1")
+        expect(params.year1).toBe('2015')
+        expect(params.year2).toBe('2016')
+        expect(params.audio).toBe('1')
+        expect(params.offers).toBe('1')
         expect(params.ships_from).toBe(EFrom.FRANCE)
-        expect(params.limit).toBe("50")
-        expect(params.page).toBe("2")
+        expect(params.limit).toBe('50')
+        expect(params.page).toBe('2')
         expect(params.sort).toBe(ESort.LISTED_OLDEST)
-        done()
     }, timeout)
 
-    // @ts-ignore 
-    test('It should return good params with user\'s wantlist search', async (done) => {
+    test('It should return good params with user\'s wantlist search', async () => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.USER,
-            searchValue: "TheUser"
+            searchValue: 'TheUser',
         })
 
-        const params = url.parse(res.urlGenerated!, true)?.query
-        expect(res.urlGenerated!.includes('/mywants')).toBe(true)
-        expect(res.urlGenerated!.includes('/list')).toBe(false)
-        expect(params.user).toBe("TheUser")
-        done()
+        const params = url.parse(res.urlGenerated, true)?.query
+        expect(res.urlGenerated.includes('/mywants')).toBe(true)
+        expect(res.urlGenerated.includes('/list')).toBe(false)
+        expect(params.user).toBe('TheUser')
     }, timeout)
 
-    // @ts-ignore 
-    test('It should return good params with user\'s selling search', async (done) => {
+    test('It should return good params with user\'s selling search', async () => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.STRING,
-            searchValue: "",
-            seller: "TheSeller"
+            searchValue: '',
+            seller: 'TheSeller',
         })
 
-        expect(res.urlGenerated!.includes('/seller/TheSeller/')).toBe(true)
-        expect(res.urlGenerated!.includes('/sell/')).toBe(false)
-        expect(res.urlGenerated!.includes('/mywants')).toBe(false)
-        expect(res.urlGenerated!.includes('/profile')).toBe(true)
-        done()
+        expect(res.urlGenerated.includes('/seller/TheSeller/')).toBe(true)
+        expect(res.urlGenerated.includes('/sell/')).toBe(false)
+        expect(res.urlGenerated.includes('/mywants')).toBe(false)
+        expect(res.urlGenerated.includes('/profile')).toBe(true)
     }, timeout)
 
-    // @ts-ignore 
-    test('It should return good params with user\'s wantlist search against user\'s selling items', async (done) => {
+    test('It should return good params with user\'s wantlist search against user\'s selling items', async () => {
         const res: IOutputSuccess = await service.search({
             searchType: EType.USER,
-            searchValue: "TheUser",
-            seller: "TheSeller"
+            searchValue: 'TheUser',
+            seller: 'TheSeller',
         })
 
-        const params = url.parse(res.urlGenerated!, true)?.query
-        expect(res.urlGenerated!.includes('/seller/TheSeller/')).toBe(true)
-        expect(res.urlGenerated!.includes('/sell/')).toBe(false)
-        expect(res.urlGenerated!.includes('/mywants')).toBe(true)
-        expect(res.urlGenerated!.includes('/profile')).toBe(false)
-        expect(params.user).toBe("TheUser")
-        done()
+        const params = url.parse(res.urlGenerated, true)?.query
+        expect(res.urlGenerated.includes('/seller/TheSeller/')).toBe(true)
+        expect(res.urlGenerated.includes('/sell/')).toBe(false)
+        expect(res.urlGenerated.includes('/mywants')).toBe(true)
+        expect(res.urlGenerated.includes('/profile')).toBe(false)
+        expect(params.user).toBe('TheUser')
     }, timeout)
 })
