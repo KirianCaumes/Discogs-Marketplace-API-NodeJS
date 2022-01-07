@@ -17,8 +17,8 @@ import IYears from '@interface/IYears'
 import TLimit from '@type/TLimit'
 import { chromium as playwright } from 'playwright-chromium'
 import UserAgent from 'user-agents'
-import EDiscogsCurrencyToIsoCode from '@enum/iso/translates/EDiscogsCurrencyToIsoCode'
-import EDiscogsCountryNameToIsoCode from '@enum/iso/translates/EDiscogsCountryNameToIsoCode'
+import EDiscogsCurrencyToIsoCode from '@enum/iso/translate/EDiscogsCurrencyToIsoCode'
+import EDiscogsCountryNameToIsoCode from '@enum/iso/translate/EDiscogsCountryNameToIsoCode'
 import { parseHTML } from 'linkedom'
 
 /**
@@ -270,9 +270,8 @@ export default class Marketplace {
                 const have = Number.parseInt(el.querySelector('.community_summary .community_result:nth-child(1) .community_number')?.textContent ?? '', 10)
                 const want = Number.parseInt(el.querySelector('.community_summary .community_result:nth-child(2) .community_number')?.textContent ?? '', 10)
                 const countryName = el.querySelector('.seller_info li:nth-child(3)')?.textContent?.split(':')?.[1] ?? ''
-                const isoCountryCode = (Object.keys(ECountryCode)
-                    .find((key: string) => ECountryName[key as ECountryCode] === countryName
-                        || EDiscogsCountryNameToIsoCode[countryName as keyof typeof EDiscogsCountryNameToIsoCode]) ?? '') as ECountryCode
+                const isoCountryCode = (Object.keys(ECountryCode).find((key: string) => (ECountryName[key as ECountryCode] === countryName))
+                    || EDiscogsCountryNameToIsoCode[countryName as keyof typeof EDiscogsCountryNameToIsoCode]) as ECountryCode
                 const releaseId = Number.parseInt(
                     el.querySelector<HTMLLinkElement>('a.item_release_link')?.href.split('release/')?.pop()?.split('-')?.shift() ?? '0', 10,
                 )
