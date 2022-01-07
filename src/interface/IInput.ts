@@ -12,7 +12,7 @@ import EFormatDescription from '@enum/EFormatDescription'
 import ELang from '@enum/ELang'
 
 /**
- * @interface IInput Element that can be provided by user
+ * Element that can be provided by user
  */
 export default interface IInput {
     /**

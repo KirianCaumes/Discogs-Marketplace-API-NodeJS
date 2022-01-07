@@ -1,5 +1,5 @@
 /**
- * @interface IInput Provide interval of years
+ * Provide interval of years
  */
 export default interface IYears {
     min: number

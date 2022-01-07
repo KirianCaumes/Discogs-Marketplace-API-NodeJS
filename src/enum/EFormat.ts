@@ -1,7 +1,5 @@
 /**
  * Formats Description
- * @type {Object.<string, string>}
- * @readonly
  */
 enum EFormat {
     VINYL = 'Vinyl',

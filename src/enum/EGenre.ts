@@ -1,7 +1,5 @@
 /**
  * Genres
- * @type {Object.<string, string>}
- * @readonly
  */
 enum EGenre {
     ROCK = 'Rock',

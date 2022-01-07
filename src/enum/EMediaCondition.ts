@@ -1,7 +1,5 @@
 /**
  * Media Conditions
- * @type {Object.<string, string>}
- * @readonly
  */
 enum EMediaCondition {
     VERYGOODPLUS = 'Very Good Plus (VG+)',

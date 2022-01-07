@@ -1,7 +1,5 @@
 /**
  * Languages
- * @type {Object.<string, string>}
- * @readonly
  */
 enum ELang {
     GERMAN = 'de',

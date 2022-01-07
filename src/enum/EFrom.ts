@@ -1,7 +1,5 @@
 /**
  * Countries
- * @type {Object.<string, string>}
- * @readonly
  */
 // eslint-disable-next-line import/prefer-default-export
 enum EFrom {

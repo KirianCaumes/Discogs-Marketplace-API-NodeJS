@@ -1,7 +1,5 @@
 /**
  * Styles
- * @type {Object.<string, string>}
- * @readonly
  */
 enum EStyle {
     POPROCK = 'Pop Rock',

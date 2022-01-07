@@ -1,5 +1,8 @@
+import ECountryCode from '@enum/iso/ECountryCode'
+import ECountryName from '@enum/iso/ECountryName'
+
 /**
- * @interface IItem One item from discogs
+ * One item from discogs
  */
 export default interface IItem {
     itemId: number
@@ -28,6 +31,7 @@ export default interface IItem {
     }
     seller: {
         name: string
+        url: string
         score: string
         notes: number
     }
@@ -37,13 +41,15 @@ export default interface IItem {
     }
     from: {
         countryName: string
-        isoCountryName: string
-        isoCode: string
+        isoCountryName: ECountryName
+        isoCountryCode: ECountryCode
     }
     community: {
         have: number
         want: number
     }
-    releaseUrl: string
-    releaseId: number
+    release: {
+        id: number
+        url: string
+    }
 }

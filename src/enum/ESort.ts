@@ -1,7 +1,5 @@
 /**
  * Sorts of search
- * @type {Object.<string, string>}
- * @readonly
  */
 enum ESort {
     /**

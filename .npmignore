@@ -1,6 +1,11 @@
 src/
 tsconfig.json
+tsconfig.build.json
 jest.config.js
 test/
 coverage
 .vscode/
+.eslintrc.js
+.gitattributes
+.gitignore
+notes.md

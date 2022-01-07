@@ -1,7 +1,5 @@
 /**
  * Currencies
- * @type {Object.<string, string>}
- * @readonly
  */
 enum ECurrency {
     EUR = 'EUR',

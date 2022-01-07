@@ -1,7 +1,5 @@
 /**
  * Formats
- * @type {Object.<string, string>}
- * @readonly
  */
 enum EFormatDescription {
     ALBUM = 'Album',

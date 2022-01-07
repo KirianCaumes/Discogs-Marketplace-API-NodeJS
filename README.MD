@@ -26,7 +26,7 @@ DiscogsMarketplace.search({ searchType: EType.ARTIST, searchValue: 244819 })
     })
 ```
 
-In plain Javascript
+In Javascript with require
 
 ```js
 const DiscogsMarketplace = require('discogs-marketplace-api-nodejs').default
@@ -126,65 +126,70 @@ If success, it will return :
 
 ```ts
 interface IOutputSuccess {
-    result: IItem[],
+    items: IItem[]
     page: {
-        current: number,
+        current: number
         total: number
-    },
-    item: {
-        total: number,
-        perPage: number,
-    },
+    }
+    result: {
+        total: number
+        perPage: number
+    }
     search: {
-        value: string | number,
+        value: string | number
         type: EType
-    },
-    urlGenerated: string,
+    }
+    urlGenerated: string
 }
 
 interface IItem {
+    itemId: number
     title: {
-        original: string,
-        artist: string,
-        item: string,
-        formats: string[],
-    },
-    url: string,
-    labels: string[],
-    catnos: string[],
-    imageUrl: string,
-    description: string,
-    isAcceptingOffer: boolean,
-    isAvailable: boolean,
+        original: string
+        artist: string
+        item: string
+        formats: string[]
+    }
+    url: string
+    labels: string[]
+    catnos: string[]
+    imageUrl: string
+    description: string
+    isAcceptingOffer: boolean
+    isAvailable: boolean
     condition: {
         media: {
-            full: string,
-            short: string
-        },
-        sleeve: {
-            full: string,
+            full: string
             short: string
         }
-    },
+        sleeve: {
+            full: string
+            short: string
+        }
+    }
     seller: {
-        name: string,
-        score: string,
+        name: string
+        url: string
+        score: string
         notes: number
-    },
+    }
     price: {
-        base: string,
-        shipping: string,
-    },
+        base: string
+        shipping: string
+    }
     from: {
-        countryName: string,
-        isoCountryName: string,
-        isoCode: string,
-    },
+        countryName: string
+        isoCountryName: ECountryName
+        isoCountryCode: ECountryCode
+    }
     community: {
-        have: number,
+        have: number
         want: number
-    },
-    releaseUrl: string
+    }    
+    release: {
+        id: number
+        url: string
+    }
 }
 ```
 
@@ -192,7 +197,7 @@ If error, it will throw :
 
 ```ts
 interface IOutputError {
-    message: string,
+    message: string
     code: number
 }
 ```
