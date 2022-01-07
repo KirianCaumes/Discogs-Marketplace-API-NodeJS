@@ -201,3 +201,17 @@ interface IOutputError {
     code: number
 }
 ```
+
+## Know issues
+
+If you are using this librairie on a Typescript project, you might encounter issues with `linkedom`.
+
+To fix it, use this in command line: `--skipLibCheck` or add that in you `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "skipLibCheck": true
+  }
+}
+```
