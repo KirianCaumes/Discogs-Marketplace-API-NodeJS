@@ -5,6 +5,7 @@ jest.config.js
 test/
 coverage
 .vscode/
+.devcontainer/
 .eslintrc.js
 .gitattributes
 .gitignore

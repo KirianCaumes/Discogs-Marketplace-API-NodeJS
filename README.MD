@@ -202,6 +202,20 @@ interface IOutputError {
 }
 ```
 
+## How to contribute
+
+There is a devcontainer on that project already configured, feel free to use it.
+
+You can install dependecies with:
+
+```sh
+npm i
+```
+
+And then create a new file that import `DiscogsMarketplace` and run query to try your updates.
+
+Finally, you can open a pull request with your new additions.
+
 ## Know issues
 
 If you are using this librairie on a Typescript project, you might encounter issues with `linkedom`.
@@ -215,3 +229,5 @@ To fix it, use this in command line: `--skipLibCheck` or add that in you `tsconf
   }
 }
 ```
+
+If you found another one, feel free to open an issue.

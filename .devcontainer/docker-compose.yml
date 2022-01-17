@@ -1,0 +1,19 @@
+version: '3'
+services:
+  discogs-marketplace-api-nodejs_container:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    stdin_open: true
+    tty: true
+    volumes:
+      - ../:/app_discogs-marketplace-api-nodejs:rw
+    ports:
+      - 5000:5000
+      - 3000:3000
+    networks:
+      - discogs-marketplace-api-nodejs_network
+
+networks:
+  discogs-marketplace-api-nodejs_network:
+    driver: 'bridge'
