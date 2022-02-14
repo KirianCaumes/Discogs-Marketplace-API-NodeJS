@@ -163,7 +163,7 @@ export default class Marketplace {
             this.url = page.url()
 
             /** Get HTML */
-            const bodyHTML = await page.evaluate(() => document.querySelector('table.table_block')?.outerHTML)
+            const bodyHTML = await page.evaluate(() => document.getElementById('page_content')?.outerHTML)
 
             /** Close browser */
             await browser.close()

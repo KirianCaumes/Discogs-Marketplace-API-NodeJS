@@ -35,5 +35,6 @@ RUN sudo apt-get update --fix-missing
 RUN sudo curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
 RUN sudo apt-get install -y nodejs
 RUN sudo npm i -g nodemon
+RUN sudo npm i -g np
 
 WORKDIR /app_discogsnewreleasenotification
