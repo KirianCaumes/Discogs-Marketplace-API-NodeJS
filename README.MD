@@ -218,6 +218,16 @@ Finally, you can open a pull request with your new additions.
 
 ## Know issues
 
+### Playwright
+
+Try this if chrome wasn't installed with `npm i`:
+
+```sh
+npx playwright install
+```
+
+### Linkedom
+
 If you are using this librairy on a Typescript project, you might encounter issues with `linkedom`.
 
 To fix it, use this in command line: `--skipLibCheck` or add that in you `tsconfig.json`:
