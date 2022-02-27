@@ -184,7 +184,7 @@ export default class Marketplace {
 
             // eslint-disable-next-line @typescript-eslint/no-throw-literal
             throw {
-                message: 'An error occured',
+                message: error?.message || 'An error occured',
                 code: 500,
             } as IOutputError
         }
@@ -235,12 +235,12 @@ export default class Marketplace {
     }
 
     /**
-     * Function to convert devise to ISO name
+     * Function to convert currency to ISO name
      * @param str String to clean
      * @returns Cleanup string
      */
     // eslint-disable-next-line class-methods-use-this
-    private convertDevise(value: string): string {
+    private convertCurrency(value: string): string {
         if (!value)
             return value
 
@@ -249,7 +249,13 @@ export default class Marketplace {
         if (!currency)
             return value
 
-        return `${value.replace(currency, '')} ${(EDiscogsCurrencyToIsoCode as any)[currency]}`.replace(/\s\s+/g, ' ')
+        const amount = value
+            .replace(/[.](?=.*[.])/g, '') // Remove all dot but last
+            .replace(currency, '') // Remove original currency
+            .replace(/\s/g, '') // Remove spaces
+
+        return `${amount} ${(EDiscogsCurrencyToIsoCode as any)[currency]}`
+            .replace(/\s\s+/g, ' ') // Remove useless spaces
     }
 
     /**
@@ -264,7 +270,7 @@ export default class Marketplace {
 
         return {
             items: [...document.querySelectorAll('table.table_block tbody tr')]?.map(el => {
-                const shipping: any = this.convertDevise(
+                const shipping: any = this.convertCurrency(
                     el.querySelector('.item_shipping')?.childNodes?.[0]?.textContent?.replace(/(\s+|\+)/g, ' ')?.trim()?.replace(',', '.') ?? '',
                 )
                 const have = Number.parseInt(el.querySelector('.community_summary .community_result:nth-child(1) .community_number')?.textContent ?? '', 10)
@@ -322,7 +328,7 @@ export default class Marketplace {
                         notes: Number.isNaN(notes) ? 0 : notes,
                     },
                     price: {
-                        base: this.convertDevise(el.querySelector('.price')?.textContent?.replace(/\s+/g, ' ')?.replace(/,/, '.') ?? ''),
+                        base: this.convertCurrency(el.querySelector('.price')?.textContent?.replace(/\s+/g, ' ')?.replace(/,/, '.') ?? ''),
                         shipping: Number.isNaN(parseFloat(shipping)) ? null : shipping,
                     },
                     from: {

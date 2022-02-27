@@ -218,7 +218,7 @@ Finally, you can open a pull request with your new additions.
 
 ## Know issues
 
-If you are using this librairie on a Typescript project, you might encounter issues with `linkedom`.
+If you are using this librairy on a Typescript project, you might encounter issues with `linkedom`.
 
 To fix it, use this in command line: `--skipLibCheck` or add that in you `tsconfig.json`:
 
@@ -230,4 +230,4 @@ To fix it, use this in command line: `--skipLibCheck` or add that in you `tsconf
 }
 ```
 
-If you found another one, feel free to open an issue.
+If you found another problem, feel free to open an issue.
