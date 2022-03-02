@@ -11,8 +11,9 @@ enum ECurrency {
     JPY = 'JPY',
     SEK = 'SEK',
     BRL = 'BRL',
-    NZD = 'NZD',
     MXN = 'MXN',
+    NZD = 'NZD',
+    DKK = 'DKK',
     ZAR = 'ZAR',
 }
 

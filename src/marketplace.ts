@@ -249,12 +249,14 @@ export default class Marketplace {
         if (!currency)
             return value
 
+        const currencyClean = (EDiscogsCurrencyToIsoCode as any)[currency]
+
         const amount = value
-            .replace(/[.](?=.*[.])/g, '') // Remove all dot but last
+            .replace(currencyClean !== ECurrency.JPY ? /[.](?=.*[.])/g : /\./g, '') // Remove all dot but last, except if JPY
             .replace(currency, '') // Remove original currency
             .replace(/\s/g, '') // Remove spaces
 
-        return `${amount} ${(EDiscogsCurrencyToIsoCode as any)[currency]}`
+        return `${amount} ${currencyClean}`
             .replace(/\s\s+/g, ' ') // Remove useless spaces
     }
 
