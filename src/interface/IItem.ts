@@ -5,7 +5,7 @@ import ECountryName from '@enum/iso/ECountryName'
  * One item from discogs
  */
 export default interface IItem {
-    itemId: number
+    id: number
     title: {
         original: string
         artist: string

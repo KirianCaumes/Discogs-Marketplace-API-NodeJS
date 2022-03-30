@@ -292,7 +292,7 @@ export default class Marketplace {
                 const lastIndexOfParenthesis = originalTitle?.lastIndexOf(' (') ?? -1
 
                 return {
-                    itemId: Number.isNaN(itemId) ? 0 : itemId,
+                    id: Number.isNaN(itemId) ? 0 : itemId,
                     title: {
                         original: originalTitle ?? '',
                         artist: originalTitle?.substring(0, firstIndexOfDash) ?? '',

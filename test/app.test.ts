@@ -31,7 +31,7 @@ describe('Test marketplace.ts', () => {
         expect(res.search?.value).not.toBe(null)
         expect(res.search?.type).not.toBe(null)
         expect(res.urlGenerated).not.toBe(null)
-        expect(res.items[0]?.itemId).not.toBe(null)
+        expect(res.items[0]?.id).not.toBe(null)
         expect(res.items[0]?.title?.original).not.toBe(null)
         expect(res.items[0]?.title?.artist).not.toBe(null)
         expect(res.items[0]?.title?.item).not.toBe(null)

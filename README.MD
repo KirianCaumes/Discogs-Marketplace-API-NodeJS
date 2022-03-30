@@ -143,7 +143,7 @@ interface IOutputSuccess {
 }
 
 interface IItem {
-    itemId: number
+    id: number
     title: {
         original: string
         artist: string
