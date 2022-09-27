@@ -1,5 +1,6 @@
+import url from 'url'
 import DiscogsMarketplace, {
-    IOutputSuccess, IDiscogsMarketplace,
+    IOutputSuccess,
     ECurrency,
     EFormat,
     EFormatDescription,
@@ -10,15 +11,14 @@ import DiscogsMarketplace, {
     ESort,
     EStyle,
     EType,
-} from '@main/index'
-import url from 'url'
+    IOutputError,
+} from '../src/index'
 
 describe('Test marketplace.ts', () => {
-    const service: IDiscogsMarketplace = DiscogsMarketplace
     const timeout = 10000
 
     it('It should return success value', async () => {
-        const res: IOutputSuccess = await service.search({ searchType: EType.STRING, searchValue: '' })
+        const res: IOutputSuccess = await DiscogsMarketplace.search({ searchType: EType.STRING, searchValue: '' })
 
         expect(res.result).not.toBe(null)
         expect(res.page).not.toBe(null)
@@ -67,15 +67,15 @@ describe('Test marketplace.ts', () => {
 
     test('It should return error value', async () => {
         try {
-            await service.search({ searchType: EType.STRING, searchValue: 'error' })
-        } catch (err: any) {
-            expect(err.code).toBe(404)
-            expect(err.message).toBe('An error occured')
+            await DiscogsMarketplace.search({ searchType: EType.STRING, searchValue: 'error' })
+        } catch (err) {
+            expect((err as IOutputError).code).toBe(404)
+            expect((err as IOutputError).message).toBe('An error occured')
         }
     }, timeout)
 
     test('It should return success value with artist', async () => {
-        const res: IOutputSuccess = await service.search({ searchType: EType.ARTIST, searchValue: 123456 })
+        const res: IOutputSuccess = await DiscogsMarketplace.search({ searchType: EType.ARTIST, searchValue: 123456 })
         expect(res.result).not.toBe(null)
         expect(res.page).not.toBe(null)
         expect(res.page?.current).not.toBe(null)
@@ -90,7 +90,7 @@ describe('Test marketplace.ts', () => {
     }, timeout)
 
     test('It should return good params with artist', async () => {
-        const res: IOutputSuccess = await service.search({
+        const res: IOutputSuccess = await DiscogsMarketplace.search({
             searchType: EType.ARTIST,
             searchValue: 123456,
             currency: undefined,
@@ -132,7 +132,7 @@ describe('Test marketplace.ts', () => {
     }, timeout)
 
     test('It should return good params with complex search', async () => {
-        const res: IOutputSuccess = await service.search({
+        const res: IOutputSuccess = await DiscogsMarketplace.search({
             searchType: EType.STRING,
             searchValue: 'test',
             currency: ECurrency.EUR,
@@ -174,7 +174,7 @@ describe('Test marketplace.ts', () => {
     }, timeout)
 
     test('It should return good params with complex search and years interval', async () => {
-        const res: IOutputSuccess = await service.search({
+        const res: IOutputSuccess = await DiscogsMarketplace.search({
             searchType: EType.STRING,
             searchValue: 'test',
             currency: ECurrency.EUR,
@@ -216,7 +216,7 @@ describe('Test marketplace.ts', () => {
     }, timeout)
 
     test('It should return good params with user\'s wantlist search', async () => {
-        const res: IOutputSuccess = await service.search({
+        const res: IOutputSuccess = await DiscogsMarketplace.search({
             searchType: EType.USER,
             searchValue: 'TheUser',
         })
@@ -228,7 +228,7 @@ describe('Test marketplace.ts', () => {
     }, timeout)
 
     test('It should return good params with user\'s selling search', async () => {
-        const res: IOutputSuccess = await service.search({
+        const res: IOutputSuccess = await DiscogsMarketplace.search({
             searchType: EType.STRING,
             searchValue: '',
             seller: 'TheSeller',
@@ -241,7 +241,7 @@ describe('Test marketplace.ts', () => {
     }, timeout)
 
     test('It should return good params with user\'s wantlist search against user\'s selling items', async () => {
-        const res: IOutputSuccess = await service.search({
+        const res: IOutputSuccess = await DiscogsMarketplace.search({
             searchType: EType.USER,
             searchValue: 'TheUser',
             seller: 'TheSeller',

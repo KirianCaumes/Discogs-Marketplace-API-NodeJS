@@ -1,7 +1,6 @@
 /**
  * Countries
  */
-// eslint-disable-next-line import/prefer-default-export
 enum EFrom {
     AFGHANISTAN = 'Afghanistan',
     ALBANIA = 'Albania',

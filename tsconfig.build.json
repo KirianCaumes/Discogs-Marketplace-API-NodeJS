@@ -1,35 +1,10 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "declaration": true,
-    "outDir": "./dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "baseUrl": "./",
-    "paths": {
-      "@enum/*": [
-        "src/enum/*"
-      ],
-      "@interface/*": [
-        "src/interface/*"
-      ],
-      "@type/*": [
-        "src/type/*"
-      ],
-      "@main/*": [
-        "src/*"
-      ],
-    },
-    "plugins": [
-      {
-        "transform": "typescript-transform-paths"
-      },
-      {
-        "transform": "typescript-transform-paths",
-        "afterDeclarations": true
-      }
-    ]
+    "skipLibCheck": true
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true,
   },
   "include": [
     "src/**/*"

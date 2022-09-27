@@ -1,15 +1,8 @@
-import EFrom from '@enum/EFrom'
-import EType from '@enum/EType'
-import ECurrency from '@enum/ECurrency'
-import EGenre from '@enum/EGenre'
-import EStyle from '@enum/EStyle'
-import EMediaCondition from '@enum/EMediaCondition'
-import ESort from '@enum/ESort'
-import TLimit from '@type/TLimit'
-import IYears from '@interface/IYears'
-import EFormat from '@enum/EFormat'
-import EFormatDescription from '@enum/EFormatDescription'
-import ELang from '@enum/ELang'
+import {
+    ECurrency, EFormat, EFormatDescription, EFrom, EGenre, ELang, EMediaCondition, ESort, EStyle, EType,
+} from 'enums'
+import { LimitType } from 'types'
+import IYears from 'interfaces/year.interface'
 
 /**
  * Element that can be provided by user
@@ -78,7 +71,7 @@ export default interface IInput {
     /**
      * Limit of elements to search (25 | 50 | 100 | 250)
      */
-    limit?: TLimit
+    limit?: LimitType
     /**
      * Page (Must be < 401 or discogs will return an error 404)
      */

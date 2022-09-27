@@ -6,36 +6,12 @@
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "baseUrl": "./",
-    "paths": {
-      "@enum/*": [
-        "src/enum/*"
-      ],
-      "@interface/*": [
-        "src/interface/*"
-      ],
-      "@type/*": [
-        "src/type/*"
-      ],
-      "@main/*": [
-        "src/*"
-      ],
-    },
-    "plugins": [
-      {
-        "transform": "typescript-transform-paths"
-      },
-      {
-        "transform": "typescript-transform-paths",
-        "afterDeclarations": true
-      }
-    ]
+    "baseUrl": "./src",
   },
   "include": [
-    "src/**/*",
-    "test/**/*"
-  ],
-  "exclude": [
-    "node_modules"
+    "./src",
+    "./test",
+    ".eslintrc.js",
+    "jest.config.js"
   ]
 }

@@ -110,7 +110,7 @@ interface IInput {
     /**
      * Limit of elements to search (25 | 50 | 100 | 250)
      */
-    limit?: TLimit,
+    limit?: LimitType,
     /**
      * Page (Must be < 401 or discogs will return an error 404)
      */
