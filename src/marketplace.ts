@@ -1,14 +1,14 @@
-import { chromium as playwright } from 'playwright-chromium'
 import UserAgent from 'user-agents'
 import { parseHTML } from 'linkedom'
 import {
-    ECurrency, ELang, ESort, EType,
+    ECurrency, ELang, EType,
 } from 'enums'
 import {
     IInput, IOutputSuccess, IOutputError,
 } from 'interfaces'
 import { EDiscogsCountryNameToIsoCode, EDiscogsCurrencyToIsoCode } from 'enums/iso/translate'
 import { ECountryCode, ECountryName } from 'enums/iso'
+import axios from 'axios'
 
 /**
  * Discogs Marketplace
@@ -33,99 +33,62 @@ export default abstract class Marketplace {
         isMakeAnOfferOnly = false,
         from = undefined,
         seller = undefined,
-        sort = ESort.LISTED_NEWEST,
+        sort = undefined,
         limit = 25,
-        page = 1,
+        page = undefined,
         lang = ELang.ENGLISH,
     }: IInput): Promise<IOutputSuccess> {
         try {
-            /** Init browser */
-            const browser = await playwright.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] })
-
-            /** Init context */
-            const browserContext = await browser.newContext({
-                userAgent: new UserAgent().toString(),
-            })
-
-            /** Init page */
-            const browserPage = await browserContext.newPage()
-
-            /** Block useless ressources */
-            await browserPage.route('**/*', route => ([
-                'stylesheet',
-                'image',
-                'media',
-                'font',
-                'script',
-                'texttrack',
-                'xhr',
-                'fetch',
-                'eventsource',
-                'websocket',
-                'manifest',
-                'other',
-            ].includes(route.request().resourceType()) ? route.abort() : route.continue()))
-
-            /** Init page */
-            const response = await browserPage.goto(
-                `${this.generateUrl({
-                    searchType,
-                    seller,
-                    lang,
-                })}?${this.serializeParams({
+            const config: import('axios').AxiosRequestConfig = {
+                url: this.generateUrl({ searchType, seller, lang }),
+                method: 'GET',
+                params: {
                     [searchType]: searchValue,
                     currency,
                     genre,
                     style: style?.length ? style : undefined,
-                    format: format?.length ? format?.[0] : undefined,
-                    format_desc: formatDescription?.length ? formatDescription[0] : undefined,
-                    condition: mediaCondition?.length ? mediaCondition[0] : undefined,
+                    format: format?.length ? format : undefined,
+                    format_desc: formatDescription?.length ? formatDescription : undefined,
+                    condition: mediaCondition?.length ? mediaCondition : undefined,
                     year: year && !years ? year : undefined,
                     year1: years?.min && !year ? years?.min : undefined,
                     year2: years?.max && !year ? years?.max : undefined,
-                    audio: isAudioSample ? 1 : 0,
-                    offers: isMakeAnOfferOnly ? 1 : 0,
+                    audio: isAudioSample ? 1 : undefined,
+                    offers: isMakeAnOfferOnly ? 1 : undefined,
                     ships_from: from?.length ? from : undefined,
                     limit,
                     page,
                     sort,
-                })}`,
-                { waitUntil: 'domcontentloaded' },
-            )
+                },
+                paramsSerializer: this.serializeParams,
+                headers: {
+                    'X-PJAX': 'true',
+                    'User-Agent': new UserAgent().toString(),
+                },
+            }
 
-            /** Get url */
-            const urlGenerated = browserPage.url()
+            const { data: bodyHTML } = await axios.request(config)
 
-            /** Get HTML */
-            const bodyHTML = await browserPage.evaluate(() => document.getElementById('page_content')?.outerHTML)
-
-            /** Close browser */
-            await browser.close()
-
-            /** If error, reject */
-            if ((response?.status() ?? 0) >= 400)
-                // eslint-disable-next-line @typescript-eslint/no-throw-literal
-                throw { document: bodyHTML, status: response?.status() ?? 0 }
-
-            return this.getItem(
+            return this.getData(
                 parseHTML(bodyHTML).document,
-                urlGenerated,
+                axios.getUri(config),
                 {
                     searchType, searchValue, limit, page,
                 },
             )
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            if (error?.document && error.status)
+            const { response, message } = error as import('axios').AxiosError
+            if (response?.data && response.status)
                 // eslint-disable-next-line @typescript-eslint/no-throw-literal
                 throw {
-                    message: parseHTML(error.document).document?.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occured',
-                    code: error.status,
+                    message: parseHTML(response.data).document?.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occured',
+                    code: response.status,
                 } as IOutputError
 
             // eslint-disable-next-line @typescript-eslint/no-throw-literal
             throw {
-                message: error?.message || 'An error occured',
+                message: message || 'An error occured',
                 code: 500,
             } as IOutputError
         }
@@ -211,7 +174,7 @@ export default abstract class Marketplace {
      * @param urlGenerated Url generated
      * @returns Items found
      */
-    private static getItem(document: Document, urlGenerated: string, {
+    private static getData(document: Document, urlGenerated: string, {
         searchType = EType.STRING,
         searchValue = undefined,
         limit = 25,

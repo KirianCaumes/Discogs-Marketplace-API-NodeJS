@@ -12,21 +12,21 @@ npm install discogs-marketplace-api-nodejs
 
 ### Import and search
 
-In Typescript
+With ECMAScript 6 and +
 
-```ts
-import DiscogsMarketplace, { EType, IOutputSuccess, IOutputError } from 'discogs-marketplace-api-nodejs'
+```js
+import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
 
 DiscogsMarketplace.search({ searchType: EType.ARTIST, searchValue: 244819 })
-    .then((res: IOutputSuccess) => {
+    .then(res=> {
         console.log(res)
     })
-    .catch((err: IOutputError) => {
+    .catch(err => {
         console.error(err)
     })
 ```
 
-In Javascript with require
+With commonJS
 
 ```js
 const DiscogsMarketplace = require('discogs-marketplace-api-nodejs').default
@@ -217,14 +217,6 @@ And then create a new file that import `DiscogsMarketplace` and run query to try
 Finally, you can open a pull request with your new additions.
 
 ## Know issues
-
-### Playwright
-
-Try this if chrome wasn't installed with `npm i`:
-
-```sh
-npx playwright install
-```
 
 ### Linkedom
 
