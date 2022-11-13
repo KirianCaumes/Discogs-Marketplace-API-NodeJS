@@ -18,7 +18,7 @@ With ECMAScript 6 and +
 import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
 
 DiscogsMarketplace.search({ searchType: EType.ARTIST, searchValue: 244819 })
-    .then(res=> {
+    .then(res => {
         console.log(res)
     })
     .catch(err => {

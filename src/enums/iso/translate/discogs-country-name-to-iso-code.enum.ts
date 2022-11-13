@@ -34,7 +34,7 @@ enum EDiscogsCountryNameToIsoCode {
     'Martinique (French)' = 'MQ',
     'Micronesia' = 'FM',
     'Netherlands Antilles' = 'CW', // or SX
-    'Neutral Zone' = 'IQ', // or SA
+    'Neutral Zone' = '',
     'New Caledonia (French)' = 'NC',
     'Pitcairn Island' = 'PN',
     'Polynesia (French)' = 'PF',
