@@ -1,16 +1,14 @@
 # Discogs Marketplace API NodeJS &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/discogs-marketplace-api-nodejs.svg?style=flat)](https://www.npmjs.com/package/discogs-marketplace-api-nodejs)
 
-Another (better ?) NodeJs library to fetch data from Discog's marketplace
+Another (better ?) NodeJs library to fetch data from Discogs marketplace. 💿
 
-## Usage
-
-### Install
+## Installing (with npm)
 
 ```sh
 npm install discogs-marketplace-api-nodejs
 ```
 
-### Import and search
+## Example
 
 With ECMAScript 6 and +
 
@@ -19,14 +17,14 @@ import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
 
 DiscogsMarketplace.search({ searchType: EType.ARTIST, searchValue: 244819 })
     .then(res => {
-        console.log(res)
+        console.log(res) // See 'Data format' chapter
     })
     .catch(err => {
-        console.error(err)
+        console.error(err) // See 'Data format' chapter
     })
 ```
 
-With commonJS
+With CommonJS
 
 ```js
 const DiscogsMarketplace = require('discogs-marketplace-api-nodejs').default
@@ -34,16 +32,16 @@ const { EType } = require('discogs-marketplace-api-nodejs')
 
 DiscogsMarketplace.search({ searchType: EType.ARTIST, searchValue: 244819 })
     .then(res => {
-        console.log(res)
+        console.log(res) // See 'Data format' chapter
     })
     .catch(err => {
-        console.error(err)
+        console.error(err) // See 'Data format' chapter
     })
 ```
 
-### Data format
+## Data format
 
-Data that must provided to the search function must looks like this (other interfaces can be found in "*src/enum*" ) :
+You can provide parameters to the function according to this interface:
 
 ```ts
 interface IInput {
@@ -122,7 +120,7 @@ interface IInput {
 }
 ```
 
-If success, it will return :
+If success, it will return:
 
 ```ts
 interface IOutputSuccess {
@@ -193,7 +191,7 @@ interface IItem {
 }
 ```
 
-If error, it will throw :
+If error, it will throw:
 
 ```ts
 interface IOutputError {
@@ -202,19 +200,19 @@ interface IOutputError {
 }
 ```
 
+Other interfaces can be found in `src/interfaces`.
+
 ## How to contribute
 
-There is a devcontainer on that project already configured, feel free to use it.
+There is a [devcontainer](https://code.visualstudio.com/docs/devcontainers/containers) on that project already configured, feel free to use it.
 
 You can install dependecies with:
 
 ```sh
-npm i
+npm install
 ```
 
-And then create a new file that import `DiscogsMarketplace` and run query to try your updates.
-
-Finally, you can open a pull request with your new additions.
+You can open a pull request with your new additions.
 
 ## Know issues
 
