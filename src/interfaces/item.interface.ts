@@ -1,4 +1,4 @@
-import { ECountryCode, ECountryName } from 'enums/iso'
+import { ECountryCode } from 'enums/iso'
 
 /**
  * One item from discogs
@@ -67,13 +67,11 @@ export default interface IItem {
         shipping: string
     }
     /** From */
-    from: {
-        /** CountryName */
-        countryName: string
-        /** IsoCountryName */
-        isoCountryName: ECountryName
-        /** IsoCountryCode */
-        isoCountryCode: ECountryCode
+    country: {
+        /** Name */
+        name: string
+        /** Iso code */
+        code: ECountryCode
     }
     /** Community */
     community: {

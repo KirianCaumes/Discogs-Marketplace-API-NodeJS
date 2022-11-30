@@ -2,46 +2,116 @@
 
 Another (better ?) NodeJs library to fetch data from Discogs marketplace. 💿
 
-## Installing (with npm)
+## Installation (with npm)
+
+Run the following command in your project:
 
 ```sh
 npm install discogs-marketplace-api-nodejs
 ```
 
-## Example
+## Quick Start
 
-With ECMAScript 6 and +
+Import `DiscogsMarketplace` into your project:
+
+```js
+// With ECMAScript 6 and +
+import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
+
+// With CommonJS
+const DiscogsMarketplace = require('discogs-marketplace-api-nodejs').default
+```
+
+## Examples
+
+- Get top 250 items, of the 2nd page, filtered by Rock, listed by newest, for a given artist
 
 ```js
 import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
 
-DiscogsMarketplace.search({ searchType: EType.ARTIST, searchValue: 244819 })
-    .then(res => {
-        console.log(res) // See 'Data format' chapter
-    })
-    .catch(err => {
-        console.error(err) // See 'Data format' chapter
-    })
+// https://www.discogs.com/sell/list?sort=listed,desc&limit=250&artist_id=244819&page=2&genre=Rock
+const result = await DiscogsMarketplace.search({
+    limit: 250,
+    page: 2,
+    genre: EGenre.ROCK,
+    sort: ESort.LISTED_NEWEST,
+    searchType: EType.ARTIST,
+    searchValue: 244819,
+})
 ```
 
-With CommonJS
+- Get top 50 items, of the 1st page, listed by price lowest, on a user wantlist
 
 ```js
-const DiscogsMarketplace = require('discogs-marketplace-api-nodejs').default
-const { EType } = require('discogs-marketplace-api-nodejs')
+import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
 
-DiscogsMarketplace.search({ searchType: EType.ARTIST, searchValue: 244819 })
-    .then(res => {
-        console.log(res) // See 'Data format' chapter
-    })
-    .catch(err => {
-        console.error(err) // See 'Data format' chapter
-    })
+// https://www.discogs.com/sell/mywants?limit=50&user=Kirian_&sort=price,asc
+const result = await DiscogsMarketplace.search({
+    limit: 50,
+    sort: ESort.PRICE_LOWEST,
+    searchType: EType.USER,
+    searchValue: 'Kirian_',
+})
+```
+
+- Get top 25 items, of the 1st page, listed by seller A-Z, on a release
+
+```js
+import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
+
+// https://www.discogs.com/sell/release/767931?sort=seller,asc&limit=25&page=1
+const result = await DiscogsMarketplace.search({
+    sort: ESort.SELLER_AZ,
+    searchType: EType.RELEASE,
+    searchValue: '767931',
+})
+```
+
+- Get top 100 items, of the 1st page, listed by newest, on a string search
+
+```js
+import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
+
+// https://www.discogs.com/sell/list?sort=listed,desc&limit=100&q=in+flames&page=1
+const result = await DiscogsMarketplace.search({
+    limit: 100,
+    sort: ESort.LISTED_NEWEST,
+    searchType: EType.STRING,
+    searchValue: 'in flames',
+})
+```
+
+- Get top 25 items, of the 1st page, listed by newest, on a seller inventory
+
+```js
+import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
+
+// https://www.discogs.com/seller/Kirian_/profile?sort=listed,desc&limit=25&page=1
+const result = await DiscogsMarketplace.search({
+    sort: ESort.LISTED_NEWEST,
+    searchType: EType.STRING,
+    searchValue: '',
+    seller: 'Kirian_',
+})
+```
+
+- Get top 25 items, of the 1st page, listed by newest, on a user wantlist, on a seller inventory
+
+```js
+import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
+
+// https://www.discogs.com/seller/Kirian_/mywants?sort=listed,desc&limit=25&user=Kirian_&page=1
+const result = await DiscogsMarketplace.search({
+    sort: ESort.LISTED_NEWEST,
+    searchType: EType.USER,
+    searchValue: 'Kirian_',
+    seller: 'Kirian_',
+})
 ```
 
 ## Data format
 
-You can provide parameters to the function according to this interface:
+You can provide parameters to `DiscogsMarketplace.search` function according to this interface:
 
 ```ts
 interface IInput {
@@ -175,15 +245,14 @@ interface IItem {
         base: string
         shipping: string
     }
-    from: {
-        countryName: string
-        isoCountryName: ECountryName
-        isoCountryCode: ECountryCode
+    country: {
+        name: string
+        code: ECountryCode
     }
     community: {
         have: number
         want: number
-    }    
+    }
     release: {
         id: number
         url: string
