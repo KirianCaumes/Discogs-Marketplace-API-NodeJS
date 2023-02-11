@@ -27,15 +27,15 @@ const DiscogsMarketplace = require('discogs-marketplace-api-nodejs').default
 - Get top 250 items, of the 2nd page, filtered by Rock, listed by newest, for a given artist
 
 ```js
-import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
+import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
 
 // https://www.discogs.com/sell/list?sort=listed,desc&limit=250&artist_id=244819&page=2&genre=Rock
 const result = await DiscogsMarketplace.search({
     limit: 250,
     page: 2,
-    genre: EGenre.ROCK,
-    sort: ESort.LISTED_NEWEST,
-    searchType: EType.ARTIST,
+    genre: 'Rock',
+    sort: 'Listed Newest',
+    searchType: 'artist_id',
     searchValue: 244819,
 })
 ```
@@ -43,13 +43,13 @@ const result = await DiscogsMarketplace.search({
 - Get top 50 items, of the 1st page, listed by price lowest, on a user wantlist
 
 ```js
-import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
+import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
 
 // https://www.discogs.com/sell/mywants?limit=50&user=Kirian_&sort=price,asc
 const result = await DiscogsMarketplace.search({
     limit: 50,
-    sort: ESort.PRICE_LOWEST,
-    searchType: EType.USER,
+    sort: 'Price Lowest',
+    searchType: 'user',
     searchValue: 'Kirian_',
 })
 ```
@@ -57,12 +57,12 @@ const result = await DiscogsMarketplace.search({
 - Get top 25 items, of the 1st page, listed by seller A-Z, on a release
 
 ```js
-import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
+import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
 
 // https://www.discogs.com/sell/release/767931?sort=seller,asc&limit=25&page=1
 const result = await DiscogsMarketplace.search({
-    sort: ESort.SELLER_AZ,
-    searchType: EType.RELEASE,
+    sort: 'Seller A-Z',
+    searchType: 'release_id',
     searchValue: '767931',
 })
 ```
@@ -70,13 +70,13 @@ const result = await DiscogsMarketplace.search({
 - Get top 100 items, of the 1st page, listed by newest, on a string search
 
 ```js
-import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
+import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
 
 // https://www.discogs.com/sell/list?sort=listed,desc&limit=100&q=in+flames&page=1
 const result = await DiscogsMarketplace.search({
     limit: 100,
-    sort: ESort.LISTED_NEWEST,
-    searchType: EType.STRING,
+    sort: 'Listed Newest',
+    searchType: 'q',
     searchValue: 'in flames',
 })
 ```
@@ -84,12 +84,12 @@ const result = await DiscogsMarketplace.search({
 - Get top 25 items, of the 1st page, listed by newest, on a seller inventory
 
 ```js
-import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
+import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
 
 // https://www.discogs.com/seller/Kirian_/profile?sort=listed,desc&limit=25&page=1
 const result = await DiscogsMarketplace.search({
-    sort: ESort.LISTED_NEWEST,
-    searchType: EType.STRING,
+    sort: 'Listed Newest',
+    searchType: 'q',
     searchValue: '',
     seller: 'Kirian_',
 })
@@ -98,12 +98,12 @@ const result = await DiscogsMarketplace.search({
 - Get top 25 items, of the 1st page, listed by newest, on a user wantlist, on a seller inventory
 
 ```js
-import DiscogsMarketplace, { EType } from 'discogs-marketplace-api-nodejs'
+import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
 
 // https://www.discogs.com/seller/Kirian_/mywants?sort=listed,desc&limit=25&user=Kirian_&page=1
 const result = await DiscogsMarketplace.search({
-    sort: ESort.LISTED_NEWEST,
-    searchType: EType.USER,
+    sort: 'Listed Newest',
+    searchType: 'user',
     searchValue: 'Kirian_',
     seller: 'Kirian_',
 })
@@ -111,90 +111,153 @@ const result = await DiscogsMarketplace.search({
 
 ## Data format
 
-You can provide parameters to `DiscogsMarketplace.search` function according to this interface:
+You can provide parameters to `DiscogsMarketplace.search` function according to this type:
 
 ```ts
-interface IInput {
+type InputCommonType = {
     /**
-     * Type of elements to search
+     * Type of elements to search.
+     * Default to `q`.
+     * | Name       | Description                |
+     * |:---------: |:--------------------------:|
+     * | q          | Basic query search         |
+     * | master_id  | Search in a master release |
+     * | release_id | Search in a release        |
+     * | label_id   | Search in a label          |
+     * | artist_id  | Search in a artist         |
+     * | user       | Search in user wantlist    |
      */
-    searchType: EType,
+    searchType: SearchTypeType
     /**
      * Value to search corresponding to searchType
      */
-    searchValue: string | number | undefined,
+    searchValue: string | number | undefined
     /**
      * Currency
      */
-    currency?: ECurrency,
+    currency?: CurrencyType
     /**
      * Genre
      */
-    genre?: EGenre,
+    genre?: GenreType
     /**
      * Styles
      */
-    style?: EStyle[]
+    style?: StyleType[]
     /**
      * Formats
      */
-    format?: EFormat[]
+    format?: FormatType[]
     /**
      * Format descriptions
      */
-    formatDescription?: EFormatDescription[]
+    formatDescription?: FormatDescriptionType[]
     /**
      * Media conditions
      */
-    mediaCondition?: EMediaCondition[]
+    condition?: ConditionType[]
     /**
-     * Year (Do not use it with years)
+     * Year (Do not use it with `years`)
      */
-    year?: number,
+    year?: number
     /**
-     * Interval of years (Do not use it with year)
+     * Interval of years (Do not use it with `year`)
      */
-    years?: IYears,
+    years?: {
+        /** Min */
+        min: number
+        /** Max */
+        max: number
+    }
     /**
      * Is audio sample ?
      */
-    isAudioSample?: boolean,
+    isAudioSample?: boolean
     /**
      * Is make an offer only ?
      */
-    isMakeAnOfferOnly?: boolean,
+    isMakeAnOfferOnly?: boolean
     /**
      * Expedition country
      */
-    from?: EFrom,
+    from?: FromType
     /**
      * Seller name
      */
-    seller?: string,
+    seller?: string
     /**
      * Sort elements by
      */
-    sort?: ESort,
+    sort?: SortType
     /**
      * Limit of elements to search (25 | 50 | 100 | 250)
      */
-    limit?: LimitType,
+    limit?: LimitType
     /**
-     * Page (Must be < 401 or discogs will return an error 404)
+     * Page (Must be < 401 or discogs will return an error 404).
+     * Default to `25`.
      */
-    page?: number,
+    page?: number
     /**
-     * Lang to use for Discogs
+     * Lang to use for Discogs.
+     * Default to `en`.
      */
-    lang?: ELang
+    lang?: LangType
 }
 ```
 
 If success, it will return:
 
 ```ts
-interface IOutputSuccess {
-    items: IItem[]
+type OutputSuccessType = {
+    items: {
+        id: number
+        title: {
+            original: string
+            artist: string
+            item: string
+            formats: string[]
+        }
+        url: string
+        labels: string[]
+        catnos: string[]
+        imageUrl: string
+        description: string
+        isAcceptingOffer: boolean
+        isAvailable: boolean
+        condition: {
+            media: {
+                full: string
+                short: string
+            }
+            sleeve: {
+                full: string
+                short: string
+            }
+        }
+        seller: {
+            name: string
+            url: string
+            score: string
+            notes: number
+        }
+        price: {
+            base: string
+            shipping: string
+        }
+        country: {
+            name: string
+            code: ECountryCode
+        }
+        community: {
+            have: number
+            want: number
+        }
+        release: {
+            id: number
+            url: string
+        }
+    }[]
     page: {
         current: number
         total: number
@@ -205,65 +268,16 @@ interface IOutputSuccess {
     }
     search: {
         value: string | number
-        type: EType
+        type: SearchTypeType
     }
     urlGenerated: string
-}
-
-interface IItem {
-    id: number
-    title: {
-        original: string
-        artist: string
-        item: string
-        formats: string[]
-    }
-    url: string
-    labels: string[]
-    catnos: string[]
-    imageUrl: string
-    description: string
-    isAcceptingOffer: boolean
-    isAvailable: boolean
-    condition: {
-        media: {
-            full: string
-            short: string
-        }
-        sleeve: {
-            full: string
-            short: string
-        }
-    }
-    seller: {
-        name: string
-        url: string
-        score: string
-        notes: number
-    }
-    price: {
-        base: string
-        shipping: string
-    }
-    country: {
-        name: string
-        code: ECountryCode
-    }
-    community: {
-        have: number
-        want: number
-    }
-    release: {
-        id: number
-        url: string
-    }
 }
 ```
 
 If error, it will throw:
 
 ```ts
-interface IOutputError {
+type OutputErrorType = {
     message: string
     code: number
 }

@@ -1,35 +1,12 @@
 import {
-    ECurrency, EFormat, EFormatDescription, EFrom, EGenre, ELang, EMediaCondition, ESort, EStyle, EType,
-} from 'enums'
-import {
-    IYears, IInput, IOutputSuccess, IOutputError, IItem,
-} from 'interfaces'
-import { LimitType } from 'types'
+    InputType, OutputErrorType, OutputSuccessType,
+} from 'types/commons'
 import DiscogsMarketplace from 'marketplace'
 
 export {
-    ECurrency,
-    EFormat,
-    EFormatDescription,
-    EFrom,
-    EGenre,
-    ELang,
-    EMediaCondition,
-    ESort,
-    EStyle,
-    EType,
-}
-
-export {
-    IInput,
-    IItem,
-    IOutputError,
-    IOutputSuccess,
-    IYears,
-}
-
-export {
-    LimitType,
+    InputType,
+    OutputErrorType,
+    OutputSuccessType,
 }
 
 export default DiscogsMarketplace

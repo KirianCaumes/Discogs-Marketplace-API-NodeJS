@@ -19,6 +19,7 @@ module.exports = {
     rules: {
         '@typescript-eslint/indent': ['warn', 4],
         '@typescript-eslint/semi': ['warn', 'never'],
+        '@typescript-eslint/consistent-type-definitions': ['warn', 'type'],
         '@typescript-eslint/member-delimiter-style': ['error', { multiline: { delimiter: 'none' }, singleline: { delimiter: 'comma' } }],
         '@typescript-eslint/naming-convention': [
             'error',

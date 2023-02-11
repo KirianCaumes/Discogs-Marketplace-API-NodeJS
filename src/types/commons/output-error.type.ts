@@ -1,9 +1,11 @@
 /**
  * Result provided to user
  */
-export default interface IOutputError {
+type OutputErrorType = {
     /** Message */
     message: string
     /** Code */
     code: number
 }
+
+export default OutputErrorType

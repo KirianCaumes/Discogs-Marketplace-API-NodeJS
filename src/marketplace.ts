@@ -1,13 +1,6 @@
+import { CURRENCIES, COUNTRIES } from 'data'
 import UserAgent from 'user-agents'
 import { parseHTML } from 'linkedom'
-import {
-    ECurrency, ELang, EType,
-} from 'enums'
-import {
-    IInput, IOutputSuccess, IOutputError,
-} from 'interfaces'
-import { EDiscogsCountryNameToIsoCode, EDiscogsCurrencyToIsoCode } from 'enums/iso/translate'
-import { ECountryCode, ECountryName } from 'enums/iso'
 import axios from 'axios'
 
 /**
@@ -19,14 +12,14 @@ export default abstract class Marketplace {
      * @returns Items found
      */
     public static async search({
-        searchType = EType.STRING,
+        searchType = 'q',
         searchValue = undefined,
         currency = undefined,
         genre = undefined,
         style = [],
         format = [],
         formatDescription = [],
-        mediaCondition = [],
+        condition = [],
         year = undefined,
         years = undefined,
         isAudioSample = false,
@@ -36,8 +29,8 @@ export default abstract class Marketplace {
         sort = undefined,
         limit = 25,
         page = undefined,
-        lang = ELang.ENGLISH,
-    }: IInput): Promise<IOutputSuccess> {
+        lang = 'en',
+    }: import('types/commons').InputType): Promise<import('types/commons').OutputSuccessType> {
         try {
             const config: import('axios').AxiosRequestConfig = {
                 url: this.generateUrl({ searchType, seller, lang }),
@@ -49,7 +42,7 @@ export default abstract class Marketplace {
                     style: style?.length ? style : undefined,
                     format: format?.length ? format : undefined,
                     format_desc: formatDescription?.length ? formatDescription : undefined,
-                    condition: mediaCondition?.length ? mediaCondition : undefined,
+                    condition: condition?.length ? condition : undefined,
                     year: year && !years ? year : undefined,
                     year1: years?.min && !year ? years?.min : undefined,
                     year2: years?.max && !year ? years?.max : undefined,
@@ -60,7 +53,9 @@ export default abstract class Marketplace {
                     page,
                     sort,
                 },
-                paramsSerializer: this.serializeParams,
+                paramsSerializer: {
+                    serialize: this.serializeParams,
+                },
                 headers: {
                     'X-PJAX': 'true',
                     'User-Agent': new UserAgent().toString(),
@@ -84,13 +79,13 @@ export default abstract class Marketplace {
                 throw {
                     message: parseHTML(response.data).document?.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occured',
                     code: response.status,
-                } as IOutputError
+                } as import('types/commons').OutputErrorType
 
             // eslint-disable-next-line @typescript-eslint/no-throw-literal
             throw {
                 message: message || 'An error occured',
                 code: 500,
-            } as IOutputError
+            } as import('types/commons').OutputErrorType
         }
     }
 
@@ -102,14 +97,14 @@ export default abstract class Marketplace {
         searchType,
         seller,
         lang,
-    }: Partial<IInput>): string {
+    }: Partial<import('types/commons').InputType>): string {
         let url = `https://www.discogs.com/${lang}/`
         if (seller) {
             url += `seller/${seller}/`
-            url += searchType === EType.USER ? 'mywants' : 'profile'
+            url += searchType === 'user' ? 'mywants' : 'profile'
         } else {
             url += 'sell/'
-            url += searchType === EType.USER ? 'mywants' : 'list'
+            url += searchType === 'user' ? 'mywants' : 'list'
         }
         return url
     }
@@ -151,17 +146,16 @@ export default abstract class Marketplace {
         if (!value)
             return value
 
-        const currency: string = Object.keys(EDiscogsCurrencyToIsoCode).find(key => value.includes(key)) ?? ''
+        const currencyFound = Object.keys(CURRENCIES).find(key => value.includes(key)) ?? ''
 
-        if (!currency)
+        if (!currencyFound)
             return value
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const currencyClean = (EDiscogsCurrencyToIsoCode as any)[currency]
+        const currencyClean = CURRENCIES[currencyFound as keyof typeof CURRENCIES]
 
         const amount = value
-            .replace(currencyClean !== ECurrency.JPY ? /[.](?=.*[.])/g : /\./g, '') // Remove all dot but last, except if JPY
-            .replace(currency, '') // Remove original currency
+            .replace(currencyClean !== 'JPY' ? /[.](?=.*[.])/g : /\./g, '') // Remove all dot but last, except if JPY
+            .replace(currencyFound, '') // Remove original currency
             .replace(/\s/g, '') // Remove spaces
 
         return `${amount} ${currencyClean}`
@@ -175,11 +169,11 @@ export default abstract class Marketplace {
      * @returns Items found
      */
     private static getData(document: Document, urlGenerated: string, {
-        searchType = EType.STRING,
+        searchType = 'q',
         searchValue = undefined,
         limit = 25,
         page = 1,
-    }: Partial<IInput>): IOutputSuccess {
+    }: Partial<import('types/commons').InputType>): import('types/commons').OutputSuccessType {
         const totalItems = parseFloat(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             document.querySelector('.pagination_total')?.textContent?.split(' ')?.filter((x: any) => x).pop()?.replace(/(,|\.|\s)/g, '') || '0',
@@ -193,9 +187,8 @@ export default abstract class Marketplace {
                 )
                 const have = Number.parseInt(el.querySelector('.community_summary .community_result:nth-child(1) .community_number')?.textContent ?? '', 10)
                 const want = Number.parseInt(el.querySelector('.community_summary .community_result:nth-child(2) .community_number')?.textContent ?? '', 10)
-                const countryName = el.querySelector('.seller_info li:nth-child(3)')?.textContent?.split(':')?.[1] ?? ''
-                const countryCode = (Object.keys(ECountryCode).find((key: string) => (ECountryName[key as ECountryCode] === countryName))
-                    || EDiscogsCountryNameToIsoCode[countryName as keyof typeof EDiscogsCountryNameToIsoCode]) as ECountryCode
+                const countryName = el.querySelector('.seller_info li:nth-child(3)')?.textContent?.split(':')?.pop() ?? ''
+                const countryCode = COUNTRIES[countryName as keyof typeof COUNTRIES]
                 const releaseId = Number.parseInt(
                     el.querySelector<HTMLLinkElement>('a.item_release_link')?.href.split('release/')?.pop()?.split('-')?.shift() ?? '0', 10,
                 )

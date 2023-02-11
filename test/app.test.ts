@@ -1,24 +1,11 @@
 import url from 'url'
-import DiscogsMarketplace, {
-    IOutputSuccess,
-    ECurrency,
-    EFormat,
-    EFormatDescription,
-    EFrom,
-    EGenre,
-    ELang,
-    EMediaCondition,
-    ESort,
-    EStyle,
-    EType,
-    IOutputError,
-} from '../src/index'
+import DiscogsMarketplace from '../src/index'
 
 describe('Test marketplace.ts', () => {
     const timeout = 10000
 
     it('It should return success value', async () => {
-        const res: IOutputSuccess = await DiscogsMarketplace.search({ searchType: EType.STRING, searchValue: '' })
+        const res: import('../src/index').OutputSuccessType = await DiscogsMarketplace.search({ searchType: 'q', searchValue: '' })
 
         expect(res.result).not.toBe(null)
         expect(res.page).not.toBe(null)
@@ -66,15 +53,15 @@ describe('Test marketplace.ts', () => {
 
     test('It should return error value', async () => {
         try {
-            await DiscogsMarketplace.search({ searchType: EType.STRING, searchValue: 'error' })
+            await DiscogsMarketplace.search({ searchType: 'q', searchValue: 'error' })
         } catch (err) {
-            expect((err as IOutputError).code).toBe(404)
-            expect((err as IOutputError).message).toBe('An error occured')
+            expect((err as import('../src/index').OutputErrorType).code).toBe(404)
+            expect((err as import('../src/index').OutputErrorType).message).toBe('An error occured')
         }
     }, timeout)
 
     test('It should return success value with artist', async () => {
-        const res: IOutputSuccess = await DiscogsMarketplace.search({ searchType: EType.ARTIST, searchValue: 123456 })
+        const res: import('../src/index').OutputSuccessType = await DiscogsMarketplace.search({ searchType: 'artist_id', searchValue: 123456 })
         expect(res.result).not.toBe(null)
         expect(res.page).not.toBe(null)
         expect(res.page?.current).not.toBe(null)
@@ -89,30 +76,30 @@ describe('Test marketplace.ts', () => {
     }, timeout)
 
     test('It should return good params with artist', async () => {
-        const res: IOutputSuccess = await DiscogsMarketplace.search({
-            searchType: EType.ARTIST,
+        const res: import('../src/index').OutputSuccessType = await DiscogsMarketplace.search({
+            searchType: 'artist_id',
             searchValue: 123456,
             currency: undefined,
             genre: undefined,
             style: [],
             format: [],
             formatDescription: [],
-            mediaCondition: [],
+            condition: [],
             year: undefined,
             years: undefined,
             isAudioSample: false,
             isMakeAnOfferOnly: false,
             from: undefined,
             seller: undefined,
-            sort: ESort.LISTED_NEWEST,
+            sort: 'Listed Newest',
             limit: 25,
             page: 1,
-            lang: ELang.ENGLISH,
+            lang: 'en',
         })
 
         const params = url.parse(res.urlGenerated, true)?.query
         expect(params).not.toBe(null)
-        expect(params[EType.ARTIST]).toBe('123456')
+        expect(params.artist_id).toBe('123456')
         expect(params.currency).toBe(undefined)
         expect(params.genre).toBe(undefined)
         expect(params.style).toBe(undefined)
@@ -127,96 +114,96 @@ describe('Test marketplace.ts', () => {
         expect(params.ships_from).toBe(undefined)
         expect(params.limit).toBe('25')
         expect(params.page).toBe('1')
-        expect(params.sort).toBe(ESort.LISTED_NEWEST)
+        expect(params.sort).toBe('Listed Newest')
     }, timeout)
 
     test('It should return good params with complex search', async () => {
-        const res: IOutputSuccess = await DiscogsMarketplace.search({
-            searchType: EType.STRING,
+        const res: import('../src/index').OutputSuccessType = await DiscogsMarketplace.search({
+            searchType: 'q',
             searchValue: 'test',
-            currency: ECurrency.EUR,
-            genre: EGenre.ROCK,
-            style: [EStyle.DEATHMETAL, EStyle.HEAVYMETAL],
-            format: [EFormat.CD],
-            formatDescription: [EFormatDescription.PROMO],
-            mediaCondition: [EMediaCondition.MINT],
+            currency: 'EUR',
+            genre: 'Rock',
+            style: ['Death Metal', 'Heavy Metal'],
+            format: ['CD'],
+            formatDescription: ['Promo'],
+            condition: ['Mint (M)'],
             year: 2019,
             years: undefined,
             isAudioSample: true,
             isMakeAnOfferOnly: true,
-            from: EFrom.FRANCE,
+            from: 'France',
             seller: undefined,
-            sort: ESort.LISTED_OLDEST,
+            sort: 'Listed Newest',
             limit: 50,
             page: 2,
-            lang: ELang.FRENCH,
+            lang: 'fr',
         })
 
         const params = url.parse(res.urlGenerated, true)?.query
         expect(params).not.toBe(null)
-        expect(params[EType.STRING]).toBe('test')
-        expect(params.currency).toBe(ECurrency.EUR)
-        expect(params.genre).toBe(EGenre.ROCK)
-        expect(params.style).toEqual([EStyle.DEATHMETAL, EStyle.HEAVYMETAL])
-        expect(params.format).toBe(EFormat.CD)
-        expect(params.format_desc).toBe(EFormatDescription.PROMO)
-        expect(params.condition).toBe(EMediaCondition.MINT)
+        expect(params.q).toBe('test')
+        expect(params.currency).toBe('EUR')
+        expect(params.genre).toBe('Rock')
+        expect(params.style).toEqual(['Death Metal', 'Heavy Metal'])
+        expect(params.format).toBe('CD')
+        expect(params.format_desc).toBe('Promo')
+        expect(params.condition).toBe('Mint (M)')
         expect(params.year).toBe('2019')
         expect(params.year1).toBe(undefined)
         expect(params.year2).toBe(undefined)
         expect(params.audio).toBe('1')
         expect(params.offers).toBe('1')
-        expect(params.ships_from).toBe(EFrom.FRANCE)
+        expect(params.ships_from).toBe('France')
         expect(params.limit).toBe('50')
         expect(params.page).toBe('2')
-        expect(params.sort).toBe(ESort.LISTED_OLDEST)
+        expect(params.sort).toBe('Listed Newest')
     }, timeout)
 
     test('It should return good params with complex search and years interval', async () => {
-        const res: IOutputSuccess = await DiscogsMarketplace.search({
-            searchType: EType.STRING,
+        const res: import('../src/index').OutputSuccessType = await DiscogsMarketplace.search({
+            searchType: 'q',
             searchValue: 'test',
-            currency: ECurrency.EUR,
-            genre: EGenre.ROCK,
-            style: [EStyle.DEATHMETAL, EStyle.HEAVYMETAL],
-            format: [EFormat.CD],
-            formatDescription: [EFormatDescription.PROMO],
-            mediaCondition: [EMediaCondition.MINT],
+            currency: 'EUR',
+            genre: 'Rock',
+            style: ['Death Metal', 'Heavy Metal'],
+            format: ['CD'],
+            formatDescription: ['Promo'],
+            condition: ['Mint (M)'],
             year: undefined,
             years: { min: 2015, max: 2016 },
             isAudioSample: true,
             isMakeAnOfferOnly: true,
-            from: EFrom.FRANCE,
+            from: 'France',
             seller: undefined,
-            sort: ESort.LISTED_OLDEST,
+            sort: 'Listed Newest',
             limit: 50,
             page: 2,
-            lang: ELang.FRENCH,
+            lang: 'fr',
         })
 
         const params = url.parse(res.urlGenerated, true)?.query
         expect(params).not.toBe(null)
-        expect(params[EType.STRING]).toBe('test')
-        expect(params.currency).toBe(ECurrency.EUR)
-        expect(params.genre).toBe(EGenre.ROCK)
-        expect(params.style).toEqual([EStyle.DEATHMETAL, EStyle.HEAVYMETAL])
-        expect(params.format).toBe(EFormat.CD)
-        expect(params.format_desc).toBe(EFormatDescription.PROMO)
-        expect(params.condition).toBe(EMediaCondition.MINT)
+        expect(params.q).toBe('test')
+        expect(params.currency).toBe('EUR')
+        expect(params.genre).toBe('Rock')
+        expect(params.style).toEqual(['Death Metal', 'Heavy Metal'])
+        expect(params.format).toBe('CD')
+        expect(params.format_desc).toBe('Promo')
+        expect(params.condition).toBe('Mint (M)')
         expect(params.year).toBe(undefined)
         expect(params.year1).toBe('2015')
         expect(params.year2).toBe('2016')
         expect(params.audio).toBe('1')
         expect(params.offers).toBe('1')
-        expect(params.ships_from).toBe(EFrom.FRANCE)
+        expect(params.ships_from).toBe('France')
         expect(params.limit).toBe('50')
         expect(params.page).toBe('2')
-        expect(params.sort).toBe(ESort.LISTED_OLDEST)
+        expect(params.sort).toBe('Listed Newest')
     }, timeout)
 
     test('It should return good params with user\'s wantlist search', async () => {
-        const res: IOutputSuccess = await DiscogsMarketplace.search({
-            searchType: EType.USER,
+        const res: import('../src/index').OutputSuccessType = await DiscogsMarketplace.search({
+            searchType: 'user',
             searchValue: 'TheUser',
         })
 
@@ -227,8 +214,8 @@ describe('Test marketplace.ts', () => {
     }, timeout)
 
     test('It should return good params with user\'s selling search', async () => {
-        const res: IOutputSuccess = await DiscogsMarketplace.search({
-            searchType: EType.STRING,
+        const res: import('../src/index').OutputSuccessType = await DiscogsMarketplace.search({
+            searchType: 'q',
             searchValue: '',
             seller: 'TheSeller',
         })
@@ -240,8 +227,8 @@ describe('Test marketplace.ts', () => {
     }, timeout)
 
     test('It should return good params with user\'s wantlist search against user\'s selling items', async () => {
-        const res: IOutputSuccess = await DiscogsMarketplace.search({
-            searchType: EType.USER,
+        const res: import('../src/index').OutputSuccessType = await DiscogsMarketplace.search({
+            searchType: 'user',
             searchValue: 'TheUser',
             seller: 'TheSeller',
         })
