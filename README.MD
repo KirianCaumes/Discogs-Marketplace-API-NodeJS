@@ -114,7 +114,7 @@ const result = await DiscogsMarketplace.search({
 You can provide parameters to `DiscogsMarketplace.search` function according to this type:
 
 ```ts
-type InputCommonType = {
+type InputType = {
     /**
      * Type of elements to search.
      * Default to `q`.

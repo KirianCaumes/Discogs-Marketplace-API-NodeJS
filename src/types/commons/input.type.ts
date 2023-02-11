@@ -15,7 +15,7 @@ import {
 /**
  * Element that can be provided by user
  */
-type InputCommonType = {
+type InputType = {
     /**
      * Type of elements to search.
      * Default to `q`.
@@ -106,4 +106,4 @@ type InputCommonType = {
     lang?: LangType
 }
 
-export default InputCommonType
+export default InputType
