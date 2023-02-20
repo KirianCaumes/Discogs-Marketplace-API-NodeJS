@@ -1,4 +1,4 @@
-import { SearchTypeType } from 'types/unions'
+import type { SearchTypeType } from 'types/unions'
 
 /**
  * Result provided to user

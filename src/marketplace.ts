@@ -2,6 +2,8 @@ import { CURRENCIES, COUNTRIES } from 'data'
 import UserAgent from 'user-agents'
 import { parseHTML } from 'linkedom'
 import axios from 'axios'
+import type { AxiosError, AxiosRequestConfig } from 'axios'
+import type { InputType, OutputErrorType, OutputSuccessType } from 'types/commons'
 
 /**
  * Discogs Marketplace
@@ -30,9 +32,9 @@ export default abstract class Marketplace {
         limit = 25,
         page = undefined,
         lang = 'en',
-    }: import('types/commons').InputType): Promise<import('types/commons').OutputSuccessType> {
+    }: InputType): Promise<OutputSuccessType> {
         try {
-            const config: import('axios').AxiosRequestConfig = {
+            const config: AxiosRequestConfig = {
                 url: this.generateUrl({ searchType, seller, lang }),
                 method: 'GET',
                 params: {
@@ -73,19 +75,19 @@ export default abstract class Marketplace {
             )
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            const { response, message } = error as import('axios').AxiosError
+            const { response, message } = error as AxiosError
             if (response?.data && response.status)
                 // eslint-disable-next-line @typescript-eslint/no-throw-literal
                 throw {
                     message: parseHTML(response.data).document?.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occured',
                     code: response.status,
-                } as import('types/commons').OutputErrorType
+                } as OutputErrorType
 
             // eslint-disable-next-line @typescript-eslint/no-throw-literal
             throw {
                 message: message || 'An error occured',
                 code: 500,
-            } as import('types/commons').OutputErrorType
+            } as OutputErrorType
         }
     }
 
@@ -97,7 +99,7 @@ export default abstract class Marketplace {
         searchType,
         seller,
         lang,
-    }: Partial<import('types/commons').InputType>): string {
+    }: Partial<InputType>): string {
         let url = `https://www.discogs.com/${lang}/`
         if (seller) {
             url += `seller/${seller}/`
@@ -173,7 +175,7 @@ export default abstract class Marketplace {
         searchValue = undefined,
         limit = 25,
         page = 1,
-    }: Partial<import('types/commons').InputType>): import('types/commons').OutputSuccessType {
+    }: Partial<InputType>): OutputSuccessType {
         const totalItems = parseFloat(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             document.querySelector('.pagination_total')?.textContent?.split(' ')?.filter((x: any) => x).pop()?.replace(/(,|\.|\s)/g, '') || '0',

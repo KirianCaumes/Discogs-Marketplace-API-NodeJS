@@ -31,6 +31,7 @@ module.exports = {
             { selector: 'typeAlias', format: ['PascalCase'], suffix: ['Type', 'Returns', 'Params'] },
         ],
         '@typescript-eslint/explicit-function-return-type': ['warn', { allowExpressions: true }],
+        '@typescript-eslint/consistent-type-imports': ['error'],
         'jsdoc/require-jsdoc': ['warn', {
             checkConstructors: false,
             contexts: [
