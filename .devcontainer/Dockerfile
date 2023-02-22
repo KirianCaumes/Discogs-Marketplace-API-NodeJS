@@ -31,8 +31,8 @@ RUN sudo apt-get -y install libnss3 && \
     sudo apt-get -y install psmisc
 RUN sudo apt-get update --fix-missing
 
-# install nodejs 16.x
-RUN sudo curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
+# install nodejs 18.x
+RUN sudo curl -sL https://deb.nodesource.com/setup_18.x | sudo bash -
 RUN sudo apt-get install -y nodejs
 RUN sudo npm i -g nodemon
 RUN sudo npm i -g np
