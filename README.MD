@@ -283,13 +283,11 @@ type OutputErrorType = {
 }
 ```
 
-Other interfaces can be found in `src/interfaces`.
-
 ## How to contribute
 
 There is a [devcontainer](https://code.visualstudio.com/docs/devcontainers/containers) on that project already configured, feel free to use it.
 
-You can install dependecies with:
+Install dependecies with:
 
 ```sh
 npm install
