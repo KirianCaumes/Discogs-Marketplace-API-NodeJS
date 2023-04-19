@@ -8,6 +8,8 @@ services:
     tty: true
     volumes:
       - ../:/app_discogs-marketplace-api-nodejs:rw
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     ports:
       - 5000:5000
       - 3000:3000
