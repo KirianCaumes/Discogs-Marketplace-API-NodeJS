@@ -1,9 +1,5 @@
-import InputType from 'types/commons/input.type'
-import OutputErrorType from 'types/commons/output-error.type'
-import OutputSuccessType from 'types/commons/output-sucess.type'
+import type InputType from 'types/commons/input.type'
+import type OutputErrorType from 'types/commons/output-error.type'
+import type OutputSuccessType from 'types/commons/output-sucess.type'
 
-export {
-    InputType,
-    OutputErrorType,
-    OutputSuccessType,
-}
+export { InputType, OutputErrorType, OutputSuccessType }

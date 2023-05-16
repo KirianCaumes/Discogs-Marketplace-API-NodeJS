@@ -3,10 +3,15 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "discogs-marketplace-api-nodejs_container",
   "workspaceFolder": "/app_discogs-marketplace-api-nodejs",
-  "extensions": [
-    "gruntfuggly.todo-tree",
-    "davidanson.vscode-markdownlint",
-    "dbaeumer.vscode-eslint",
-    "pflannery.vscode-versionlens"
-  ]
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "gruntfuggly.todo-tree",
+        "davidanson.vscode-markdownlint",
+        "dbaeumer.vscode-eslint",
+        "pflannery.vscode-versionlens",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
 }

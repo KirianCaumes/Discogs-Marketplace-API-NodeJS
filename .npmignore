@@ -10,3 +10,6 @@ coverage
 .gitattributes
 .gitignore
 notes.md
+.eslintrc.cjs
+.prettierignore
+.prettierrc.js

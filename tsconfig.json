@@ -6,12 +6,7 @@
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "baseUrl": "./src",
+    "baseUrl": "./src"
   },
-  "include": [
-    "./src",
-    "./test",
-    ".eslintrc.js",
-    "jest.config.js"
-  ]
+  "include": ["./src", "./test", ".eslintrc.js", "jest.config.js"]
 }

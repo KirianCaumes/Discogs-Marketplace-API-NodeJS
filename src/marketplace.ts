@@ -66,22 +66,22 @@ export default abstract class Marketplace {
 
             const { data: bodyHTML } = await axios.request(config)
 
-            return this.getData(
-                parseHTML(bodyHTML).document,
-                axios.getUri(config),
-                {
-                    searchType, searchValue, limit, page,
-                },
-            )
+            return this.getData(parseHTML(bodyHTML).document, axios.getUri(config), {
+                searchType,
+                searchValue,
+                limit,
+                page,
+            })
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             const { response, message } = error as AxiosError
-            if (response?.data && response.status)
+            if (response?.data && response.status) {
                 // eslint-disable-next-line @typescript-eslint/no-throw-literal
                 throw {
                     message: parseHTML(response.data).document?.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occured',
                     code: response.status,
                 } as OutputErrorType
+            }
 
             // eslint-disable-next-line @typescript-eslint/no-throw-literal
             throw {
@@ -95,11 +95,7 @@ export default abstract class Marketplace {
      * Generate URL to be parsed
      * @returns Url
      */
-    private static generateUrl({
-        searchType,
-        seller,
-        lang,
-    }: Partial<InputType>): string {
+    private static generateUrl({ searchType, seller, lang }: Partial<InputType>): string {
         let url = `https://www.discogs.com/${lang}/`
         if (seller) {
             url += `seller/${seller}/`
@@ -120,21 +116,25 @@ export default abstract class Marketplace {
     private static serializeParams(params: { [key: string]: any }): string {
         const param: string[] = []
         // eslint-disable-next-line no-restricted-syntax
-        for (const key in params)
-            if (params[key] === undefined || params[key] === null)
+        for (const key in params) {
+            if (params[key] === undefined || params[key] === null) {
                 // eslint-disable-next-line no-continue
                 continue
-            else if (Array.isArray(params[key]))
+            } else if (Array.isArray(params[key])) {
                 /** Custom handle for array */
-                if (params[key].length > 0)
+                if (params[key].length > 0) {
                     // eslint-disable-next-line no-restricted-syntax
-                    for (const el of params[key])
+                    for (const el of params[key]) {
                         param.push(`${key}=${encodeURIComponent(el)}`)
-                else
+                    }
+                } else {
                     // eslint-disable-next-line no-continue
                     continue
-            else
+                }
+            } else {
                 param.push(`${key}=${encodeURIComponent(params[key])}`)
+            }
+        }
 
         return param.join('&')
     }
@@ -145,13 +145,15 @@ export default abstract class Marketplace {
      * @returns Cleanup string
      */
     private static convertCurrency(value: string): string {
-        if (!value)
+        if (!value) {
             return value
+        }
 
         const currencyFound = Object.keys(CURRENCIES).find(key => value.includes(key)) ?? ''
 
-        if (!currencyFound)
+        if (!currencyFound) {
             return value
+        }
 
         const currencyClean = CURRENCIES[currencyFound as keyof typeof CURRENCIES]
 
@@ -160,8 +162,7 @@ export default abstract class Marketplace {
             .replace(currencyFound, '') // Remove original currency
             .replace(/\s/g, '') // Remove spaces
 
-        return `${amount} ${currencyClean}`
-            .replace(/\s\s+/g, ' ') // Remove useless spaces
+        return `${amount} ${currencyClean}`.replace(/\s\s+/g, ' ') // Remove useless spaces
     }
 
     /**
@@ -170,94 +171,138 @@ export default abstract class Marketplace {
      * @param urlGenerated Url generated
      * @returns Items found
      */
-    private static getData(document: Document, urlGenerated: string, {
-        searchType = 'q',
-        searchValue = undefined,
-        limit = 25,
-        page = 1,
-    }: Partial<InputType>): OutputSuccessType {
+    private static getData(
+        document: Document,
+        urlGenerated: string,
+        { searchType = 'q', searchValue = undefined, limit = 25, page = 1 }: Partial<InputType>,
+    ): OutputSuccessType {
         const totalItems = parseFloat(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            document.querySelector('.pagination_total')?.textContent?.split(' ')?.filter((x: any) => x).pop()?.replace(/(,|\.|\s)/g, '') || '0',
+            document
+                .querySelector('.pagination_total')
+                ?.textContent?.split(' ')
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                ?.filter((x: any) => x)
+                .pop()
+                ?.replace(/(,|\.|\s)/g, '') || '0',
         )
 
         return {
-            items: [...document.querySelectorAll('table.table_block tbody tr')]?.map(el => {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const shipping: any = this.convertCurrency(
-                    el.querySelector('.item_shipping')?.childNodes?.[0]?.textContent?.replace(/(\s+|\+)/g, ' ')?.trim()?.replace(',', '.') ?? '',
-                )
-                const have = Number.parseInt(el.querySelector('.community_summary .community_result:nth-child(1) .community_number')?.textContent ?? '', 10)
-                const want = Number.parseInt(el.querySelector('.community_summary .community_result:nth-child(2) .community_number')?.textContent ?? '', 10)
-                const countryName = el.querySelector('.seller_info li:nth-child(3)')?.textContent?.split(':')?.pop() ?? ''
-                const countryCode = COUNTRIES[countryName as keyof typeof COUNTRIES]
-                const releaseId = Number.parseInt(
-                    el.querySelector<HTMLLinkElement>('a.item_release_link')?.href.split('release/')?.pop()?.split('-')?.shift() ?? '0', 10,
-                )
-                const itemId = Number.parseInt(el.querySelector<HTMLLinkElement>('a.item_description_title')?.href?.split('/').pop() ?? '0', 10)
-                const notes = Number.parseInt(el.querySelector('.seller_info li:nth-child(2) .section_link')
-                    ?.textContent?.replace(/\s+/g, ' ')?.trim()?.split(' ')?.[0]?.replace(/,/g, '') ?? '', 10)
+            items:
+                [...document.querySelectorAll('table.table_block tbody tr')]?.map(el => {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const shipping: any = this.convertCurrency(
+                        el
+                            .querySelector('.item_shipping')
+                            ?.childNodes?.[0]?.textContent?.replace(/(\s+|\+)/g, ' ')
+                            ?.trim()
+                            ?.replace(',', '.') ?? '',
+                    )
+                    const have = Number.parseInt(
+                        el.querySelector('.community_summary .community_result:nth-child(1) .community_number')?.textContent ?? '',
+                        10,
+                    )
+                    const want = Number.parseInt(
+                        el.querySelector('.community_summary .community_result:nth-child(2) .community_number')?.textContent ?? '',
+                        10,
+                    )
+                    const countryName = el.querySelector('.seller_info li:nth-child(3)')?.textContent?.split(':')?.pop() ?? ''
+                    const countryCode = COUNTRIES[countryName as keyof typeof COUNTRIES]
+                    const releaseId = Number.parseInt(
+                        el.querySelector<HTMLLinkElement>('a.item_release_link')?.href.split('release/')?.pop()?.split('-')?.shift() ?? '0',
+                        10,
+                    )
+                    const itemId = Number.parseInt(
+                        el.querySelector<HTMLLinkElement>('a.item_description_title')?.href?.split('/').pop() ?? '0',
+                        10,
+                    )
+                    const notes = Number.parseInt(
+                        el
+                            .querySelector('.seller_info li:nth-child(2) .section_link')
+                            ?.textContent?.replace(/\s+/g, ' ')
+                            ?.trim()
+                            ?.split(' ')?.[0]
+                            ?.replace(/,/g, '') ?? '',
+                        10,
+                    )
 
-                const originalTitle = el.querySelector('a.item_description_title')?.textContent
-                const firstIndexOfDash = originalTitle?.indexOf(' - ') ?? -1
-                const lastIndexOfParenthesis = originalTitle?.lastIndexOf(' (') ?? -1
+                    const originalTitle = el.querySelector('a.item_description_title')?.textContent
+                    const firstIndexOfDash = originalTitle?.indexOf(' - ') ?? -1
+                    const lastIndexOfParenthesis = originalTitle?.lastIndexOf(' (') ?? -1
 
-                return {
-                    id: Number.isNaN(itemId) ? 0 : itemId,
-                    title: {
-                        original: originalTitle ?? '',
-                        artist: originalTitle?.substring(0, firstIndexOfDash) ?? '',
-                        item: firstIndexOfDash > -1 && lastIndexOfParenthesis > -1
-                            ? originalTitle?.substring(firstIndexOfDash + 3, lastIndexOfParenthesis) ?? ''
-                            : '',
-                        formats: lastIndexOfParenthesis > -1
-                            ? (originalTitle?.substring(lastIndexOfParenthesis + 2, originalTitle.length - 1)?.split(', ') ?? [])
-                            : [],
-                    },
-                    url: `https://www.discogs.com${el.querySelector<HTMLLinkElement>('a.item_description_title')?.href}`,
-                    labels: [...el.querySelectorAll('.label_and_cat a[href^=\'https://www.discogs.com/\']')]
-                        ?.map(x => x?.textContent ?? '')
-                        ?.filter((value, index, self) => self.indexOf(value) === index),
-                    catnos: el.querySelector('.label_and_cat .item_catno')?.textContent?.replace(/\s+/g, ' ')?.split(', ')?.filter(x => x !== 'none') ?? [],
-                    imageUrl: el.querySelector('.marketplace_image')?.getAttribute('data-src') ?? '',
-                    description: el.querySelector('.item_condition')?.nextElementSibling?.textContent?.replace(/\s+/g, ' ')?.trim() ?? '',
-                    isAcceptingOffer: (el.querySelector('.item_add_to_cart p a strong')?.textContent?.split('/')?.length ?? 0) > 1,
-                    isAvailable: !el.classList?.contains('unavailable'),
-                    condition: {
-                        media: {
-                            full: el.querySelector('.item_condition span:nth-child(3)')?.textContent?.replace(/\s+/g, ' ')?.trim() ?? '',
-                            short: el.querySelector('.item_condition span:nth-child(3)')?.textContent?.replace(/\s+/g, ' ')?.trim()?.match(/\(([^)]+)\)/)?.[1]
-                                ?? '',
+                    return {
+                        id: Number.isNaN(itemId) ? 0 : itemId,
+                        title: {
+                            original: originalTitle ?? '',
+                            artist: originalTitle?.substring(0, firstIndexOfDash) ?? '',
+                            item:
+                                firstIndexOfDash > -1 && lastIndexOfParenthesis > -1
+                                    ? originalTitle?.substring(firstIndexOfDash + 3, lastIndexOfParenthesis) ?? ''
+                                    : '',
+                            formats:
+                                lastIndexOfParenthesis > -1
+                                    ? originalTitle?.substring(lastIndexOfParenthesis + 2, originalTitle.length - 1)?.split(', ') ?? []
+                                    : [],
                         },
-                        sleeve: {
-                            full: el.querySelector('.item_condition span.item_sleeve_condition')?.textContent ?? '',
-                            short: el.querySelector('.item_condition span.item_sleeve_condition')?.textContent?.match(/\(([^)]+)\)/)?.[1] ?? '',
+                        url: `https://www.discogs.com${el.querySelector<HTMLLinkElement>('a.item_description_title')?.href}`,
+                        labels: [...el.querySelectorAll(".label_and_cat a[href^='https://www.discogs.com/']")]
+                            ?.map(x => x?.textContent ?? '')
+                            ?.filter((value, index, self) => self.indexOf(value) === index),
+                        catnos:
+                            el
+                                .querySelector('.label_and_cat .item_catno')
+                                ?.textContent?.replace(/\s+/g, ' ')
+                                ?.split(', ')
+                                ?.filter(x => x !== 'none') ?? [],
+                        imageUrl: el.querySelector('.marketplace_image')?.getAttribute('data-src') ?? '',
+                        description:
+                            el.querySelector('.item_condition')?.nextElementSibling?.textContent?.replace(/\s+/g, ' ')?.trim() ?? '',
+                        isAcceptingOffer: (el.querySelector('.item_add_to_cart p a strong')?.textContent?.split('/')?.length ?? 0) > 1,
+                        isAvailable: !el.classList?.contains('unavailable'),
+                        condition: {
+                            media: {
+                                full:
+                                    el.querySelector('.item_condition span:nth-child(3)')?.textContent?.replace(/\s+/g, ' ')?.trim() ?? '',
+                                short:
+                                    el
+                                        .querySelector('.item_condition span:nth-child(3)')
+                                        ?.textContent?.replace(/\s+/g, ' ')
+                                        ?.trim()
+                                        ?.match(/\(([^)]+)\)/)?.[1] ?? '',
+                            },
+                            sleeve: {
+                                full: el.querySelector('.item_condition span.item_sleeve_condition')?.textContent ?? '',
+                                short:
+                                    el
+                                        .querySelector('.item_condition span.item_sleeve_condition')
+                                        ?.textContent?.match(/\(([^)]+)\)/)?.[1] ?? '',
+                            },
                         },
-                    },
-                    seller: {
-                        name: el.querySelector('.seller_info a')?.textContent ?? '',
-                        url: `https://www.discogs.com${el.querySelector<HTMLLinkElement>('.seller_info a')?.href}`,
-                        score: el.querySelector('.seller_info li:nth-child(2) strong')?.textContent ?? '',
-                        notes: Number.isNaN(notes) ? 0 : notes,
-                    },
-                    price: {
-                        base: this.convertCurrency(el.querySelector('.price')?.textContent?.replace(/\s+/g, ' ')?.replace(/,/, '.') ?? ''),
-                        shipping: Number.isNaN(parseFloat(shipping)) ? null : shipping,
-                    },
-                    country: {
-                        name: countryName,
-                        code: countryCode,
-                    },
-                    community: {
-                        have: Number.isNaN(have) ? 0 : have,
-                        want: Number.isNaN(want) ? 0 : want,
-                    },
-                    release: {
-                        id: Number.isNaN(releaseId) ? 0 : releaseId,
-                        url: `https://www.discogs.com${el.querySelector<HTMLLinkElement>('a.item_release_link')?.href}`,
-                    },
-                }
-            }) || [],
+                        seller: {
+                            name: el.querySelector('.seller_info a')?.textContent ?? '',
+                            url: `https://www.discogs.com${el.querySelector<HTMLLinkElement>('.seller_info a')?.href}`,
+                            score: el.querySelector('.seller_info li:nth-child(2) strong')?.textContent ?? '',
+                            notes: Number.isNaN(notes) ? 0 : notes,
+                        },
+                        price: {
+                            base: this.convertCurrency(
+                                el.querySelector('.price')?.textContent?.replace(/\s+/g, ' ')?.replace(/,/, '.') ?? '',
+                            ),
+                            shipping: Number.isNaN(parseFloat(shipping)) ? null : shipping,
+                        },
+                        country: {
+                            name: countryName,
+                            code: countryCode,
+                        },
+                        community: {
+                            have: Number.isNaN(have) ? 0 : have,
+                            want: Number.isNaN(want) ? 0 : want,
+                        },
+                        release: {
+                            id: Number.isNaN(releaseId) ? 0 : releaseId,
+                            url: `https://www.discogs.com${el.querySelector<HTMLLinkElement>('a.item_release_link')?.href}`,
+                        },
+                    }
+                }) || [],
             page: {
                 current: page,
                 total: Math.ceil(totalItems / limit),

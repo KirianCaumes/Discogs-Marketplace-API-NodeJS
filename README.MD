@@ -16,10 +16,10 @@ Import `DiscogsMarketplace` into your project:
 
 ```js
 // With ECMAScript 6 and +
-import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
+import { DiscogsMarketplace } from 'discogs-marketplace-api-nodejs'
 
 // With CommonJS
-const DiscogsMarketplace = require('discogs-marketplace-api-nodejs').default
+const DiscogsMarketplace = require('discogs-marketplace-api-nodejs').DiscogsMarketplace
 ```
 
 ## Examples
@@ -27,8 +27,6 @@ const DiscogsMarketplace = require('discogs-marketplace-api-nodejs').default
 - Get top 250 items, of the 2nd page, filtered by Rock, listed by newest, for a given artist
 
 ```js
-import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
-
 // https://www.discogs.com/sell/list?sort=listed,desc&limit=250&artist_id=244819&page=2&genre=Rock
 const result = await DiscogsMarketplace.search({
     limit: 250,
@@ -43,8 +41,6 @@ const result = await DiscogsMarketplace.search({
 - Get top 50 items, of the 1st page, listed by price lowest, on a user wantlist
 
 ```js
-import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
-
 // https://www.discogs.com/sell/mywants?limit=50&user=Kirian_&sort=price,asc
 const result = await DiscogsMarketplace.search({
     limit: 50,
@@ -57,8 +53,6 @@ const result = await DiscogsMarketplace.search({
 - Get top 25 items, of the 1st page, listed by seller A-Z, on a release
 
 ```js
-import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
-
 // https://www.discogs.com/sell/release/767931?sort=seller,asc&limit=25&page=1
 const result = await DiscogsMarketplace.search({
     sort: 'Seller A-Z',
@@ -70,8 +64,6 @@ const result = await DiscogsMarketplace.search({
 - Get top 100 items, of the 1st page, listed by newest, on a string search
 
 ```js
-import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
-
 // https://www.discogs.com/sell/list?sort=listed,desc&limit=100&q=in+flames&page=1
 const result = await DiscogsMarketplace.search({
     limit: 100,
@@ -84,8 +76,6 @@ const result = await DiscogsMarketplace.search({
 - Get top 25 items, of the 1st page, listed by newest, on a seller inventory
 
 ```js
-import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
-
 // https://www.discogs.com/seller/Kirian_/profile?sort=listed,desc&limit=25&page=1
 const result = await DiscogsMarketplace.search({
     sort: 'Listed Newest',
@@ -98,8 +88,6 @@ const result = await DiscogsMarketplace.search({
 - Get top 25 items, of the 1st page, listed by newest, on a user wantlist, on a seller inventory
 
 ```js
-import DiscogsMarketplace from 'discogs-marketplace-api-nodejs'
-
 // https://www.discogs.com/seller/Kirian_/mywants?sort=listed,desc&limit=25&user=Kirian_&page=1
 const result = await DiscogsMarketplace.search({
     sort: 'Listed Newest',

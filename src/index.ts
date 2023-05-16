@@ -1,12 +1,4 @@
-import {
-    InputType, OutputErrorType, OutputSuccessType,
-} from 'types/commons'
+import type { InputType, OutputErrorType, OutputSuccessType } from 'types/commons'
 import DiscogsMarketplace from 'marketplace'
 
-export {
-    InputType,
-    OutputErrorType,
-    OutputSuccessType,
-}
-
-export default DiscogsMarketplace
+export { DiscogsMarketplace, InputType, OutputErrorType, OutputSuccessType }

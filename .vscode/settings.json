@@ -1,26 +1,22 @@
 {
-	"editor.formatOnSave": true,
-	"[typescript]": {
-		"editor.tabSize": 4,
-		"editor.detectIndentation": false
-	},
-	"[javascript]": {
-		"editor.tabSize": 4,
-		"editor.detectIndentation": false
-	},
-	"editor.codeActionsOnSave": {
-		"source.fixAll": true
-	},
-	"eslint.workingDirectories": [
-		"./src"
-	],
-	"eslint.alwaysShowStatus": true,
-	"versionlens.suggestions.showOnStartup": true,
-	"terminal.integrated.defaultProfile.linux": "bash",
-	"terminal.integrated.profiles.linux": {
-		"bash": {
-			"path": "/bin/bash",
-			"icon": "terminal-bash"
-		},
-	}
+  "editor.formatOnSave": true,
+  "[typescriptreact][typescript][javascript][css][scss][html][json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "eslint.workingDirectories": ["./"],
+  "prettier.requireConfig": true,
+  "versionlens.suggestions.showOnStartup": true,
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "/bin/bash",
+      "icon": "terminal-bash"
+    }
+  }
 }
