@@ -28,9 +28,9 @@ export default abstract class Marketplace {
         isMakeAnOfferOnly = false,
         from = undefined,
         seller = undefined,
-        sort = undefined,
+        sort = 'Listed Newest',
         limit = 25,
-        page = undefined,
+        page = 1,
         lang = 'en',
     }: InputType): Promise<OutputSuccessType> {
         try {

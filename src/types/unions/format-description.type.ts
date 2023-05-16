@@ -1,7 +1,6 @@
 /**
  * FormatDescriptions
  */
-// eslint-disable-next-line max-len
 type FormatDescriptionType =
     | '1 ⅞ ips'
     | '1"'

@@ -1,7 +1,6 @@
 /**
  * Genres
  */
-// eslint-disable-next-line max-len
 type GenreType =
     | 'Blues'
     | 'Brass & Military'

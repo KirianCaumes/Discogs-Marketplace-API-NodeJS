@@ -1,7 +1,6 @@
 /**
  * Conditions
  */
-// eslint-disable-next-line max-len
 type ConditionType =
     | '0'
     | 'Fair (F)'

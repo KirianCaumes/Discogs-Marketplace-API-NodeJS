@@ -1,7 +1,6 @@
 /**
  * Formats
  */
-// eslint-disable-next-line max-len
 type FormatType =
     | '4-Track Cartridge'
     | '8-Track Cartridge'

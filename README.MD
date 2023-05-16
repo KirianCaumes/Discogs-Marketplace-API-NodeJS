@@ -44,6 +44,7 @@ const result = await DiscogsMarketplace.search({
 // https://www.discogs.com/sell/mywants?limit=50&user=Kirian_&sort=price,asc
 const result = await DiscogsMarketplace.search({
     limit: 50,
+    page: 1,
     sort: 'Price Lowest',
     searchType: 'user',
     searchValue: 'Kirian_',
@@ -56,6 +57,7 @@ const result = await DiscogsMarketplace.search({
 // https://www.discogs.com/sell/release/767931?sort=seller,asc&limit=25&page=1
 const result = await DiscogsMarketplace.search({
     sort: 'Seller A-Z',
+    page: 1,
     searchType: 'release_id',
     searchValue: '767931',
 })
@@ -67,6 +69,7 @@ const result = await DiscogsMarketplace.search({
 // https://www.discogs.com/sell/list?sort=listed,desc&limit=100&q=in+flames&page=1
 const result = await DiscogsMarketplace.search({
     limit: 100,
+    page: 1,
     sort: 'Listed Newest',
     searchType: 'q',
     searchValue: 'in flames',
@@ -79,6 +82,7 @@ const result = await DiscogsMarketplace.search({
 // https://www.discogs.com/seller/Kirian_/profile?sort=listed,desc&limit=25&page=1
 const result = await DiscogsMarketplace.search({
     sort: 'Listed Newest',
+    page: 1,
     searchType: 'q',
     searchValue: '',
     seller: 'Kirian_',
@@ -91,6 +95,7 @@ const result = await DiscogsMarketplace.search({
 // https://www.discogs.com/seller/Kirian_/mywants?sort=listed,desc&limit=25&user=Kirian_&page=1
 const result = await DiscogsMarketplace.search({
     sort: 'Listed Newest',
+    page: 1,
     searchType: 'user',
     searchValue: 'Kirian_',
     seller: 'Kirian_',
@@ -119,7 +124,7 @@ type InputType = {
     /**
      * Value to search corresponding to searchType
      */
-    searchValue: string | number | undefined
+    searchValue?: string | number
     /**
      * Currency
      */
@@ -174,16 +179,18 @@ type InputType = {
      */
     seller?: string
     /**
-     * Sort elements by
+     * Sort elements by.
+     * Default to `Listed Newest`.
      */
     sort?: SortType
     /**
-     * Limit of elements to search (25 | 50 | 100 | 250)
+     * Limit of elements to search (25 | 50 | 100 | 250).
+     * Default to `25`.
      */
     limit?: LimitType
     /**
      * Page (Must be < 401 or discogs will return an error 404).
-     * Default to `25`.
+     * Default to `1`.
      */
     page?: number
     /**

@@ -1,7 +1,6 @@
 /**
  * Sorts
  */
-// eslint-disable-next-line max-len
 type SortType =
     | 'Artist A-Z'
     | 'Artist Z-A'

@@ -32,7 +32,7 @@ type InputType = {
     /**
      * Value to search corresponding to searchType
      */
-    searchValue: string | number | undefined
+    searchValue?: string | number
     /**
      * Currency
      */
@@ -87,16 +87,18 @@ type InputType = {
      */
     seller?: string
     /**
-     * Sort elements by
+     * Sort elements by.
+     * Default to `Listed Newest`.
      */
     sort?: SortType
     /**
-     * Limit of elements to search (25 | 50 | 100 | 250)
+     * Limit of elements to search (25 | 50 | 100 | 250).
+     * Default to `25`.
      */
     limit?: LimitType
     /**
      * Page (Must be < 401 or discogs will return an error 404).
-     * Default to `25`.
+     * Default to `1`.
      */
     page?: number
     /**

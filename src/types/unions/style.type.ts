@@ -1,7 +1,6 @@
 /**
  * Styles
  */
-// eslint-disable-next-line max-len
 type StyleType =
     | 'AOR'
     | 'Aboriginal'

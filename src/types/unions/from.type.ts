@@ -1,7 +1,6 @@
 /**
  * Froms
  */
-// eslint-disable-next-line max-len
 type FromType =
     | 'Afghanistan'
     | 'Albania'
