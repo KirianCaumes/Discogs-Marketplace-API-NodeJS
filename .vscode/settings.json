@@ -1,10 +1,19 @@
 {
   "editor.formatOnSave": true,
-  "[typescriptreact][typescript][javascript][css][scss][html][json]": {
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[markdown]": {
-    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+    "editor.defaultFormatter": "vscode.markdown-language-features"
   },
   "editor.codeActionsOnSave": {
     "source.fixAll": true
@@ -18,5 +27,7 @@
       "path": "/bin/bash",
       "icon": "terminal-bash"
     }
-  }
+  },
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.preferences.importModuleSpecifier": "non-relative"
 }

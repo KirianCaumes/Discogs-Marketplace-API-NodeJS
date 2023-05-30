@@ -13,3 +13,5 @@ notes.md
 .eslintrc.cjs
 .prettierignore
 .prettierrc.js
+.gitmojirc.json
+.lintstagedrc.js

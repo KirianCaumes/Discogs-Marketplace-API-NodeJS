@@ -1,6 +1,7 @@
 {
   "name": "discogs-marketplace-api-nodejs",
   "dockerComposeFile": "docker-compose.yml",
+  "postCreateCommand": "bash .devcontainer/init.sh",
   "service": "discogs-marketplace-api-nodejs_container",
   "workspaceFolder": "/app_discogs-marketplace-api-nodejs",
   "customizations": {
