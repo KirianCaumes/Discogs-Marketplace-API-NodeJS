@@ -11,7 +11,8 @@
         "davidanson.vscode-markdownlint",
         "dbaeumer.vscode-eslint",
         "pflannery.vscode-versionlens",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "streetsidesoftware.code-spell-checker"
       ]
     }
   }

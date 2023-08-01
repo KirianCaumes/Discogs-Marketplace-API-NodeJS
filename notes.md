@@ -46,6 +46,7 @@ Go to <https://www.discogs.com/release/edit/9999999> and run:
 
 ```js
 const data = []
+// cspell: disable-next-line
 // Execute the following format and execute following script: Select Vinyl Format, Pathé Disc, Edison Disc, Cylinder, CD, CDV, DVD, HD DVD, Blu-Ray, Ultra HD Blu-Ray, SACD, 4-Track Cartridge, Cassette, DC-International, Reel-to-reel, Sabamobil, Betacam, Film Reel, HitClips, Laserdisc, SelectaVision
 document.querySelectorAll('.format_descriptions label span').forEach(x => data.push(x.textContent))
 // Then

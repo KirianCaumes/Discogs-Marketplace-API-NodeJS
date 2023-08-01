@@ -19,10 +19,10 @@ module.exports = {
     ],
     parserOptions: {
         project: 'tsconfig.json',
-        tsconfigRootDir: __dirname,
         sourceType: 'module',
     },
     plugins: ['jsdoc'],
+    reportUnusedDisableDirectives: true,
     rules: {
         '@typescript-eslint/consistent-type-definitions': ['warn', 'type'],
         '@typescript-eslint/naming-convention': [
@@ -38,7 +38,7 @@ module.exports = {
             { selector: 'typeAlias', format: ['PascalCase'], suffix: ['Type', 'State', 'Props', 'Returns', 'Params'] },
         ],
         '@typescript-eslint/explicit-function-return-type': ['warn', { allowExpressions: true }],
-        '@typescript-eslint/consistent-type-imports': ['error', { disallowTypeAnnotations: false }],
+        '@typescript-eslint/consistent-type-imports': ['error'],
         'jsdoc/require-jsdoc': [
             'warn',
             {
@@ -67,10 +67,17 @@ module.exports = {
         ],
         'jsdoc/require-param-description': ['warn', { contexts: ['any'] }],
         'jsdoc/require-param': ['warn', { checkDestructuredRoots: false }],
-        // 'capitalized-comments': ['warn', 'always'], // Not always usefull as it also fix comment with code
-        camelcase: ['error', { allow: ['format_desc', 'ships_from'] }],
+        'import/order': ['error', { groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'] }],
+        'capitalized-comments': [
+            'warn',
+            'always',
+            {
+                ignorePattern: 'cspell',
+            },
+        ],
+        camelcase: ['error'],
         'no-restricted-syntax': [
-            // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires, import/no-extraneous-dependencies
+            // eslint-disable-next-line import/no-extraneous-dependencies, global-require, @typescript-eslint/no-var-requires
             ...require('eslint-config-airbnb-base/rules/style').rules['no-restricted-syntax'],
             {
                 selector: 'TSEnumDeclaration',
@@ -100,4 +107,10 @@ module.exports = {
             },
         },
     ],
+    /** {@link https://github.com/import-js/eslint-plugin-import/issues/1485} */
+    settings: {
+        'import/resolver': {
+            typescript: {},
+        },
+    },
 }

@@ -1,7 +1,7 @@
-import { CURRENCIES, COUNTRIES } from 'data'
 import UserAgent from 'user-agents'
 import { parseHTML } from 'linkedom'
 import axios from 'axios'
+import { CURRENCIES, COUNTRIES } from 'data'
 import type { AxiosError, AxiosRequestConfig } from 'axios'
 import type { InputType, OutputErrorType, OutputSuccessType } from 'types/commons'
 
@@ -59,6 +59,7 @@ export default abstract class Marketplace {
                     serialize: this.serializeParams,
                 },
                 headers: {
+                    // cspell: disable-next-line
                     'X-PJAX': 'true',
                     'User-Agent': new UserAgent().toString(),
                 },
@@ -78,14 +79,14 @@ export default abstract class Marketplace {
             if (response?.data && response.status) {
                 // eslint-disable-next-line @typescript-eslint/no-throw-literal
                 throw {
-                    message: parseHTML(response.data).document?.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occured',
+                    message: parseHTML(response.data).document?.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occurred',
                     code: response.status,
                 } as OutputErrorType
             }
 
             // eslint-disable-next-line @typescript-eslint/no-throw-literal
             throw {
-                message: message || 'An error occured',
+                message: message || 'An error occurred',
                 code: 500,
             } as OutputErrorType
         }
@@ -249,6 +250,7 @@ export default abstract class Marketplace {
                             ?.filter((value, index, self) => self.indexOf(value) === index),
                         catnos:
                             el
+                                // cspell: disable-next-line
                                 .querySelector('.label_and_cat .item_catno')
                                 ?.textContent?.replace(/\s+/g, ' ')
                                 ?.split(', ')

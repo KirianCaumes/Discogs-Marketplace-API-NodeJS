@@ -1,5 +1,6 @@
+// cspell: disable
 /**
- * Froms
+ * From
  */
 type FromType =
     | 'Afghanistan'

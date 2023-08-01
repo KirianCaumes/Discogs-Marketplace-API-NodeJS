@@ -8,5 +8,5 @@
     "esModuleInterop": true,
     "baseUrl": "./src"
   },
-  "include": ["./src", "./test", ".eslintrc.js", "jest.config.js"]
+  "include": ["./src", "./test", ".eslintrc.cjs", "jest.config.js", "cspell.config.js"]
 }

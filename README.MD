@@ -282,7 +282,7 @@ type OutputErrorType = {
 
 There is a [devcontainer](https://code.visualstudio.com/docs/devcontainers/containers) on that project already configured, feel free to use it.
 
-Install dependecies with:
+Install dependencies with:
 
 ```sh
 npm install
@@ -294,7 +294,7 @@ You can open a pull request with your new additions.
 
 ### Linkedom
 
-If you are using this librairy on a Typescript project, you might encounter issues with `linkedom`.
+If you are using this library on a Typescript project, you might encounter issues with `linkedom`.
 
 To fix it, use this in command line: `--skipLibCheck` or add that in you `tsconfig.json`:
 
