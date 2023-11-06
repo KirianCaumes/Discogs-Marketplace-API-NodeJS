@@ -15,3 +15,5 @@ notes.md
 .prettierrc.js
 .gitmojirc.json
 .lintstagedrc.js
+.husky/
+cspell.config.js
