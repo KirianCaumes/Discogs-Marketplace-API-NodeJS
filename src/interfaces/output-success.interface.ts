@@ -1,11 +1,11 @@
-import type { SearchTypeType } from 'types/unions'
+import type { SearchTypeType } from 'types'
 
 /**
  * Result provided to user
  */
-type OutputSuccessType = {
+interface OutputSuccessInterface {
     /** Items */
-    items: {
+    items: Array<{
         /** Id */
         id: number
         /** Title */
@@ -17,14 +17,14 @@ type OutputSuccessType = {
             /** Item */
             item: string
             /** Formats */
-            formats: string[]
+            formats: Array<string>
         }
         /** Url */
         url: string
         /** Labels */
-        labels: string[]
+        labels: Array<string>
         /** Catnos */
-        catnos: string[]
+        catnos: Array<string>
         /** ImageUrl */
         imageUrl: string
         /** Description */
@@ -89,7 +89,7 @@ type OutputSuccessType = {
             /** Url */
             url: string
         }
-    }[]
+    }>
     /** Page */
     page: {
         /** Current */
@@ -115,4 +115,4 @@ type OutputSuccessType = {
     urlGenerated: string
 }
 
-export default OutputSuccessType
+export default OutputSuccessInterface

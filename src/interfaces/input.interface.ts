@@ -10,12 +10,12 @@ import type {
     LangType,
     FormatDescriptionType,
     SearchTypeType,
-} from 'types/unions'
+} from 'types'
 
 /**
  * Element that can be provided by user
  */
-type InputType = {
+interface InputInterface {
     /**
      * Type of elements to search.
      * Default to `q`.
@@ -44,19 +44,19 @@ type InputType = {
     /**
      * Styles
      */
-    style?: StyleType[]
+    style?: Array<StyleType>
     /**
      * Formats
      */
-    format?: FormatType[]
+    format?: Array<FormatType>
     /**
      * Format descriptions
      */
-    formatDescription?: FormatDescriptionType[]
+    formatDescription?: Array<FormatDescriptionType>
     /**
      * Media conditions
      */
-    condition?: ConditionType[]
+    condition?: Array<ConditionType>
     /**
      * Year (Do not use it with `years`)
      */
@@ -108,4 +108,4 @@ type InputType = {
     lang?: LangType
 }
 
-export default InputType
+export default InputInterface

@@ -24,21 +24,22 @@ module.exports = {
     plugins: ['jsdoc'],
     reportUnusedDisableDirectives: true,
     rules: {
-        '@typescript-eslint/consistent-type-definitions': ['warn', 'type'],
+        /** {@link https://github.com/microsoft/TypeScript/wiki/Performance#preferring-interfaces-over-intersections} */
+        '@typescript-eslint/consistent-type-definitions': ['warn', 'interface'],
         '@typescript-eslint/naming-convention': [
-            'error',
-            { selector: 'interface', format: ['PascalCase'], custom: { regex: '^I[A-Z]', match: true } },
-            { selector: 'enum', format: ['PascalCase'], custom: { regex: '^E[A-Z]', match: true } },
+            // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires, import/no-extraneous-dependencies
+            ...require('eslint-config-airbnb-typescript/lib/shared').rules['@typescript-eslint/naming-convention'],
             {
                 selector: 'variable',
                 types: ['boolean'],
                 format: ['PascalCase'],
                 prefix: ['is', 'should', 'has', 'can', 'did', 'will'],
             },
-            { selector: 'typeAlias', format: ['PascalCase'], suffix: ['Type', 'State', 'Props', 'Returns', 'Params'] },
         ],
         '@typescript-eslint/explicit-function-return-type': ['warn', { allowExpressions: true }],
         '@typescript-eslint/consistent-type-imports': ['error'],
+        /** {@link https://tkdodo.eu/blog/array-types-in-type-script} */
+        '@typescript-eslint/array-type': ['error', { default: 'generic' }],
         'jsdoc/require-jsdoc': [
             'warn',
             {
@@ -77,7 +78,7 @@ module.exports = {
         ],
         camelcase: ['error'],
         'no-restricted-syntax': [
-            // eslint-disable-next-line import/no-extraneous-dependencies, global-require, @typescript-eslint/no-var-requires
+            // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires, import/no-extraneous-dependencies
             ...require('eslint-config-airbnb-base/rules/style').rules['no-restricted-syntax'],
             {
                 selector: 'TSEnumDeclaration',

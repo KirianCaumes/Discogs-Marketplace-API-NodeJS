@@ -1,11 +1,11 @@
 /**
  * Result provided to user
  */
-type OutputErrorType = {
+interface OutputErrorInterface {
     /** Message */
     message: string
     /** Code */
     code: number
 }
 
-export default OutputErrorType
+export default OutputErrorInterface

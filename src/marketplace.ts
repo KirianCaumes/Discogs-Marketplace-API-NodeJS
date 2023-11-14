@@ -3,7 +3,7 @@ import { parseHTML } from 'linkedom'
 import axios from 'axios'
 import { CURRENCIES, COUNTRIES } from 'data'
 import type { AxiosError, AxiosRequestConfig } from 'axios'
-import type { InputType, OutputErrorType, OutputSuccessType } from 'types/commons'
+import type { InputInterface, OutputErrorInterface, OutputSuccessInterface } from 'interfaces'
 
 /**
  * Discogs Marketplace
@@ -32,7 +32,7 @@ export default abstract class Marketplace {
         limit = 25,
         page = 1,
         lang = 'en',
-    }: InputType): Promise<OutputSuccessType> {
+    }: InputInterface): Promise<OutputSuccessInterface> {
         try {
             const config: AxiosRequestConfig = {
                 url: this.generateUrl({ searchType, seller, lang }),
@@ -81,14 +81,14 @@ export default abstract class Marketplace {
                 throw {
                     message: parseHTML(response.data).document?.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occurred',
                     code: response.status,
-                } as OutputErrorType
+                } as OutputErrorInterface
             }
 
             // eslint-disable-next-line @typescript-eslint/no-throw-literal
             throw {
                 message: message || 'An error occurred',
                 code: 500,
-            } as OutputErrorType
+            } as OutputErrorInterface
         }
     }
 
@@ -96,7 +96,7 @@ export default abstract class Marketplace {
      * Generate URL to be parsed
      * @returns Url
      */
-    private static generateUrl({ searchType, seller, lang }: Partial<InputType>): string {
+    private static generateUrl({ searchType, seller, lang }: Partial<InputInterface>): string {
         let url = `https://www.discogs.com/${lang}/`
         if (seller) {
             url += `seller/${seller}/`
@@ -115,7 +115,7 @@ export default abstract class Marketplace {
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private static serializeParams(params: { [key: string]: any }): string {
-        const param: string[] = []
+        const param: Array<string> = []
         // eslint-disable-next-line no-restricted-syntax
         for (const key in params) {
             if (params[key] === undefined || params[key] === null) {
@@ -175,8 +175,8 @@ export default abstract class Marketplace {
     private static getData(
         document: Document,
         urlGenerated: string,
-        { searchType = 'q', searchValue = undefined, limit = 25, page = 1 }: Partial<InputType>,
-    ): OutputSuccessType {
+        { searchType = 'q', searchValue = undefined, limit = 25, page = 1 }: Partial<InputInterface>,
+    ): OutputSuccessInterface {
         const totalItems = parseFloat(
             document
                 .querySelector('.pagination_total')

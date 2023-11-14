@@ -1,4 +1,4 @@
 import DiscogsMarketplace from 'marketplace'
-import type { InputType, OutputErrorType, OutputSuccessType } from 'types/commons'
+import type { InputInterface, OutputErrorInterface, OutputSuccessInterface } from 'interfaces'
 
-export { DiscogsMarketplace, InputType, OutputErrorType, OutputSuccessType }
+export { DiscogsMarketplace, InputInterface, OutputErrorInterface, OutputSuccessInterface }

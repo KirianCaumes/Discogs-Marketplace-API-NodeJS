@@ -1,6 +1,6 @@
 import url from 'url'
 import { DiscogsMarketplace } from '../src/index'
-import type { OutputErrorType, OutputSuccessType } from '../src/index'
+import type { OutputErrorInterface, OutputSuccessInterface } from '../src/index'
 
 describe('Test marketplace.ts', () => {
     const timeout = 10000
@@ -8,7 +8,7 @@ describe('Test marketplace.ts', () => {
     it(
         'It should return success value',
         async () => {
-            const res: OutputSuccessType = await DiscogsMarketplace.search({ searchType: 'q', searchValue: '' })
+            const res: OutputSuccessInterface = await DiscogsMarketplace.search({ searchType: 'q', searchValue: '' })
 
             expect(res.result).not.toBe(null)
             expect(res.page).not.toBe(null)
@@ -62,8 +62,8 @@ describe('Test marketplace.ts', () => {
             try {
                 await DiscogsMarketplace.search({ searchType: 'q', searchValue: 'error' })
             } catch (err) {
-                expect((err as OutputErrorType).code).toBe(404)
-                expect((err as OutputErrorType).message).toBe('An error occurred')
+                expect((err as OutputErrorInterface).code).toBe(404)
+                expect((err as OutputErrorInterface).message).toBe('An error occurred')
             }
         },
         timeout,
@@ -72,7 +72,7 @@ describe('Test marketplace.ts', () => {
     test(
         'It should return success value with artist',
         async () => {
-            const res: OutputSuccessType = await DiscogsMarketplace.search({
+            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
                 searchType: 'artist_id',
                 searchValue: 123456,
             })
@@ -94,7 +94,7 @@ describe('Test marketplace.ts', () => {
     test(
         'It should return good params with artist',
         async () => {
-            const res: OutputSuccessType = await DiscogsMarketplace.search({
+            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
                 searchType: 'artist_id',
                 searchValue: 123456,
                 currency: undefined,
@@ -140,7 +140,7 @@ describe('Test marketplace.ts', () => {
     test(
         'It should return good params with complex search',
         async () => {
-            const res: OutputSuccessType = await DiscogsMarketplace.search({
+            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
                 searchType: 'q',
                 searchValue: 'test',
                 currency: 'EUR',
@@ -186,7 +186,7 @@ describe('Test marketplace.ts', () => {
     test(
         'It should return good params with complex search and years interval',
         async () => {
-            const res: OutputSuccessType = await DiscogsMarketplace.search({
+            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
                 searchType: 'q',
                 searchValue: 'test',
                 currency: 'EUR',
@@ -232,7 +232,7 @@ describe('Test marketplace.ts', () => {
     test(
         "It should return good params with user's wantlist search",
         async () => {
-            const res: OutputSuccessType = await DiscogsMarketplace.search({
+            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
                 searchType: 'user',
                 searchValue: 'TheUser',
             })
@@ -248,7 +248,7 @@ describe('Test marketplace.ts', () => {
     test(
         "It should return good params with user's selling search",
         async () => {
-            const res: OutputSuccessType = await DiscogsMarketplace.search({
+            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
                 searchType: 'q',
                 searchValue: '',
                 seller: 'TheSeller',
@@ -265,7 +265,7 @@ describe('Test marketplace.ts', () => {
     test(
         "It should return good params with user's wantlist search against user's selling items",
         async () => {
-            const res: OutputSuccessType = await DiscogsMarketplace.search({
+            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
                 searchType: 'user',
                 searchValue: 'TheUser',
                 seller: 'TheSeller',

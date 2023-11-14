@@ -104,10 +104,10 @@ const result = await DiscogsMarketplace.search({
 
 ## Data format
 
-You can provide parameters to `DiscogsMarketplace.search` function according to this type:
+You can provide parameters to `DiscogsMarketplace.search` function according to this interface:
 
 ```ts
-type InputType = {
+interface InputInterface {
     /**
      * Type of elements to search.
      * Default to `q`.
@@ -136,19 +136,19 @@ type InputType = {
     /**
      * Styles
      */
-    style?: StyleType[]
+    style?: Array<StyleType>
     /**
      * Formats
      */
-    format?: FormatType[]
+    format?: Array<FormatType>
     /**
      * Format descriptions
      */
-    formatDescription?: FormatDescriptionType[]
+    formatDescription?: Array<FormatDescriptionType>
     /**
      * Media conditions
      */
-    condition?: ConditionType[]
+    condition?: Array<ConditionType>
     /**
      * Year (Do not use it with `years`)
      */
@@ -204,18 +204,18 @@ type InputType = {
 If success, it will return:
 
 ```ts
-type OutputSuccessType = {
-    items: {
+interface OutputSuccessInterface {
+    items: Array<{
         id: number
         title: {
             original: string
             artist: string
             item: string
-            formats: string[]
+            formats: Array<string>
         }
         url: string
-        labels: string[]
-        catnos: string[]
+        labels: Array<string>
+        catnos: Array<string>
         imageUrl: string
         description: string
         isAcceptingOffer: boolean
@@ -242,7 +242,7 @@ type OutputSuccessType = {
         }
         country: {
             name: string
-            code: ECountryCode
+            code: string
         }
         community: {
             have: number
@@ -252,7 +252,7 @@ type OutputSuccessType = {
             id: number
             url: string
         }
-    }[]
+    }>
     page: {
         current: number
         total: number
@@ -272,7 +272,7 @@ type OutputSuccessType = {
 If error, it will throw:
 
 ```ts
-type OutputErrorType = {
+interface OutputErrorInterface {
     message: string
     code: number
 }
