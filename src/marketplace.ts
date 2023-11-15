@@ -61,7 +61,7 @@ export default abstract class Marketplace {
                 headers: {
                     // cspell: disable-next-line
                     'X-PJAX': 'true',
-                    'User-Agent': new UserAgent().toString(),
+                    'User-Agent': new UserAgent({ platform: 'Win32' }).toString(),
                 },
             }
 
