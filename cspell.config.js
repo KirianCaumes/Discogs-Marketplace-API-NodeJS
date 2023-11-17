@@ -7,5 +7,17 @@ module.exports = {
     language: 'en',
     ignorePaths: ['settings.json', 'devcontainer.json', 'node_modules/**', 'build/**', 'dist/**'],
     ignoreWords: ['Kirian_', 'KirianCaumes'],
-    words: ['discogs', 'wantlist', 'catnos', 'devcontainer', 'linkedom', 'gitmojis', 'mywants', 'camelcase'],
+    words: [
+        'discogs',
+        'wantlist',
+        'catnos',
+        'devcontainer',
+        'linkedom',
+        'gitmojis',
+        'mywants',
+        'camelcase',
+        'texttrack',
+        'domcontentloaded',
+        'PJAX',
+    ],
 }

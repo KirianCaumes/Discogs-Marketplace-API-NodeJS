@@ -1,8 +1,7 @@
 import UserAgent from 'user-agents'
 import { parseHTML } from 'linkedom'
-import axios from 'axios'
+import { chromium as playwright } from 'playwright-chromium'
 import { CURRENCIES, COUNTRIES } from 'data'
-import type { AxiosError, AxiosRequestConfig } from 'axios'
 import type { InputInterface, OutputErrorInterface, OutputSuccessInterface } from 'interfaces'
 
 /**
@@ -34,10 +33,44 @@ export default abstract class Marketplace {
         lang = 'en',
     }: InputInterface): Promise<OutputSuccessInterface> {
         try {
-            const config: AxiosRequestConfig = {
-                url: this.generateUrl({ searchType, seller, lang }),
-                method: 'GET',
-                params: {
+            /** Init browser */
+            const browser = await playwright.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] })
+
+            /** Init context */
+            const browserContext = await browser.newContext({
+                userAgent: new UserAgent({ platform: 'Win32' }).toString(),
+                extraHTTPHeaders: {
+                    'X-PJAX': 'true',
+                },
+            })
+
+            /** Init page */
+            const browserPage = await browserContext.newPage()
+
+            /** Block useless resources */
+            await browserPage.route('**/*', route =>
+                [
+                    'stylesheet',
+                    'image',
+                    'media',
+                    'font',
+                    'script',
+                    'texttrack',
+                    'xhr',
+                    'fetch',
+                    'eventsource',
+                    'websocket',
+                    'manifest',
+                    'other',
+                ].includes(route.request().resourceType())
+                    ? route.abort()
+                    : route.continue(),
+            )
+
+            /** Url to call */
+            const url = [
+                this.generateUrl({ searchType, seller, lang }),
+                this.serializeParams({
                     [searchType]: searchValue,
                     currency,
                     genre,
@@ -54,39 +87,42 @@ export default abstract class Marketplace {
                     limit,
                     page,
                     sort,
-                },
-                paramsSerializer: {
-                    serialize: this.serializeParams,
-                },
-                headers: {
-                    // cspell: disable-next-line
-                    'X-PJAX': 'true',
-                    'User-Agent': new UserAgent({ platform: 'Win32' }).toString(),
-                },
+                }),
+            ].join('?')
+
+            /** Init page */
+            const response = await browserPage.goto(url, { waitUntil: 'domcontentloaded' })
+
+            /** Get HTML */
+            const bodyHTML = await browserPage.content()
+
+            /** Close browser */
+            await browser.close()
+
+            /** If error, reject */
+            if ((response?.status() ?? 0) >= 400) {
+                // eslint-disable-next-line @typescript-eslint/no-throw-literal
+                throw {
+                    message: parseHTML(bodyHTML).document?.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occurred',
+                    code: response?.status() || 500,
+                } as OutputErrorInterface
             }
 
-            const { data: bodyHTML } = await axios.request(config)
-
-            return this.getData(parseHTML(bodyHTML).document, axios.getUri(config), {
+            return this.getData(parseHTML(bodyHTML).document, browserPage.url(), {
                 searchType,
                 searchValue,
                 limit,
                 page,
             })
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-            const { response, message } = error as AxiosError
-            if (response?.data && response.status) {
-                // eslint-disable-next-line @typescript-eslint/no-throw-literal
-                throw {
-                    message: parseHTML(response.data).document?.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occurred',
-                    code: response.status,
-                } as OutputErrorInterface
+        } catch (error: unknown) {
+            if ((error as OutputErrorInterface).message && (error as OutputErrorInterface).code) {
+                // Rethrow error
+                throw error
             }
 
             // eslint-disable-next-line @typescript-eslint/no-throw-literal
             throw {
-                message: message || 'An error occurred',
+                message: (error as Error)?.message || 'An error occurred',
                 code: 500,
             } as OutputErrorInterface
         }
@@ -181,8 +217,7 @@ export default abstract class Marketplace {
             document
                 .querySelector('.pagination_total')
                 ?.textContent?.split(' ')
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                ?.filter((x: any) => x)
+                ?.filter(x => x)
                 .pop()
                 ?.replace(/(,|\.|\s)/g, '') || '0',
         )

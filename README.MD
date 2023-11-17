@@ -2,7 +2,7 @@
 
 Another (better ?) NodeJs library to fetch data from Discogs marketplace. 💿
 
-## Installation (with npm)
+## 📂 Installation (with npm)
 
 Run the following command in your project:
 
@@ -10,7 +10,7 @@ Run the following command in your project:
 npm install discogs-marketplace-api-nodejs
 ```
 
-## Quick Start
+## ▶️ Quick Start
 
 Import `DiscogsMarketplace` into your project:
 
@@ -22,7 +22,7 @@ import { DiscogsMarketplace } from 'discogs-marketplace-api-nodejs'
 const DiscogsMarketplace = require('discogs-marketplace-api-nodejs').DiscogsMarketplace
 ```
 
-## Examples
+## 🤔 Examples
 
 - Get top 250 items, of the 2nd page, filtered by Rock, listed by newest, for a given artist
 
@@ -102,7 +102,7 @@ const result = await DiscogsMarketplace.search({
 })
 ```
 
-## Data format
+## 📃 Data format
 
 You can provide parameters to `DiscogsMarketplace.search` function according to this interface:
 
@@ -278,7 +278,7 @@ interface OutputErrorInterface {
 }
 ```
 
-## How to contribute
+## 💡 How to contribute
 
 There is a [devcontainer](https://code.visualstudio.com/docs/devcontainers/containers) on that project already configured, feel free to use it.
 
@@ -290,7 +290,17 @@ npm install
 
 You can open a pull request with your new additions.
 
-## Know issues
+## 🐛 Known issues/problems
+
+### Playwright
+
+Install system dependencies:
+
+```sh
+sudo npx playwright install-deps chromium
+```
+
+More information [here](https://playwright.dev/docs/browsers#install-system-dependencies).
 
 ### Linkedom
 
