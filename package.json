@@ -33,7 +33,6 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "linkedom": "^0.16.4",
     "playwright-chromium": "^1.40.0",
     "user-agents": "^1.1.24"
   },

@@ -302,18 +302,4 @@ sudo npx playwright install-deps chromium
 
 More information [here](https://playwright.dev/docs/browsers#install-system-dependencies).
 
-### Linkedom
-
-If you are using this library on a Typescript project, you might encounter issues with `linkedom`.
-
-To fix it, use this in command line: `--skipLibCheck` or add that in you `tsconfig.json`:
-
-```json
-{
-  "compilerOptions": {
-    "skipLibCheck": true
-  }
-}
-```
-
 If you found another problem, feel free to open an issue.
