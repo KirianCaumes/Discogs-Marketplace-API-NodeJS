@@ -88,24 +88,35 @@ interface InputInterface {
     seller?: string
     /**
      * Sort elements by.
+     *
      * Default to `Listed Newest`.
      */
     sort?: SortType
     /**
      * Limit of elements to search (25 | 50 | 100 | 250).
+     *
      * Default to `25`.
      */
     limit?: LimitType
     /**
      * Page (Must be < 401 or discogs will return an error 404).
+     *
      * Default to `1`.
      */
     page?: number
     /**
      * Lang to use for Discogs.
+     *
      * Default to `en`.
      */
     lang?: LangType
+    /**
+     * Strategy to scrape data:
+     * - `fetch` (default): Get the result with a classic HTTP fetch request (Axios).
+     * - `browser`: Get the result by creating a new instance of a browser (Playwright) to scrape the page.
+     * This can help bypass Cloudflare (or other) protection for some cases.
+     */
+    strategy?: 'fetch' | 'browser'
 }
 
 export default InputInterface

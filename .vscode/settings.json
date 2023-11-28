@@ -29,5 +29,8 @@
     }
   },
   "typescript.preferences.importModuleSpecifier": "non-relative",
-  "javascript.preferences.importModuleSpecifier": "non-relative"
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "markdownlint.config": {
+    "MD051": false
+  }
 }

@@ -1,6 +1,6 @@
 import url from 'url'
 import { DiscogsMarketplace } from '../src/index'
-import type { OutputErrorInterface, OutputSuccessInterface } from '../src/index'
+import type { OutputErrorInterface } from '../src/index'
 
 describe('Test marketplace.ts', () => {
     const timeout = 10000
@@ -8,7 +8,7 @@ describe('Test marketplace.ts', () => {
     it(
         'It should return success value',
         async () => {
-            const res: OutputSuccessInterface = await DiscogsMarketplace.search({ searchType: 'q', searchValue: '' })
+            const res = await DiscogsMarketplace.search({ searchType: 'q', searchValue: '' })
 
             expect(res.result).not.toBe(null)
             expect(res.page).not.toBe(null)
@@ -72,7 +72,7 @@ describe('Test marketplace.ts', () => {
     test(
         'It should return success value with artist',
         async () => {
-            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
+            const res = await DiscogsMarketplace.search({
                 searchType: 'artist_id',
                 searchValue: 123456,
             })
@@ -94,7 +94,7 @@ describe('Test marketplace.ts', () => {
     test(
         'It should return good params with artist',
         async () => {
-            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
+            const res = await DiscogsMarketplace.search({
                 searchType: 'artist_id',
                 searchValue: 123456,
                 currency: undefined,
@@ -140,7 +140,7 @@ describe('Test marketplace.ts', () => {
     test(
         'It should return good params with complex search',
         async () => {
-            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
+            const res = await DiscogsMarketplace.search({
                 searchType: 'q',
                 searchValue: 'test',
                 currency: 'EUR',
@@ -186,7 +186,7 @@ describe('Test marketplace.ts', () => {
     test(
         'It should return good params with complex search and years interval',
         async () => {
-            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
+            const res = await DiscogsMarketplace.search({
                 searchType: 'q',
                 searchValue: 'test',
                 currency: 'EUR',
@@ -232,7 +232,7 @@ describe('Test marketplace.ts', () => {
     test(
         "It should return good params with user's wantlist search",
         async () => {
-            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
+            const res = await DiscogsMarketplace.search({
                 searchType: 'user',
                 searchValue: 'TheUser',
             })
@@ -248,7 +248,7 @@ describe('Test marketplace.ts', () => {
     test(
         "It should return good params with user's selling search",
         async () => {
-            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
+            const res = await DiscogsMarketplace.search({
                 searchType: 'q',
                 searchValue: '',
                 seller: 'TheSeller',
@@ -265,7 +265,7 @@ describe('Test marketplace.ts', () => {
     test(
         "It should return good params with user's wantlist search against user's selling items",
         async () => {
-            const res: OutputSuccessInterface = await DiscogsMarketplace.search({
+            const res = await DiscogsMarketplace.search({
                 searchType: 'user',
                 searchValue: 'TheUser',
                 seller: 'TheSeller',
@@ -277,6 +277,27 @@ describe('Test marketplace.ts', () => {
             expect(res.urlGenerated.includes('/mywants')).toBe(true)
             expect(res.urlGenerated.includes('/profile')).toBe(false)
             expect(params.user).toBe('TheUser')
+        },
+        timeout,
+    )
+
+    it(
+        'It should return success value with Navigator',
+        async () => {
+            const res = await DiscogsMarketplace.search({ searchType: 'q', searchValue: '', strategy: 'browser' })
+
+            expect(res.result).not.toBe(null)
+            expect(res.page).not.toBe(null)
+            expect(res.page?.current).not.toBe(null)
+            expect(res.page?.total).not.toBe(null)
+            expect(res.result).not.toBe(null)
+            expect(res.result?.total).not.toBe(null)
+            expect(res.result?.perPage).not.toBe(null)
+            expect(res.search).not.toBe(null)
+            expect(res.search?.value).not.toBe(null)
+            expect(res.search?.type).not.toBe(null)
+            expect(res.urlGenerated).not.toBe(null)
+            expect(res.items[0]?.id).not.toBe(null)
         },
         timeout,
     )
