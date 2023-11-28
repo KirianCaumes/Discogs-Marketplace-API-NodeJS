@@ -4,7 +4,7 @@ Another (better ?) NodeJs library to fetch data from Discogs marketplace. 💿
 
 ## 📂 Installation (with npm)
 
-This library works with two different `strategies` to scrape data: with a classic HTTP fetch request (Axios) or by creating a new instance of a browser (Playwright). Take a look at the "[About strategies](#🤠-about-strategies)" chapter to learn more.
+This library works with two different `strategies` to scrape data: with a classic HTTP fetch request (Axios) or by creating a new instance of a browser (Playwright). Take a look at the "[About strategies](#-about-strategies)" chapter to learn more.
 
 Run the following command in your project:
 
