@@ -6,7 +6,7 @@ module.exports = {
     version: '0.2',
     language: 'en',
     ignorePaths: ['settings.json', 'devcontainer.json', 'node_modules/**', 'build/**', 'dist/**'],
-    ignoreWords: ['Kirian_', 'KirianCaumes'],
+    ignoreWords: ['Kirian_', 'KirianCaumes', 'knip'],
     words: [
         'discogs',
         'wantlist',
