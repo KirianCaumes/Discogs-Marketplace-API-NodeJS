@@ -8,7 +8,7 @@ describe('Test marketplace.ts', () => {
     it(
         'It should return success value',
         async () => {
-            const res = await DiscogsMarketplace.search({ searchType: 'q', searchValue: '' })
+            const res = await DiscogsMarketplace.search({ searchType: 'q', searchValue: '', strategy: 'browser' })
 
             expect(res.result).not.toBe(null)
             expect(res.page).not.toBe(null)
@@ -60,7 +60,7 @@ describe('Test marketplace.ts', () => {
         'It should return error value',
         async () => {
             try {
-                await DiscogsMarketplace.search({ searchType: 'q', searchValue: 'error' })
+                await DiscogsMarketplace.search({ searchType: 'q', searchValue: 'error', strategy: 'browser' })
             } catch (err) {
                 expect((err as OutputErrorInterface).code).toBe(404)
                 expect((err as OutputErrorInterface).message).toBe('An error occurred')
@@ -75,6 +75,7 @@ describe('Test marketplace.ts', () => {
             const res = await DiscogsMarketplace.search({
                 searchType: 'artist_id',
                 searchValue: 123456,
+                strategy: 'browser',
             })
             expect(res.result).not.toBe(null)
             expect(res.page).not.toBe(null)
@@ -113,6 +114,7 @@ describe('Test marketplace.ts', () => {
                 limit: 25,
                 page: 1,
                 lang: 'en',
+                strategy: 'browser',
             })
 
             const params = url.parse(res.urlGenerated, true)?.query
@@ -159,6 +161,7 @@ describe('Test marketplace.ts', () => {
                 limit: 50,
                 page: 2,
                 lang: 'fr',
+                strategy: 'browser',
             })
 
             const params = url.parse(res.urlGenerated, true)?.query
@@ -205,6 +208,7 @@ describe('Test marketplace.ts', () => {
                 limit: 50,
                 page: 2,
                 lang: 'fr',
+                strategy: 'browser',
             })
 
             const params = url.parse(res.urlGenerated, true)?.query
@@ -235,6 +239,7 @@ describe('Test marketplace.ts', () => {
             const res = await DiscogsMarketplace.search({
                 searchType: 'user',
                 searchValue: 'TheUser',
+                strategy: 'browser',
             })
 
             const params = url.parse(res.urlGenerated, true)?.query
@@ -252,6 +257,7 @@ describe('Test marketplace.ts', () => {
                 searchType: 'q',
                 searchValue: '',
                 seller: 'TheSeller',
+                strategy: 'browser',
             })
 
             expect(res.urlGenerated.includes('/seller/TheSeller/')).toBe(true)
@@ -269,6 +275,7 @@ describe('Test marketplace.ts', () => {
                 searchType: 'user',
                 searchValue: 'TheUser',
                 seller: 'TheSeller',
+                strategy: 'browser',
             })
 
             const params = url.parse(res.urlGenerated, true)?.query
