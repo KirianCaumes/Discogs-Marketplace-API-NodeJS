@@ -360,11 +360,17 @@ export default abstract class Marketplace {
                     const countryName = el.querySelector('.seller_info li:nth-child(3)')?.textContent?.split(':')?.pop() ?? ''
                     const countryCode = COUNTRIES[countryName as keyof typeof COUNTRIES]
                     const releaseId = Number.parseInt(
-                        el.querySelector<HTMLLinkElement>('a.item_release_link')?.href.split('release/')?.pop()?.split('-')?.shift() ?? '0',
+                        el
+                            .querySelector<HTMLLinkElement>('a.item_release_link')
+                            ?.getAttribute('href')
+                            ?.split('release/')
+                            ?.pop()
+                            ?.split('-')
+                            ?.shift() ?? '0',
                         10,
                     )
                     const itemId = Number.parseInt(
-                        el.querySelector<HTMLLinkElement>('a.item_description_title')?.href?.split('/').pop() ?? '0',
+                        el.querySelector<HTMLLinkElement>('a.item_description_title')?.getAttribute('href')?.split('/').pop() ?? '0',
                         10,
                     )
                     const notes = Number.parseInt(
@@ -395,7 +401,9 @@ export default abstract class Marketplace {
                                     ? originalTitle?.substring(lastIndexOfParenthesis + 2, originalTitle.length - 1)?.split(', ') ?? []
                                     : [],
                         },
-                        url: `https://www.discogs.com${el.querySelector<HTMLLinkElement>('a.item_description_title')?.href}`,
+                        url: `https://www.discogs.com${el
+                            .querySelector<HTMLLinkElement>('a.item_description_title')
+                            ?.getAttribute('href')}`,
                         labels: [...el.querySelectorAll(".label_and_cat a[href^='https://www.discogs.com/']")]
                             ?.map(x => x?.textContent ?? '')
                             ?.filter((value, index, self) => self.indexOf(value) === index),
@@ -432,7 +440,7 @@ export default abstract class Marketplace {
                         },
                         seller: {
                             name: el.querySelector('.seller_info a')?.textContent ?? '',
-                            url: `https://www.discogs.com${el.querySelector<HTMLLinkElement>('.seller_info a')?.href}`,
+                            url: `https://www.discogs.com${el.querySelector<HTMLLinkElement>('.seller_info a')?.getAttribute('href')}`,
                             score: el.querySelector('.seller_info li:nth-child(2) strong')?.textContent ?? '',
                             notes: Number.isNaN(notes) ? 0 : notes,
                         },
@@ -450,7 +458,7 @@ export default abstract class Marketplace {
                         },
                         release: {
                             id: Number.isNaN(releaseId) ? 0 : releaseId,
-                            url: `https://www.discogs.com${el.querySelector<HTMLLinkElement>('a.item_release_link')?.href}`,
+                            url: `https://www.discogs.com${el.querySelector<HTMLLinkElement>('a.item_release_link')?.getAttribute('href')}`,
                         },
                     }
                 }) || [],
