@@ -31,38 +31,38 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "dependencies": {
-    "axios": "^1.6.5",
-    "linkedom": "^0.16.6",
-    "playwright-chromium": "^1.40.1",
-    "user-agents": "^1.1.75"
+    "axios": "^1.6.8",
+    "linkedom": "^0.16.10",
+    "playwright-chromium": "^1.42.1",
+    "user-agents": "^1.1.149"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.11",
-    "@types/node": "^18.19.4",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.30",
     "@types/user-agents": "^1.0.4",
-    "@typescript-eslint/eslint-plugin": "^6.17.0",
-    "@typescript-eslint/parser": "^6.17.0",
-    "cspell": "^8.3.2",
-    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "cspell": "^8.6.0",
+    "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsdoc": "^48.0.2",
-    "husky": "^8.0.3",
+    "eslint-plugin-jsdoc": "^48.2.1",
+    "husky": "^9.0.11",
     "jest": "^29.7.0",
-    "knip": "^3.12.0",
-    "lint-staged": "^15.2.0",
-    "nodemon": "^3.0.2",
-    "prettier": "^3.1.1",
+    "knip": "^5.1.5",
+    "lint-staged": "^15.2.2",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
-    "ts-jest": "^29.1.1",
+    "ts-jest": "^29.1.2",
     "tsc-alias": "^1.8.8",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.3"
   }
 }
