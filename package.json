@@ -33,6 +33,12 @@
   "engines": {
     "node": ">=16.0.0"
   },
+  "funding": [
+    {
+      "type": "paypal",
+      "url": "https://www.paypal.me/KirianCaumes"
+    }
+  ],
   "dependencies": {
     "axios": "^1.6.8",
     "linkedom": "^0.16.10",
