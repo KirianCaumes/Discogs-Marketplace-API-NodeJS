@@ -59,7 +59,7 @@ export default abstract class Marketplace {
             ].join('?')
 
             /** Result got by different strategy type */
-            const result = await (async () => {
+            const result = await (() => {
                 switch (strategy) {
                     case 'fetch':
                         return this.getResultWithFetch({
@@ -161,6 +161,7 @@ export default abstract class Marketplace {
                 'X-PJAX': 'true',
                 'User-Agent': new UserAgent({ platform: 'Win32' }).toString(),
             },
+            validateStatus: () => true,
         })
 
         /** Generate document */
@@ -170,7 +171,7 @@ export default abstract class Marketplace {
         if (status >= 400) {
             // eslint-disable-next-line @typescript-eslint/no-throw-literal
             throw {
-                message: document?.querySelector('h1 + p')?.innerHTML?.trim() ?? 'An error occurred',
+                message: document?.querySelector('h1 + p')?.innerHTML?.trim() || 'An error occurred',
                 code: status,
             } as OutputErrorInterface
         }
@@ -247,7 +248,7 @@ export default abstract class Marketplace {
         if (status >= 400) {
             // eslint-disable-next-line @typescript-eslint/no-throw-literal
             throw {
-                message: (await browserPage.evaluate(() => document?.querySelector('h1 + p')?.innerHTML?.trim())) ?? 'An error occurred',
+                message: (await browserPage.evaluate(() => document?.querySelector('h1 + p')?.innerHTML?.trim())) || 'An error occurred',
                 code: status,
             } as OutputErrorInterface
         }
