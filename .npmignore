@@ -1,7 +1,6 @@
 src/
 tsconfig.json
 tsconfig.build.json
-jest.config.js
 test/
 coverage
 .vscode/

@@ -244,6 +244,10 @@ export default abstract class Marketplace {
         /** Status code from the page */
         const status = response?.status() || 500
 
+        // See current issue: https://github.com/evanw/esbuild/issues/2605
+        // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/no-explicit-any, no-return-assign
+        await browserPage.evaluate(() => ((window as any).__name ??= (func: any) => func))
+
         /** If error, reject */
         if (status >= 400) {
             // eslint-disable-next-line @typescript-eslint/no-throw-literal
