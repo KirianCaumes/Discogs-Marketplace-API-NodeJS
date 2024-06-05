@@ -1,14 +1,23 @@
 import UserAgent from 'user-agents'
-import { chromium as playwright } from 'playwright-chromium'
-import { parseHTML } from 'linkedom'
-import axios from 'axios'
 import { CURRENCIES as CURRENCIES_DATA, COUNTRIES as COUNTRIES_DATA } from 'data'
+import type { parseHTML } from 'linkedom'
+import type axios from 'axios'
 import type { InputInterface, OutputErrorInterface, OutputSuccessInterface } from 'interfaces'
+import type { chromium } from 'playwright-chromium'
 
 /**
  * Discogs Marketplace
  */
 export default abstract class Marketplace {
+    /** Playwright navigator from `playwright-chromium`, dynamically loaded if using the `browser` strategy */
+    private static playwright: typeof chromium
+
+    /** Parse html method from `linkedom`, dynamically loaded if using the `fetch` strategy */
+    private static parseHTML: typeof parseHTML
+
+    /** Axios method from `axios`, dynamically loaded if using the `fetch` strategy */
+    private static axios: typeof axios
+
     /**
      * Search elements on discogs
      * @returns Items found
@@ -32,7 +41,7 @@ export default abstract class Marketplace {
         limit = 25,
         page = 1,
         lang = 'en',
-        strategy = 'fetch',
+        strategy = 'browser',
     }: InputInterface): Promise<OutputSuccessInterface> {
         try {
             /** Url to call */
@@ -155,7 +164,14 @@ export default abstract class Marketplace {
             url: string
         }
     }): Promise<OutputSuccessInterface> {
-        const { data: bodyHTML, status } = await axios.get(url, {
+        ;[this.parseHTML, this.axios] = await Promise.all([
+            // eslint-disable-next-line import/no-extraneous-dependencies
+            this.parseHTML ?? (await import('linkedom')).parseHTML,
+            // eslint-disable-next-line import/no-extraneous-dependencies
+            this.axios ?? (await import('axios')).default,
+        ])
+
+        const { data: bodyHTML, status } = await this.axios.get(url, {
             headers: {
                 // cspell: disable-next-line
                 'X-PJAX': 'true',
@@ -165,7 +181,7 @@ export default abstract class Marketplace {
         })
 
         /** Generate document */
-        const { document } = parseHTML(bodyHTML)
+        const { document } = this.parseHTML(bodyHTML)
 
         /** If error, reject */
         if (status >= 400) {
@@ -201,8 +217,11 @@ export default abstract class Marketplace {
             url: string
         }
     }): Promise<OutputSuccessInterface> {
+        // eslint-disable-next-line import/no-extraneous-dependencies
+        this.playwright ??= (await import('playwright-chromium')).chromium
+
         /** Init browser */
-        const browser = await playwright.launch({
+        const browser = await this.playwright.launch({
             args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gl-drawing-for-tests'],
         })
 

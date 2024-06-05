@@ -6,15 +6,20 @@ Another (better ?) NodeJs library to fetch data from Discogs marketplace. 💿
 
 ## 📂 Installation (with npm)
 
-This library works with two different `strategies` to scrape data: with a classic HTTP fetch request (Axios) or by creating a new instance of a browser (Playwright). Take a look at the "[About strategies](#-about-strategies)" chapter to learn more.
+This library works with two different `strategies` to scrape data: with a new instance of a browser (Playwright) or a classic HTTP fetch request (Axios). Take a look at the "[About strategies](#-about-strategies)" chapter to learn more.
 
 Run the following command in your project:
 
 ```sh
-npm install discogs-marketplace-api-nodejs
+npm i discogs-marketplace-api-nodejs
+```
 
-# Or to avoid installing Playwright
-PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install discogs-marketplace-api-nodejs
+*Or to install only for a specific strategy:*
+
+```sh
+npm i discogs-marketplace-api-nodejs --omit=optional
+npm i playwright-chromium # For the `browser` strategy
+npm i axios linkedom # For the `fetch` strategy
 ```
 
 ## ▶️ Quick Start
@@ -115,11 +120,11 @@ const result = await DiscogsMarketplace.search({
 
 This project provides two ways to scrape data:
 
-- `fetch` (default): Get the result with a classic HTTP fetch request (Axios).
-  - For the moment, this is the simplest and fastest solution to choose.
-- `browser`: Get the result by creating a new instance of a browser (Playwright) to scrape the page.
+- `browser` (default): Get the result by creating a new instance of a browser (Playwright) to scrape the page.
   - This can help bypass Cloudflare (or other) protection for some cases.
   - Slightly slower than `fetch` (see [benchmarks](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/releases/tag/v1.8.1))
+- `fetch` (legacy): Get the result with a classic HTTP fetch request (Axios).
+  - For the moment, this is the simplest and fastest solution to choose.
 
 **Both strategies will give you the exact same result.**
 
@@ -130,7 +135,7 @@ With both strategies, you are free to choose the one that suits you!
 ```js
 const result = await DiscogsMarketplace.search({
     // ...
-    strategy: 'fetch' // or 'browser'
+    strategy: 'browser' // or 'fetch'
 })
 ```
 
@@ -232,8 +237,8 @@ interface InputInterface {
     lang?: LangType
     /**
      * Strategy to scrape data:
-     * - `fetch` (default): Get the result with a classic HTTP fetch request (Axios).
-     * - `browser`: Get the result by creating a new instance of a browser (Playwright) to scrape the page. This can help bypass Cloudflare (or other) protection for some cases.
+     * - `browser` (default): Get the result by creating a new instance of a browser (Playwright) to scrape the page. This can help bypass Cloudflare (or other) protection for some cases.
+     * - `fetch` (deprecated): Get the result with a classic HTTP fetch request (Axios).
      */
     strategy?: 'fetch' | 'browser'
 }
