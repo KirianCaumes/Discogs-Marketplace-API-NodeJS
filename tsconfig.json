@@ -8,11 +8,5 @@
     "esModuleInterop": true,
     "baseUrl": "./src"
   },
-  "include": [
-    "./src",
-    "./test",
-    ".eslintrc.cjs",
-    "cspell.config.js",
-    "knip.js"
-  ]
+  "include": ["./src", "./test", ".eslintrc.cjs", "cspell.config.js", "knip.js"]
 }

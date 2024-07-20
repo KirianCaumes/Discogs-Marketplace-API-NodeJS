@@ -308,11 +308,11 @@ export default abstract class Marketplace {
                             artist: originalTitle?.substring(0, firstIndexOfDash) ?? '',
                             item:
                                 firstIndexOfDash > -1 && lastIndexOfParenthesis > -1
-                                    ? originalTitle?.substring(firstIndexOfDash + 3, lastIndexOfParenthesis) ?? ''
+                                    ? (originalTitle?.substring(firstIndexOfDash + 3, lastIndexOfParenthesis) ?? '')
                                     : '',
                             formats:
                                 lastIndexOfParenthesis > -1
-                                    ? originalTitle?.substring(lastIndexOfParenthesis + 2, originalTitle.length - 1)?.split(', ') ?? []
+                                    ? (originalTitle?.substring(lastIndexOfParenthesis + 2, originalTitle.length - 1)?.split(', ') ?? [])
                                     : [],
                         },
                         url: `https://www.discogs.com${el

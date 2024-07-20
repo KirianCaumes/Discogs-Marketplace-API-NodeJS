@@ -107,10 +107,4 @@ module.exports = {
             },
         },
     ],
-    /** {@link https://github.com/import-js/eslint-plugin-import/issues/1485} */
-    settings: {
-        'import/resolver': {
-            typescript: {},
-        },
-    },
 }
