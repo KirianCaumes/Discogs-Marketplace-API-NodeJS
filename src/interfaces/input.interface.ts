@@ -110,13 +110,6 @@ interface InputInterface {
      * Default to `en`.
      */
     lang?: LangType
-    /**
-     * Strategy to scrape data:
-     * - `fetch` (default): Get the result with a classic HTTP fetch request (Axios).
-     * - `browser`: Get the result by creating a new instance of a browser (Playwright) to scrape the page.
-     * This can help bypass Cloudflare (or other) protection for some cases.
-     */
-    strategy?: 'fetch' | 'browser'
 }
 
 export default InputInterface

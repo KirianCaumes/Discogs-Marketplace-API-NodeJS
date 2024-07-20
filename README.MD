@@ -6,15 +6,10 @@ Another (better ?) NodeJs library to fetch data from Discogs marketplace. 💿
 
 ## 📂 Installation (with npm)
 
-This library works with two different `strategies` to scrape data: with a classic HTTP fetch request (Axios) or by creating a new instance of a browser (Playwright). Take a look at the "[About strategies](#-about-strategies)" chapter to learn more.
-
 Run the following command in your project:
 
 ```sh
-npm install discogs-marketplace-api-nodejs
-
-# Or to avoid installing Playwright
-PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install discogs-marketplace-api-nodejs
+npm i discogs-marketplace-api-nodejs
 ```
 
 ## ▶️ Quick Start
@@ -106,31 +101,6 @@ const result = await DiscogsMarketplace.search({
     searchType: 'user',
     searchValue: 'Kirian_',
     seller: 'Kirian_',
-})
-```
-
-## 🤠 About strategies
-
-> Which `strategy` should I choose?
-
-This project provides two ways to scrape data:
-
-- `fetch` (default): Get the result with a classic HTTP fetch request (Axios).
-  - For the moment, this is the simplest and fastest solution to choose.
-- `browser`: Get the result by creating a new instance of a browser (Playwright) to scrape the page.
-  - This can help bypass Cloudflare (or other) protection for some cases.
-  - Slightly slower than `fetch` (see [benchmarks](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/releases/tag/v1.8.1))
-
-**Both strategies will give you the exact same result.**
-
-I choose to maintain this two solutions, because over time Discogs is changing: one day they activated a protection that prevented a `fetch` solution from working, so I implemented to `browser` solution. But a few days later, they disabled that protection and the original solution became the best again.
-
-With both strategies, you are free to choose the one that suits you!
-
-```js
-const result = await DiscogsMarketplace.search({
-    // ...
-    strategy: 'fetch' // or 'browser'
 })
 ```
 
@@ -230,12 +200,6 @@ interface InputInterface {
      * Default to `en`.
      */
     lang?: LangType
-    /**
-     * Strategy to scrape data:
-     * - `fetch` (default): Get the result with a classic HTTP fetch request (Axios).
-     * - `browser`: Get the result by creating a new instance of a browser (Playwright) to scrape the page. This can help bypass Cloudflare (or other) protection for some cases.
-     */
-    strategy?: 'fetch' | 'browser'
 }
 ```
 
@@ -329,20 +293,6 @@ npm install
 You can open a pull request with your new additions.
 
 ## 🐛 Known issues/problems
-
-### Linkedom
-
-If you are using this library on a Typescript project, you might encounter issues with `linkedom`.
-
-To fix it, use this in command line: `--skipLibCheck` or add that in you `tsconfig.json`:
-
-```json
-{
-  "compilerOptions": {
-    "skipLibCheck": true
-  }
-}
-```
 
 ### Playwright
 
