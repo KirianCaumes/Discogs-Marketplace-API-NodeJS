@@ -15,7 +15,7 @@ import type {
 /**
  * Element that can be provided by user
  */
-interface InputInterface {
+export default interface InputInterface {
     /**
      * Type of elements to search.
      * Default to `q`.
@@ -111,5 +111,3 @@ interface InputInterface {
      */
     lang?: LangType
 }
-
-export default InputInterface

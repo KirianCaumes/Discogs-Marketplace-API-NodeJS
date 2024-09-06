@@ -3,7 +3,7 @@ import type { SearchTypeType } from 'types'
 /**
  * Result provided to user
  */
-interface OutputSuccessInterface {
+export default interface OutputSuccessInterface {
     /** Items */
     items: Array<{
         /** Id */
@@ -114,5 +114,3 @@ interface OutputSuccessInterface {
     /** UrlGenerated */
     urlGenerated: string
 }
-
-export default OutputSuccessInterface

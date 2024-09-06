@@ -24,7 +24,7 @@ describe('Test marketplace.ts', () => {
         assert.notStrictEqual(res.items[0]?.title?.artist, undefined)
         assert.notStrictEqual(res.items[0]?.title?.item, undefined)
         assert.notStrictEqual(res.items[0]?.title?.formats, undefined)
-        assert.ok(res.items[0]?.title?.formats?.length >= 0)
+        assert.ok((res.items[0]?.title?.formats?.length ?? 0) >= 0)
         assert.notStrictEqual(res.items[0]?.url, undefined)
         assert.notStrictEqual(res.items[0]?.labels, undefined)
         assert.notStrictEqual(res.items[0]?.catnos, undefined)

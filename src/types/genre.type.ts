@@ -1,7 +1,7 @@
 /**
  * Genres
  */
-type GenreType =
+export type GenreType =
     | 'Blues'
     | 'Brass & Military'
     | "Children's"
@@ -17,5 +17,3 @@ type GenreType =
     | 'Reggae'
     | 'Rock'
     | 'Stage & Screen'
-
-export default GenreType

@@ -2,7 +2,7 @@
 /**
  * Styles
  */
-type StyleType =
+export type StyleType =
     | 'AOR'
     | 'Aboriginal'
     | 'Abstract'
@@ -624,5 +624,3 @@ type StyleType =
     | 'Zouk'
     | 'Zydeco'
     | 'Éntekhno'
-
-export default StyleType

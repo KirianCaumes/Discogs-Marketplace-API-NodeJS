@@ -1,4 +1,5 @@
 import DiscogsMarketplace from 'marketplace'
 import type { InputInterface, OutputErrorInterface, OutputSuccessInterface } from 'interfaces'
 
-export { DiscogsMarketplace, InputInterface, OutputErrorInterface, OutputSuccessInterface }
+export { DiscogsMarketplace }
+export type { InputInterface, OutputErrorInterface, OutputSuccessInterface }

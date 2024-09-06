@@ -1,12 +1,23 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "module": "commonjs",
+    "target": "ES2023",
+    "module": "Preserve",
     "declaration": true,
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
   },
-  "include": ["./src", "./test", ".eslintrc.cjs", "cspell.config.js", "knip.js"]
+  "include": [
+    "./src",
+    "./test",
+    ".eslintrc.cjs",
+    "cspell.config.js",
+    "knip.js"
+  ]
 }

@@ -1,7 +1,7 @@
 /**
  * Sorts
  */
-type SortType =
+export type SortType =
     | 'Artist A-Z'
     | 'Artist Z-A'
     | 'Condition (M)-(P)'
@@ -16,5 +16,3 @@ type SortType =
     | 'Seller Z-A'
     | 'Title A-Z'
     | 'Title Z-A'
-
-export default SortType

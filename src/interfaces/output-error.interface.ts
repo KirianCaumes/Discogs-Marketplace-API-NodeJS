@@ -1,11 +1,9 @@
 /**
  * Result provided to user
  */
-interface OutputErrorInterface {
+export default interface OutputErrorInterface {
     /** Message */
     message: string
     /** Code */
     code: number
 }
-
-export default OutputErrorInterface

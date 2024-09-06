@@ -18,7 +18,10 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
-  "eslint.workingDirectories": ["./"],
+  "editor.lightbulb.enabled": "off",
+  "eslint.workingDirectories": [
+    "./"
+  ],
   "prettier.requireConfig": true,
   "versionlens.suggestions.showOnStartup": true,
   "terminal.integrated.defaultProfile.linux": "bash",

@@ -1,7 +1,7 @@
 /**
  * Conditions
  */
-type ConditionType =
+export type ConditionType =
     | '0'
     | 'Fair (F)'
     | 'Good (G)'
@@ -11,5 +11,3 @@ type ConditionType =
     | 'Poor (P)'
     | 'Very Good (VG)'
     | 'Very Good Plus (VG+)'
-
-export default ConditionType

@@ -2,7 +2,7 @@
 /**
  * From
  */
-type FromType =
+export type FromType =
     | 'Afghanistan'
     | 'Albania'
     | 'Algeria'
@@ -250,5 +250,3 @@ type FromType =
     | 'Zaire'
     | 'Zambia'
     | 'Zimbabwe'
-
-export default FromType
