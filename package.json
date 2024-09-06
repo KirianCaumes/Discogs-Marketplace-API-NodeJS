@@ -40,28 +40,28 @@
     }
   ],
   "dependencies": {
-    "playwright-chromium": "^1.45.2",
+    "playwright-chromium": "^1.47.0",
     "user-agents": "^1.1.271"
   },
   "devDependencies": {
-    "@types/node": "^20.14.11",
+    "@types/node": "^20.16.5",
     "@types/user-agents": "^1.0.4",
-    "@typescript-eslint/eslint-plugin": "^7.16.1",
-    "@typescript-eslint/parser": "^7.16.1",
-    "cspell": "^8.11.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "cspell": "^8.14.2",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsdoc": "^48.8.3",
-    "husky": "^9.1.1",
-    "knip": "^5.26.0",
-    "lint-staged": "^15.2.7",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-jsdoc": "^48.11.0",
+    "husky": "^9.1.5",
+    "knip": "^5.29.2",
+    "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "rimraf": "^6.0.1",
     "tsc-alias": "^1.8.10",
-    "tsx": "^4.16.2",
-    "typescript": "^5.5.3"
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
   }
 }

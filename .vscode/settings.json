@@ -12,6 +12,9 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[markdown]": {
     "editor.defaultFormatter": "vscode.markdown-language-features"
   },
@@ -19,9 +22,7 @@
     "source.fixAll": "explicit"
   },
   "editor.lightbulb.enabled": "off",
-  "eslint.workingDirectories": [
-    "./"
-  ],
+  "eslint.workingDirectories": ["./"],
   "prettier.requireConfig": true,
   "versionlens.suggestions.showOnStartup": true,
   "terminal.integrated.defaultProfile.linux": "bash",
