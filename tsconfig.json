@@ -11,7 +11,8 @@
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "allowJs": true
   },
-  "include": ["./src", "./test", ".eslintrc.cjs", "cspell.config.js", "knip.js"]
+  "include": ["./src", "./test", "eslint.config.mjs", "cspell.config.js", "knip.js", ".lintstagedrc.js", ".prettierrc.js"]
 }

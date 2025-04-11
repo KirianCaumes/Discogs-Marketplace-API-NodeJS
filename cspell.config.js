@@ -19,5 +19,6 @@ module.exports = {
         'domcontentloaded',
         'PJAX',
         'localtime',
+        'lintstagedrc',
     ],
 }

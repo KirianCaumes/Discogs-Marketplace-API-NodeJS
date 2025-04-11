@@ -4,27 +4,27 @@ import url from 'url'
 import { DiscogsMarketplace } from '../src/index'
 import type { OutputErrorInterface } from '../src/index'
 
-describe('Test marketplace.ts', () => {
-    test('It should return success value', async () => {
+void describe('Test marketplace.ts', () => {
+    void test('It should return success value', async () => {
         const res = await DiscogsMarketplace.search({ searchType: 'q', searchValue: '' })
 
         assert.notStrictEqual(res.result, null)
         assert.notStrictEqual(res.page, null)
-        assert.notStrictEqual(res.page?.current, null)
-        assert.notStrictEqual(res.page?.total, null)
+        assert.notStrictEqual(res.page.current, null)
+        assert.notStrictEqual(res.page.total, null)
         assert.notStrictEqual(res.result, null)
-        assert.notStrictEqual(res.result?.total, null)
-        assert.notStrictEqual(res.result?.perPage, null)
+        assert.notStrictEqual(res.result.total, null)
+        assert.notStrictEqual(res.result.perPage, null)
         assert.notStrictEqual(res.search, null)
-        assert.notStrictEqual(res.search?.value, null)
-        assert.notStrictEqual(res.search?.type, null)
+        assert.notStrictEqual(res.search.value, null)
+        assert.notStrictEqual(res.search.type, null)
         assert.notStrictEqual(res.urlGenerated, null)
         assert.notStrictEqual(res.items[0]?.id, undefined)
-        assert.notStrictEqual(res.items[0]?.title?.original, undefined)
-        assert.notStrictEqual(res.items[0]?.title?.artist, undefined)
-        assert.notStrictEqual(res.items[0]?.title?.item, undefined)
-        assert.notStrictEqual(res.items[0]?.title?.formats, undefined)
-        assert.ok((res.items[0]?.title?.formats?.length ?? 0) >= 0)
+        assert.notStrictEqual(res.items[0]?.title.original, undefined)
+        assert.notStrictEqual(res.items[0]?.title.artist, undefined)
+        assert.notStrictEqual(res.items[0]?.title.item, undefined)
+        assert.notStrictEqual(res.items[0]?.title.formats, undefined)
+        assert.ok((res.items[0]?.title.formats.length ?? 0) >= 0)
         assert.notStrictEqual(res.items[0]?.url, undefined)
         assert.notStrictEqual(res.items[0]?.labels, undefined)
         assert.notStrictEqual(res.items[0]?.catnos, undefined)
@@ -32,27 +32,27 @@ describe('Test marketplace.ts', () => {
         assert.notStrictEqual(res.items[0]?.description, undefined)
         assert.notStrictEqual(res.items[0]?.isAcceptingOffer, undefined)
         assert.notStrictEqual(res.items[0]?.isAvailable, undefined)
-        assert.notStrictEqual(res.items[0]?.condition?.media, undefined)
-        assert.notStrictEqual(res.items[0]?.condition?.media?.full, undefined)
-        assert.notStrictEqual(res.items[0]?.condition?.media?.short, undefined)
-        assert.notStrictEqual(res.items[0]?.condition?.sleeve, undefined)
-        assert.notStrictEqual(res.items[0]?.condition?.sleeve?.full, undefined)
-        assert.notStrictEqual(res.items[0]?.condition?.sleeve?.short, undefined)
-        assert.notStrictEqual(res.items[0]?.seller?.name, undefined)
-        assert.notStrictEqual(res.items[0]?.seller?.url, undefined)
-        assert.notStrictEqual(res.items[0]?.seller?.notes, undefined)
-        assert.notStrictEqual(res.items[0]?.seller?.score, undefined)
-        assert.notStrictEqual(res.items[0]?.price?.base, undefined)
-        assert.notStrictEqual(res.items[0]?.price?.shipping, undefined)
-        assert.notStrictEqual(res.items[0]?.country?.name, undefined)
-        assert.notStrictEqual(res.items[0]?.country?.code, undefined)
-        assert.notStrictEqual(res.items[0]?.community?.have, undefined)
-        assert.notStrictEqual(res.items[0]?.community?.want, undefined)
+        assert.notStrictEqual(res.items[0]?.condition.media, undefined)
+        assert.notStrictEqual(res.items[0]?.condition.media.full, undefined)
+        assert.notStrictEqual(res.items[0]?.condition.media.short, undefined)
+        assert.notStrictEqual(res.items[0]?.condition.sleeve, undefined)
+        assert.notStrictEqual(res.items[0]?.condition.sleeve.full, undefined)
+        assert.notStrictEqual(res.items[0]?.condition.sleeve.short, undefined)
+        assert.notStrictEqual(res.items[0]?.seller.name, undefined)
+        assert.notStrictEqual(res.items[0]?.seller.url, undefined)
+        assert.notStrictEqual(res.items[0]?.seller.notes, undefined)
+        assert.notStrictEqual(res.items[0]?.seller.score, undefined)
+        assert.notStrictEqual(res.items[0]?.price.base, undefined)
+        assert.notStrictEqual(res.items[0]?.price.shipping, undefined)
+        assert.notStrictEqual(res.items[0]?.country.name, undefined)
+        assert.notStrictEqual(res.items[0]?.country.code, undefined)
+        assert.notStrictEqual(res.items[0]?.community.have, undefined)
+        assert.notStrictEqual(res.items[0]?.community.want, undefined)
         assert.notStrictEqual(res.items[0]?.release.url, undefined)
         assert.notStrictEqual(res.items[0]?.release.id, undefined)
     })
 
-    test('It should return error value', async () => {
+    void test('It should return error value', async () => {
         try {
             await DiscogsMarketplace.search({ searchType: 'q', searchValue: 'error' })
         } catch (err) {
@@ -61,25 +61,25 @@ describe('Test marketplace.ts', () => {
         }
     })
 
-    test('It should return success value with artist', async () => {
+    void test('It should return success value with artist', async () => {
         const res = await DiscogsMarketplace.search({
             searchType: 'artist_id',
             searchValue: 123456,
         })
         assert.notStrictEqual(res.result, null)
         assert.notStrictEqual(res.page, null)
-        assert.notStrictEqual(res.page?.current, null)
-        assert.notStrictEqual(res.page?.total, null)
+        assert.notStrictEqual(res.page.current, null)
+        assert.notStrictEqual(res.page.total, null)
         assert.notStrictEqual(res.result, null)
-        assert.notStrictEqual(res.result?.total, null)
-        assert.notStrictEqual(res.result?.perPage, null)
+        assert.notStrictEqual(res.result.total, null)
+        assert.notStrictEqual(res.result.perPage, null)
         assert.notStrictEqual(res.search, null)
-        assert.notStrictEqual(res.search?.value, null)
-        assert.notStrictEqual(res.search?.type, null)
+        assert.notStrictEqual(res.search.value, null)
+        assert.notStrictEqual(res.search.type, null)
         assert.notStrictEqual(res.urlGenerated, null)
     })
 
-    test('It should return good params with artist', async () => {
+    void test('It should return good params with artist', async () => {
         const res = await DiscogsMarketplace.search({
             searchType: 'artist_id',
             searchValue: 123456,
@@ -101,7 +101,7 @@ describe('Test marketplace.ts', () => {
             lang: 'en',
         })
 
-        const params = url.parse(res.urlGenerated, true)?.query
+        const params = url.parse(res.urlGenerated, true).query
         assert.notStrictEqual(params, null)
         assert.strictEqual(params.artist_id, '123456')
         assert.strictEqual(params.currency, undefined)
@@ -121,7 +121,7 @@ describe('Test marketplace.ts', () => {
         assert.strictEqual(params.sort, 'Listed Newest')
     })
 
-    test('It should return good params with complex search', async () => {
+    void test('It should return good params with complex search', async () => {
         const res = await DiscogsMarketplace.search({
             searchType: 'q',
             searchValue: 'test',
@@ -143,7 +143,7 @@ describe('Test marketplace.ts', () => {
             lang: 'fr',
         })
 
-        const params = url.parse(res.urlGenerated, true)?.query
+        const params = url.parse(res.urlGenerated, true).query
         assert.notStrictEqual(params, null)
         assert.strictEqual(params.q, 'test')
         assert.strictEqual(params.currency, 'EUR')
@@ -163,7 +163,7 @@ describe('Test marketplace.ts', () => {
         assert.strictEqual(params.sort, 'Listed Newest')
     })
 
-    test('It should return good params with complex search and years interval', async () => {
+    void test('It should return good params with complex search and years interval', async () => {
         const res = await DiscogsMarketplace.search({
             searchType: 'q',
             searchValue: 'test',
@@ -185,7 +185,7 @@ describe('Test marketplace.ts', () => {
             lang: 'fr',
         })
 
-        const params = url.parse(res.urlGenerated, true)?.query
+        const params = url.parse(res.urlGenerated, true).query
         assert.notStrictEqual(params, null)
         assert.strictEqual(params.q, 'test')
         assert.strictEqual(params.currency, 'EUR')
@@ -205,19 +205,19 @@ describe('Test marketplace.ts', () => {
         assert.strictEqual(params.sort, 'Listed Newest')
     })
 
-    test("It should return good params with user's wantlist search", async () => {
+    void test("It should return good params with user's wantlist search", async () => {
         const res = await DiscogsMarketplace.search({
             searchType: 'user',
             searchValue: 'TheUser',
         })
 
-        const params = url.parse(res.urlGenerated, true)?.query
+        const params = url.parse(res.urlGenerated, true).query
         assert.strictEqual(res.urlGenerated.includes('/mywants'), true)
         assert.strictEqual(res.urlGenerated.includes('/list'), false)
         assert.strictEqual(params.user, 'TheUser')
     })
 
-    test("It should return good params with user's selling search", async () => {
+    void test("It should return good params with user's selling search", async () => {
         const res = await DiscogsMarketplace.search({
             searchType: 'q',
             searchValue: '',
@@ -230,14 +230,14 @@ describe('Test marketplace.ts', () => {
         assert.strictEqual(res.urlGenerated.includes('/profile'), true)
     })
 
-    test("It should return good params with user's wantlist search against user's selling items", async () => {
+    void test("It should return good params with user's wantlist search against user's selling items", async () => {
         const res = await DiscogsMarketplace.search({
             searchType: 'user',
             searchValue: 'TheUser',
             seller: 'TheSeller',
         })
 
-        const params = url.parse(res.urlGenerated, true)?.query
+        const params = url.parse(res.urlGenerated, true).query
         assert.strictEqual(res.urlGenerated.includes('/seller/TheSeller/'), true)
         assert.strictEqual(res.urlGenerated.includes('/sell/'), false)
         assert.strictEqual(res.urlGenerated.includes('/mywants'), true)
