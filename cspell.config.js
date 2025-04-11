@@ -20,5 +20,6 @@ module.exports = {
         'PJAX',
         'localtime',
         'lintstagedrc',
+        'gitmojirc',
     ],
 }

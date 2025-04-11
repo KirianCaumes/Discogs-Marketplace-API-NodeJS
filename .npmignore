@@ -5,11 +5,10 @@ test/
 coverage
 .vscode/
 .devcontainer/
-.eslintrc.js
+eslint.config.mjs
 .gitattributes
 .gitignore
 notes.md
-.eslintrc.cjs
 .prettierignore
 .prettierrc.js
 .gitmojirc.json
