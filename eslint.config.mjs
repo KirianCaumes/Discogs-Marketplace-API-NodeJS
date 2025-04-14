@@ -98,6 +98,7 @@ export default [
             ],
             'jsdoc/require-param-description': ['warn', { contexts: ['any'] }],
             'jsdoc/require-param': ['warn', { checkDestructuredRoots: false }],
+            'jsdoc/check-param-names': ['warn', { checkDestructured: false }],
             'import/order': ['error', { groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'] }],
             'no-console': ['warn'],
             'object-shorthand': ['error'],

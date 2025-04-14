@@ -31,7 +31,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.0.0"
   },
   "funding": [
     {
@@ -55,6 +55,7 @@
     "eslint-import-resolver-typescript": "^4.3.2",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsdoc": "^50.6.9",
+    "globals": "^16.0.0",
     "husky": "^9.1.7",
     "knip": "^5.50.2",
     "lint-staged": "^15.5.0",

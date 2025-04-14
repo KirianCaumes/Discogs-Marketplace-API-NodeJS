@@ -2,7 +2,7 @@
 /**
  * Styles
  */
-export type StyleType =
+export type Style =
     | 'AOR'
     | 'Aboriginal'
     | 'Abstract'
@@ -607,3 +607,4 @@ export type StyleType =
     | 'Zouk'
     | 'Zydeco'
     | 'Éntekhno'
+    | ({} & string)

@@ -1,4 +1,4 @@
-const CURRENCIES = {
+const Currency = {
     $US: 'USD',
     US$: 'USD',
     USD: 'USD',
@@ -31,4 +31,8 @@ const CURRENCIES = {
     '¥': 'JPY',
 } as const
 
-export default CURRENCIES
+export type CurrencyType = typeof Currency
+export type CurrencyKeys = keyof CurrencyType
+export type CurrencyValues = CurrencyType[CurrencyKeys]
+
+export default Currency

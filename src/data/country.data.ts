@@ -3,7 +3,7 @@
  * ISO name
  * {@link https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes}
  */
-const COUNTRIES_ISO = {
+const CountryIso = {
     Afghanistan: 'AF',
     'Åland Islands': 'AX',
     Albania: 'AL',
@@ -267,7 +267,7 @@ const COUNTRIES_ISO = {
  *  .filter(x => !Object.keys(COUNTRIES_ISO).includes(x))
  *  .reduce((a,b) => ({ ...a, [b]: null }), {})
  */
-const COUNTRIES_DISCOGS = {
+const CountryDiscogs = {
     Azerbaidjan: 'AZ',
     Bolivia: 'BO',
     'Bosnia-Herzegovina': 'BA',
@@ -324,9 +324,13 @@ const COUNTRIES_DISCOGS = {
     Zaire: 'CD',
 } as const
 
-const COUNTRIES = {
-    ...COUNTRIES_ISO,
-    ...COUNTRIES_DISCOGS,
+const Country = {
+    ...CountryIso,
+    ...CountryDiscogs,
 } as const
 
-export default COUNTRIES
+export type CountryType = typeof Country
+export type CountryKeys = keyof CountryType
+export type CountryValues = CountryType[CountryKeys]
+
+export default Country

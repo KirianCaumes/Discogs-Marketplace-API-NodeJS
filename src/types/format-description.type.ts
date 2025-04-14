@@ -2,7 +2,7 @@
 /**
  * FormatDescriptions
  */
-export type FormatDescriptionType =
+export type FormatDescription =
     | '1 ⅞ ips'
     | '1"'
     | '10"'
@@ -157,3 +157,4 @@ export type FormatDescriptionType =
     | '¼"'
     | '½"'
     | '⅛"'
+    | ({} & string)

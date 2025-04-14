@@ -2,7 +2,7 @@
 /**
  * Formats
  */
-export type FormatType =
+export type Format =
     | '4-Track Cartridge'
     | '8-Track Cartridge'
     | 'Acetate'
@@ -66,3 +66,4 @@ export type FormatType =
     | 'Video8'
     | 'Vinyl'
     | 'Wire Recording'
+    | ({} & string)

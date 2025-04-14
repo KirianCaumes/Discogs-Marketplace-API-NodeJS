@@ -1,4 +1,4 @@
 /**
  * Limits per page
  */
-export type LimitType = 25 | 50 | 100 | 250
+export type Limit = 25 | 50 | 100 | 250

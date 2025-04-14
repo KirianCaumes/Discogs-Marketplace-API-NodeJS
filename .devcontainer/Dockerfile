@@ -24,15 +24,15 @@ RUN sudo apt-get -y install git
 RUN sudo apt-get update --fix-missing
 RUN export EDITOR="/usr/bin/nano"
 
-# install nodejs 20.x
+# install nodejs 22.x
 RUN sudo apt-get install -y ca-certificates gnupg
 RUN sudo mkdir -p /etc/apt/keyrings  
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 RUN sudo apt-get update 
 RUN sudo apt-get install nodejs -y
-RUN sudo npm i -g np@10.0.1
-RUN sudo npm i -g gitmoji-cli@9.1.0
+RUN sudo npm i -g np@10.2.0
+RUN sudo npm i -g gitmoji-cli@9.5.0
 RUN sudo npx playwright install-deps chromium
 
 WORKDIR /app_discogs-marketplace-api-nodejs

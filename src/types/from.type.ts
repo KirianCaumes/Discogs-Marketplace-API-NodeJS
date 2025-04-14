@@ -2,7 +2,7 @@
 /**
  * From
  */
-export type FromType =
+export type From =
     | 'Afghanistan'
     | 'Albania'
     | 'Algeria'
@@ -250,3 +250,4 @@ export type FromType =
     | 'Zaire'
     | 'Zambia'
     | 'Zimbabwe'
+    | ({} & string)

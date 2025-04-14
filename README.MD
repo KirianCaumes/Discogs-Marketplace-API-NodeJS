@@ -17,11 +17,7 @@ npm i discogs-marketplace-api-nodejs
 Import `DiscogsMarketplace` into your project:
 
 ```js
-// With ECMAScript 6 and +
 import { DiscogsMarketplace } from 'discogs-marketplace-api-nodejs'
-
-// With CommonJS
-const DiscogsMarketplace = require('discogs-marketplace-api-nodejs').DiscogsMarketplace
 ```
 
 ## 🤔 Examples
@@ -104,15 +100,27 @@ const result = await DiscogsMarketplace.search({
 })
 ```
 
+- If you are making a lot of requests, you can pass a playwright page instance to reuse it:
+
+```js
+const browser = await playwright.launch()
+const browserContext = await browser.newContext()
+const browserPage = await browserContext.newPage()
+
+const result = await DiscogsMarketplace.search({ searchType: 'q'}, browserPage)
+
+await browserContext.close()
+await browser.close()
+```
+
 ## 📃 Data format
 
 You can provide parameters to `DiscogsMarketplace.search` function according to this interface:
 
 ```ts
-interface InputInterface {
+interface SearchParams {
     /**
      * Type of elements to search.
-     * Default to `q`.
      * | Name       | Description                |
      * |:---------: |:--------------------------:|
      * | q          | Basic query search         |
@@ -121,36 +129,43 @@ interface InputInterface {
      * | label_id   | Search in a label          |
      * | artist_id  | Search in a artist         |
      * | user       | Search in user wantlist    |
+     * @default 'q'
      */
-    searchType: SearchTypeType
+    searchType: Search
     /**
-     * Value to search corresponding to searchType
+     * Value to search corresponding to the search type
      */
     searchValue?: string | number
     /**
      * Currency
+     * @example 'USD'
      */
-    currency?: CurrencyType
+    currency?: Currency
     /**
      * Genre
+     * @example 'Rock'
      */
-    genre?: GenreType
+    genre?: Genre
     /**
      * Styles
+     * @example ['Death Metal', 'Heavy Metal']
      */
-    style?: Array<StyleType>
+    style?: Array<Style>
     /**
      * Formats
+     * @example ['Vinyl', 'CD']
      */
-    format?: Array<FormatType>
+    format?: Array<Format>
     /**
      * Format descriptions
+     * @example ['Limited Edition', 'Numbered']
      */
-    formatDescription?: Array<FormatDescriptionType>
+    formatDescription?: Array<FormatDescription>
     /**
      * Media conditions
+     * @example ['Mint (M)', 'Very Good Plus (VG+)']
      */
-    condition?: Array<ConditionType>
+    condition?: Array<Condition>
     /**
      * Year (Do not use it with `years`)
      */
@@ -166,47 +181,50 @@ interface InputInterface {
     }
     /**
      * Is audio sample ?
+     * @default false
      */
     isAudioSample?: boolean
     /**
      * Is make an offer only ?
+     * @default false
      */
     isMakeAnOfferOnly?: boolean
     /**
      * Expedition country
+     * @example 'US'
      */
-    from?: FromType
+    from?: From
     /**
      * Seller name
      */
     seller?: string
     /**
      * Sort elements by.
-     * Default to `Listed Newest`.
+     * @default 'Listed Newest'
      */
-    sort?: SortType
+    sort?: Sort
     /**
      * Limit of elements to search (25 | 50 | 100 | 250).
-     * Default to `25`.
+     * @default 25
      */
-    limit?: LimitType
+    limit?: Limit
     /**
      * Page (Must be < 401 or discogs will return an error 404).
-     * Default to `1`.
+     * @default 1
      */
     page?: number
     /**
      * Lang to use for Discogs.
-     * Default to `en`.
+     * @default 'en'
      */
-    lang?: LangType
+    lang?: Lang
 }
 ```
 
 If success, it will return:
 
 ```ts
-interface OutputSuccessInterface {
+interface SearchResult {
     items: Array<{
         id: number
         title: {
@@ -239,12 +257,15 @@ interface OutputSuccessInterface {
             notes: number
         }
         price: {
-            base: string
-            shipping: string
+            /** @example '12.34 USD' */
+            base: `${number} ${CurrencyValues}` | ''
+            /** @example '5.67 USD' */
+            shipping: `${number} ${CurrencyValues}` | ''
         }
         country: {
             name: string
-            code: string
+            /** @example 'US' */
+            code: CountryValues
         }
         community: {
             have: number
@@ -263,20 +284,7 @@ interface OutputSuccessInterface {
         total: number
         perPage: number
     }
-    search: {
-        value: string | number
-        type: SearchTypeType
-    }
     urlGenerated: string
-}
-```
-
-If error, it will throw:
-
-```ts
-interface OutputErrorInterface {
-    message: string
-    code: number
 }
 ```
 

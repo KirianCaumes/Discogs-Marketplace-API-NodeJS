@@ -1,9 +1,10 @@
-import type { SearchTypeType } from 'types'
+import type { CountryValues } from 'data/country.data'
+import type { CurrencyValues } from 'data/currency.data'
 
 /**
- * Result provided to user
+ * Search result from Discogs Marketplace
  */
-export default interface OutputSuccessInterface {
+export default interface SearchResult {
     /** Items */
     items: Array<{
         /** Id */
@@ -63,17 +64,26 @@ export default interface OutputSuccessInterface {
         }
         /** Price */
         price: {
-            /** Base */
-            base: string
-            /** Shipping */
-            shipping: string
+            /**
+             * Base
+             * @example '12.34 USD'
+             */
+            base: `${number} ${CurrencyValues}` | ''
+            /**
+             * Shipping
+             * @example '5.67 USD'
+             */
+            shipping: `${number} ${CurrencyValues}` | ''
         }
         /** From */
         country: {
             /** Name */
             name: string
-            /** Iso code */
-            code: string
+            /**
+             * Iso code
+             * @example 'US'
+             */
+            code: CountryValues
         }
         /** Community */
         community: {
@@ -103,13 +113,6 @@ export default interface OutputSuccessInterface {
         total: number
         /** PerPage */
         perPage: number
-    }
-    /** Search */
-    search: {
-        /** Value */
-        value: string | number
-        /** Type */
-        type: SearchTypeType
     }
     /** UrlGenerated */
     urlGenerated: string

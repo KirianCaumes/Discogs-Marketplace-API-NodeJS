@@ -1,7 +1,7 @@
 /**
  * Conditions
  */
-export type ConditionType =
+export type Condition =
     | '0'
     | 'Fair (F)'
     | 'Good (G)'
@@ -11,3 +11,4 @@ export type ConditionType =
     | 'Poor (P)'
     | 'Very Good (VG)'
     | 'Very Good Plus (VG+)'
+    | ({} & string)

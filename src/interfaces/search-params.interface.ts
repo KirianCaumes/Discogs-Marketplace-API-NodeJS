@@ -1,24 +1,21 @@
-import type {
-    LimitType,
-    GenreType,
-    CurrencyType,
-    FromType,
-    StyleType,
-    FormatType,
-    ConditionType,
-    SortType,
-    LangType,
-    FormatDescriptionType,
-    SearchTypeType,
-} from 'types'
+import type { Condition } from 'types/condition.type'
+import type { Currency } from 'types/currency.type'
+import type { FormatDescription } from 'types/format-description.type'
+import type { Format } from 'types/format.type'
+import type { From } from 'types/from.type'
+import type { Genre } from 'types/genre.type'
+import type { Lang } from 'types/lang.type'
+import type { Limit } from 'types/limit.type'
+import type { Search } from 'types/search-type.type'
+import type { Sort } from 'types/sort.type'
+import type { Style } from 'types/style.type'
 
 /**
- * Element that can be provided by user
+ * Search parameters for Discogs Marketplace
  */
-export default interface InputInterface {
+export default interface SearchParams {
     /**
      * Type of elements to search.
-     * Default to `q`.
      * | Name       | Description                |
      * |:---------: |:--------------------------:|
      * | q          | Basic query search         |
@@ -27,36 +24,43 @@ export default interface InputInterface {
      * | label_id   | Search in a label          |
      * | artist_id  | Search in a artist         |
      * | user       | Search in user wantlist    |
+     * @default 'q'
      */
-    searchType: SearchTypeType
+    searchType: Search
     /**
-     * Value to search corresponding to searchType
+     * Value to search corresponding to the search type
      */
     searchValue?: string | number
     /**
      * Currency
+     * @example 'USD'
      */
-    currency?: CurrencyType
+    currency?: Currency
     /**
      * Genre
+     * @example 'Rock'
      */
-    genre?: GenreType
+    genre?: Genre
     /**
      * Styles
+     * @example ['Death Metal', 'Heavy Metal']
      */
-    style?: Array<StyleType>
+    style?: Array<Style>
     /**
      * Formats
+     * @example ['Vinyl', 'CD']
      */
-    format?: Array<FormatType>
+    format?: Array<Format>
     /**
      * Format descriptions
+     * @example ['Limited Edition', 'Numbered']
      */
-    formatDescription?: Array<FormatDescriptionType>
+    formatDescription?: Array<FormatDescription>
     /**
      * Media conditions
+     * @example ['Mint (M)', 'Very Good Plus (VG+)']
      */
-    condition?: Array<ConditionType>
+    condition?: Array<Condition>
     /**
      * Year (Do not use it with `years`)
      */
@@ -72,42 +76,41 @@ export default interface InputInterface {
     }
     /**
      * Is audio sample ?
+     * @default false
      */
     isAudioSample?: boolean
     /**
      * Is make an offer only ?
+     * @default false
      */
     isMakeAnOfferOnly?: boolean
     /**
      * Expedition country
+     * @example 'US'
      */
-    from?: FromType
+    from?: From
     /**
      * Seller name
      */
     seller?: string
     /**
      * Sort elements by.
-     *
-     * Default to `Listed Newest`.
+     * @default 'Listed Newest'
      */
-    sort?: SortType
+    sort?: Sort
     /**
      * Limit of elements to search (25 | 50 | 100 | 250).
-     *
-     * Default to `25`.
+     * @default 25
      */
-    limit?: LimitType
+    limit?: Limit
     /**
      * Page (Must be < 401 or discogs will return an error 404).
-     *
-     * Default to `1`.
+     * @default 1
      */
     page?: number
     /**
      * Lang to use for Discogs.
-     *
-     * Default to `en`.
+     * @default 'en'
      */
-    lang?: LangType
+    lang?: Lang
 }

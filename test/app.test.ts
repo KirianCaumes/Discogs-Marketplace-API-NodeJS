@@ -1,8 +1,9 @@
 import { describe, test } from 'node:test'
 import assert from 'node:assert'
 import url from 'url'
+import { chromium as playwright } from 'playwright-chromium'
+import UserAgent from 'user-agents'
 import { DiscogsMarketplace } from '../src/index'
-import type { OutputErrorInterface } from '../src/index'
 
 void describe('Test marketplace.ts', () => {
     void test('It should return success value', async () => {
@@ -15,9 +16,6 @@ void describe('Test marketplace.ts', () => {
         assert.notStrictEqual(res.result, null)
         assert.notStrictEqual(res.result.total, null)
         assert.notStrictEqual(res.result.perPage, null)
-        assert.notStrictEqual(res.search, null)
-        assert.notStrictEqual(res.search.value, null)
-        assert.notStrictEqual(res.search.type, null)
         assert.notStrictEqual(res.urlGenerated, null)
         assert.notStrictEqual(res.items[0]?.id, undefined)
         assert.notStrictEqual(res.items[0]?.title.original, undefined)
@@ -53,12 +51,21 @@ void describe('Test marketplace.ts', () => {
     })
 
     void test('It should return error value', async () => {
-        try {
-            await DiscogsMarketplace.search({ searchType: 'q', searchValue: 'error' })
-        } catch (err) {
-            assert.strictEqual((err as OutputErrorInterface).code, 404)
-            assert.strictEqual((err as OutputErrorInterface).message, 'An error occurred')
-        }
+        await assert.rejects(
+            async () => {
+                await DiscogsMarketplace.search({
+                    searchType: 'q',
+                    // This will cause a 502 error
+                    searchValue: new Array(1500).fill('error').join(''),
+                })
+            },
+            {
+                name: 'Error',
+                message:
+                    // eslint-disable-next-line max-len
+                    'Please visit <a href="https://status.discogs.com" target="_blank" rel="noreferrer noopener">status.discogs.com</a> for the latest updates on site availability.', // cspell: disable-line
+            },
+        )
     })
 
     void test('It should return success value with artist', async () => {
@@ -73,9 +80,6 @@ void describe('Test marketplace.ts', () => {
         assert.notStrictEqual(res.result, null)
         assert.notStrictEqual(res.result.total, null)
         assert.notStrictEqual(res.result.perPage, null)
-        assert.notStrictEqual(res.search, null)
-        assert.notStrictEqual(res.search.value, null)
-        assert.notStrictEqual(res.search.type, null)
         assert.notStrictEqual(res.urlGenerated, null)
     })
 
@@ -243,5 +247,32 @@ void describe('Test marketplace.ts', () => {
         assert.strictEqual(res.urlGenerated.includes('/mywants'), true)
         assert.strictEqual(res.urlGenerated.includes('/profile'), false)
         assert.strictEqual(params.user, 'TheUser')
+    })
+
+    void test('It should return success value with a pageInstance', async () => {
+        const browser = await playwright.launch({
+            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gl-drawing-for-tests'],
+        })
+
+        const browserContext = await browser.newContext({
+            userAgent: new UserAgent({ platform: 'Win32' }).toString(),
+            extraHTTPHeaders: {
+                'X-PJAX': 'true',
+            },
+            javaScriptEnabled: false,
+        })
+
+        const browserPage = await browserContext.newPage()
+
+        assert.notStrictEqual(browserPage, null)
+
+        const res = await DiscogsMarketplace.search({ searchType: 'q', searchValue: '' }, browserPage)
+
+        assert.notStrictEqual(res.result, null)
+        assert.notStrictEqual(res.urlGenerated, null)
+        assert.notStrictEqual(res.items[0]?.id, undefined)
+
+        await browserContext.close()
+        await browser.close()
     })
 })
