@@ -95,7 +95,6 @@ void describe('Test marketplace.ts', () => {
             condition: [],
             year: undefined,
             years: undefined,
-            isAudioSample: false,
             isMakeAnOfferOnly: false,
             from: undefined,
             seller: undefined,
@@ -117,7 +116,6 @@ void describe('Test marketplace.ts', () => {
         assert.strictEqual(params.year, undefined)
         assert.strictEqual(params.year1, undefined)
         assert.strictEqual(params.year2, undefined)
-        assert.strictEqual(params.audio, undefined)
         assert.strictEqual(params.offers, undefined)
         assert.strictEqual(params.ships_from, undefined)
         assert.strictEqual(params.limit, '25')
@@ -137,7 +135,6 @@ void describe('Test marketplace.ts', () => {
             condition: ['Mint (M)'],
             year: 2019,
             years: undefined,
-            isAudioSample: true,
             isMakeAnOfferOnly: true,
             from: 'France',
             seller: undefined,
@@ -159,7 +156,6 @@ void describe('Test marketplace.ts', () => {
         assert.strictEqual(params.year, '2019')
         assert.strictEqual(params.year1, undefined)
         assert.strictEqual(params.year2, undefined)
-        assert.strictEqual(params.audio, '1')
         assert.strictEqual(params.offers, '1')
         assert.strictEqual(params.ships_from, 'France')
         assert.strictEqual(params.limit, '50')
@@ -179,7 +175,6 @@ void describe('Test marketplace.ts', () => {
             condition: ['Mint (M)'],
             year: undefined,
             years: { min: 2015, max: 2016 },
-            isAudioSample: true,
             isMakeAnOfferOnly: true,
             from: 'France',
             seller: undefined,
@@ -201,7 +196,6 @@ void describe('Test marketplace.ts', () => {
         assert.strictEqual(params.year, undefined)
         assert.strictEqual(params.year1, '2015')
         assert.strictEqual(params.year2, '2016')
-        assert.strictEqual(params.audio, '1')
         assert.strictEqual(params.offers, '1')
         assert.strictEqual(params.ships_from, 'France')
         assert.strictEqual(params.limit, '50')

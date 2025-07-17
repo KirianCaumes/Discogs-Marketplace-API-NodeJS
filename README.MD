@@ -180,11 +180,6 @@ interface SearchParams {
         max: number
     }
     /**
-     * Is audio sample ?
-     * @default false
-     */
-    isAudioSample?: boolean
-    /**
      * Is make an offer only ?
      * @default false
      */
