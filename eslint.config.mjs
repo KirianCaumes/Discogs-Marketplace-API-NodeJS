@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import esJsdoc from 'eslint-plugin-jsdoc'
 import esJs from '@eslint/js'
 import esTs from 'typescript-eslint'
