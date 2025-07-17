@@ -194,6 +194,11 @@ interface SearchParams {
      */
     seller?: string
     /**
+     * Hours range, only works on wantlist searches.
+     * @example '0-24'
+     */
+    hoursRange?: HoursRange
+    /**
      * Sort elements by.
      * @default 'listed,desc'
      */

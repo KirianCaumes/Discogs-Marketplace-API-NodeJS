@@ -4,6 +4,7 @@ import type { FormatDescription } from 'types/format-description.type'
 import type { Format } from 'types/format.type'
 import type { From } from 'types/from.type'
 import type { Genre } from 'types/genre.type'
+import type { HoursRange } from 'types/hours-range.type'
 import type { Lang } from 'types/lang.type'
 import type { Limit } from 'types/limit.type'
 import type { Search } from 'types/search-type.type'
@@ -88,6 +89,11 @@ export default interface SearchParams {
      * Seller name
      */
     seller?: string
+    /**
+     * Hours range, only works on wantlist searches.
+     * @example '0-24'
+     */
+    hoursRange?: HoursRange
     /**
      * Sort elements by.
      * @default 'listed,desc'

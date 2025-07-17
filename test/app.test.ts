@@ -68,6 +68,20 @@ void describe('Test marketplace.ts', () => {
         )
     })
 
+    void test('It should return less value with hours range', async () => {
+        const resWithRange = await DiscogsMarketplace.search({
+            searchType: 'user',
+            searchValue: 'Kirian_',
+            hoursRange: '0-24',
+        })
+        const resWithoutRange = await DiscogsMarketplace.search({
+            searchType: 'user',
+            searchValue: 'Kirian_',
+        })
+
+        assert.ok(resWithRange.result.total <= resWithoutRange.result.total)
+    })
+
     void test('It should return success value with artist', async () => {
         const res = await DiscogsMarketplace.search({
             searchType: 'artist_id',
