@@ -99,7 +99,7 @@ void describe('Test marketplace.ts', () => {
             isMakeAnOfferOnly: false,
             from: undefined,
             seller: undefined,
-            sort: 'Listed Newest',
+            sort: 'listed,desc',
             limit: 25,
             page: 1,
             lang: 'en',
@@ -122,7 +122,7 @@ void describe('Test marketplace.ts', () => {
         assert.strictEqual(params.ships_from, undefined)
         assert.strictEqual(params.limit, '25')
         assert.strictEqual(params.page, '1')
-        assert.strictEqual(params.sort, 'Listed Newest')
+        assert.strictEqual(params.sort, 'listed,desc')
     })
 
     void test('It should return good params with complex search', async () => {
@@ -141,7 +141,7 @@ void describe('Test marketplace.ts', () => {
             isMakeAnOfferOnly: true,
             from: 'France',
             seller: undefined,
-            sort: 'Listed Newest',
+            sort: 'listed,desc',
             limit: 50,
             page: 2,
             lang: 'fr',
@@ -164,7 +164,7 @@ void describe('Test marketplace.ts', () => {
         assert.strictEqual(params.ships_from, 'France')
         assert.strictEqual(params.limit, '50')
         assert.strictEqual(params.page, '2')
-        assert.strictEqual(params.sort, 'Listed Newest')
+        assert.strictEqual(params.sort, 'listed,desc')
     })
 
     void test('It should return good params with complex search and years interval', async () => {
@@ -183,7 +183,7 @@ void describe('Test marketplace.ts', () => {
             isMakeAnOfferOnly: true,
             from: 'France',
             seller: undefined,
-            sort: 'Listed Newest',
+            sort: 'listed,desc',
             limit: 50,
             page: 2,
             lang: 'fr',
@@ -206,7 +206,7 @@ void describe('Test marketplace.ts', () => {
         assert.strictEqual(params.ships_from, 'France')
         assert.strictEqual(params.limit, '50')
         assert.strictEqual(params.page, '2')
-        assert.strictEqual(params.sort, 'Listed Newest')
+        assert.strictEqual(params.sort, 'listed,desc')
     })
 
     void test("It should return good params with user's wantlist search", async () => {

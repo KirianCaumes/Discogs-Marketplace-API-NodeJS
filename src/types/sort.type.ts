@@ -1,19 +1,7 @@
+type SortField = 'listed' | 'condition' | 'artist' | 'title' | 'label' | 'seller' | 'price'
+type SortDirection = 'asc' | 'desc'
+
 /**
  * Sorts
  */
-export type Sort =
-    | 'Artist A-Z'
-    | 'Artist Z-A'
-    | 'Condition (M)-(P)'
-    | 'Condition (P)-(M)'
-    | 'Label A-Z'
-    | 'Label Z-A'
-    | 'Listed Newest'
-    | 'Listed Oldest'
-    | 'Price Highest'
-    | 'Price Lowest'
-    | 'Seller A-Z'
-    | 'Seller Z-A'
-    | 'Title A-Z'
-    | 'Title Z-A'
-    | ({} & string)
+export type Sort = `${SortField},${SortDirection}` | ({} & string)

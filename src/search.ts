@@ -29,7 +29,7 @@ export default async function search(
         isMakeAnOfferOnly = false,
         from,
         seller,
-        sort = 'Listed Newest',
+        sort = 'listed,asc',
         limit = 25,
         page = 1,
         lang = 'en',

@@ -30,7 +30,7 @@ const result = await DiscogsMarketplace.search({
     limit: 250,
     page: 2,
     genre: 'Rock',
-    sort: 'Listed Newest',
+    sort: 'listed,desc',
     searchType: 'artist_id',
     searchValue: 244819,
 })
@@ -43,7 +43,7 @@ const result = await DiscogsMarketplace.search({
 const result = await DiscogsMarketplace.search({
     limit: 50,
     page: 1,
-    sort: 'Price Lowest',
+    sort: 'price,asc',
     searchType: 'user',
     searchValue: 'Kirian_',
 })
@@ -54,7 +54,7 @@ const result = await DiscogsMarketplace.search({
 ```js
 // https://www.discogs.com/sell/release/767931?sort=seller,asc&limit=25&page=1
 const result = await DiscogsMarketplace.search({
-    sort: 'Seller A-Z',
+    sort: 'seller,asc',
     page: 1,
     searchType: 'release_id',
     searchValue: '767931',
@@ -68,7 +68,7 @@ const result = await DiscogsMarketplace.search({
 const result = await DiscogsMarketplace.search({
     limit: 100,
     page: 1,
-    sort: 'Listed Newest',
+    sort: 'listed,desc',
     searchType: 'q',
     searchValue: 'in flames',
 })
@@ -79,7 +79,7 @@ const result = await DiscogsMarketplace.search({
 ```js
 // https://www.discogs.com/seller/Kirian_/profile?sort=listed,desc&limit=25&page=1
 const result = await DiscogsMarketplace.search({
-    sort: 'Listed Newest',
+    sort: 'listed,desc',
     page: 1,
     searchType: 'q',
     searchValue: '',
@@ -92,7 +92,7 @@ const result = await DiscogsMarketplace.search({
 ```js
 // https://www.discogs.com/seller/Kirian_/mywants?sort=listed,desc&limit=25&user=Kirian_&page=1
 const result = await DiscogsMarketplace.search({
-    sort: 'Listed Newest',
+    sort: 'listed,desc',
     page: 1,
     searchType: 'user',
     searchValue: 'Kirian_',
@@ -200,7 +200,7 @@ interface SearchParams {
     seller?: string
     /**
      * Sort elements by.
-     * @default 'Listed Newest'
+     * @default 'listed,desc'
      */
     sort?: Sort
     /**

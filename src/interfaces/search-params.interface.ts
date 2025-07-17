@@ -95,7 +95,7 @@ export default interface SearchParams {
     seller?: string
     /**
      * Sort elements by.
-     * @default 'Listed Newest'
+     * @default 'listed,desc'
      */
     sort?: Sort
     /**
