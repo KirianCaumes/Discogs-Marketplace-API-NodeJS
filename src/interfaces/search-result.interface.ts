@@ -2,118 +2,118 @@ import type { CountryValues } from 'data/country.data'
 import type { CurrencyValues } from 'data/currency.data'
 
 /**
- * Search result from Discogs Marketplace
+ * Result returned from a Discogs Marketplace search.
  */
 export default interface SearchResult {
-    /** Items */
+    /** List of items matching the search query. */
     items: Array<{
-        /** Id */
+        /** Unique identifier for the listing */
         id: number
-        /** Title */
+        /** Title details */
         title: {
-            /** Original */
+            /** Full original title */
             original: string
-            /** Artist */
+            /** Artist name */
             artist: string
-            /** Item */
+            /** Item description */
             item: string
-            /** Formats */
+            /** Array of format names */
             formats: Array<string>
         }
-        /** Url */
+        /** URL to the listing on Discogs */
         url: string
-        /** Labels */
+        /** Array of label names */
         labels: Array<string>
-        /** Catnos */
+        /** Array of catalog numbers */
         catnos: Array<string>
-        /** ImageUrl */
+        /** URL to the item's image */
         imageUrl: string
-        /** Description */
+        /** Text description of the item */
         description: string
-        /** IsAcceptingOffer */
+        /** Indicates if offers are accepted */
         isAcceptingOffer: boolean
-        /** IsAvailable */
+        /** Availability status of the item */
         isAvailable: boolean
-        /** Condition */
+        /** Condition details */
         condition: {
-            /** Media */
+            /** Media condition */
             media: {
-                /** Full */
+                /** Full description */
                 full: string
-                /** Short */
+                /** Short code */
                 short: string
             }
-            /** Sleeve */
+            /** Sleeve condition */
             sleeve: {
-                /** Full */
+                /** Full description */
                 full: string
-                /** Short */
+                /** Short code */
                 short: string
             }
         }
-        /** Seller */
+        /** Seller information */
         seller: {
-            /** Name */
+            /** Seller's username */
             name: string
-            /** Url */
+            /** Seller's profile URL */
             url: string
-            /** Score */
+            /** Seller rating/score */
             score: string
-            /** Notes */
+            /** Number of notes/reviews */
             notes: number
         }
-        /** Price */
+        /** Pricing details */
         price: {
             /**
-             * Base
+             * Base price as a string combining amount and currency.
              * @example '12.34 USD'
              */
             base: `${number} ${CurrencyValues}` | ''
             /**
-             * Shipping
+             * Shipping cost as a string combining amount and currency.
              * @example '5.67 USD'
              */
             shipping: `${number} ${CurrencyValues}` | ''
         }
-        /** From */
+        /** Shipping origin country */
         country: {
-            /** Name */
+            /** Country name */
             name: string
             /**
-             * Iso code
+             * ISO country code
              * @example 'US'
              */
             code: CountryValues
         }
-        /** Community */
+        /** Community stats */
         community: {
-            /** Have */
+            /** Number of users who have this item */
             have: number
-            /** Want */
+            /** Number of users who want this item */
             want: number
         }
-        /** Release */
+        /** Release details */
         release: {
-            /** Id */
+            /** Release ID */
             id: number
-            /** Url */
+            /** Release URL */
             url: string
         }
     }>
-    /** Page */
+    /** Pagination information */
     page: {
-        /** Current */
+        /** Current page number */
         current: number
-        /** Total */
+        /** Total number of pages */
         total: number
     }
-    /** Result */
+    /** Overall search result metadata */
     result: {
-        /** Total */
+        /** Total number of results found */
         total: number
-        /** PerPage */
+        /** Number of results per page */
         perPage: number
     }
-    /** UrlGenerated */
+    /** The generated URL used for the search */
     urlGenerated: string
 }

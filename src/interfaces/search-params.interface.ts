@@ -12,105 +12,109 @@ import type { Sort } from 'types/sort.type'
 import type { Style } from 'types/style.type'
 
 /**
- * Search parameters for Discogs Marketplace
+ * Parameters used to search listings on the Discogs Marketplace.
  */
 export default interface SearchParams {
     /**
-     * Type of elements to search.
-     * | Name       | Description                |
-     * |:---------: |:--------------------------:|
-     * | q          | Basic query search         |
-     * | master_id  | Search in a master release |
-     * | release_id | Search in a release        |
-     * | label_id   | Search in a label          |
-     * | artist_id  | Search in a artist         |
-     * | user       | Search in user wantlist    |
+     * The type of element to search.
+     * | Value       | Description                    |
+     * |-------------|--------------------------------|
+     * | `q`         | Basic query search             |
+     * | `master_id` | Search within a master release |
+     * | `release_id`| Search within a release        |
+     * | `label_id`  | Search within a label          |
+     * | `artist_id` | Search by artist               |
+     * | `user`      | Search a user's wantlist       |
      * @default 'q'
      */
     searchType: Search
     /**
-     * Value to search corresponding to the search type
+     * The search value corresponding to the selected `searchType`.
      */
     searchValue?: string | number
     /**
-     * Currency
+     * Currency code for price filtering.
      * @example 'USD'
      */
     currency?: Currency
     /**
-     * Genre
+     * Genre filter.
      * @example 'Rock'
      */
     genre?: Genre
     /**
-     * Styles
+     * List of styles.
      * @example ['Death Metal', 'Heavy Metal']
      */
     style?: Array<Style>
     /**
-     * Formats
+     * List of formats.
      * @example ['Vinyl', 'CD']
      */
     format?: Array<Format>
     /**
-     * Format descriptions
+     * List of format descriptions.
      * @example ['Limited Edition', 'Numbered']
      */
     formatDescription?: Array<FormatDescription>
     /**
-     * Media conditions
+     * List of media conditions.
      * @example ['Mint (M)', 'Very Good Plus (VG+)']
      */
     condition?: Array<Condition>
     /**
-     * Year (Do not use it with `years`)
+     * Release year.
+     * Do not use together with `years`.
      */
     year?: number
     /**
-     * Interval of years (Do not use it with `year`)
+     * Range of years.
+     * Do not use together with `year`.
      */
     years?: {
-        /** Min */
+        /** Minimum year */
         min: number
-        /** Max */
+        /** Maximum year */
         max: number
     }
     /**
-     * Is make an offer only ?
+     * If true, only listings that accept offers are returned.
      * @default false
      */
     isMakeAnOfferOnly?: boolean
     /**
-     * Expedition country
+     * Expedition country filter (2-letter country code).
      * @example 'US'
      */
     from?: From
     /**
-     * Seller name
+     * Seller's username filter.
      */
     seller?: string
     /**
-     * Hours range, only works on wantlist searches.
+     * Hours range for wantlist searches.
      * @example '0-24'
      */
     hoursRange?: HoursRange
     /**
-     * Sort elements by.
+     * Sort order for the results.
      * @default 'listed,desc'
      */
     sort?: Sort
     /**
-     * Limit of elements to search (25 | 50 | 100 | 250).
+     * Number of results to return per page.
+     * Allowed values: 25, 50, 100, 250.
      * @default 25
      */
     limit?: Limit
     /**
-     * Page (Must be < 401 or discogs will return an error 404).
+     * Page number of results.
+     * Must be less than 401 to avoid Discogs 404 errors.
      * @default 1
      */
     page?: number
     /**
-     * Lang to use for Discogs.
+     * Language code for Discogs interface.
      * @default 'en'
      */
     lang?: Lang

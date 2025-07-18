@@ -7,11 +7,11 @@ import type SearchParams from 'interfaces/search-params.interface'
 import type SearchResult from 'interfaces/search-result.interface'
 
 /**
- * Search elements on discogs marketplace
+ * Performs a search on the Discogs marketplace using the provided parameters.
  * @param pageInstance
- * If you are making a lot of requests, you can pass a playwright page instance to reuse it.
- * That way, you can create a page once, reuse it for all requests and close it yourself at the end.
- * @returns Items found
+ * Optional Playwright page instance to reuse for multiple requests. This can be useful for reducing overhead when making numerous requests.
+ * If not provided, a new browser instance will be created and managed internally.
+ * @returns A promise that resolves to the search results, including items found, pagination details, and the generated URL.
  */
 export default async function search(
     {

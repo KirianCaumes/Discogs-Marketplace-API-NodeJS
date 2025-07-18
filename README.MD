@@ -1,101 +1,104 @@
-# Discogs Marketplace API NodeJS
+# 🎧 Discogs Marketplace API NodeJS
 
 [![NPM Version](https://img.shields.io/npm/v/discogs-marketplace-api-nodejs?logo=npm&color=CB3837)](https://www.npmjs.com/package/discogs-marketplace-api-nodejs) ![GitHub Repo stars](https://img.shields.io/github/stars/KirianCaumes/Discogs-Marketplace-API-NodeJS?style=flat&logo=github&label=Stars&color=%23181717) [![GitHub License](https://img.shields.io/github/license/KirianCaumes/Discogs-Marketplace-API-NodeJS?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI%2FPg0KPHN2ZyBmaWxsPSIjZmZmIiBhcmlhLWhpZGRlbj0idHJ1ZSIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2IiB2ZXJzaW9uPSIxLjEiIHdpZHRoPSIxNiIgZGF0YS12aWV3LWNvbXBvbmVudD0idHJ1ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgPg0KICAgIDxwYXRoIGQ9Ik04Ljc1Ljc1VjJoLjk4NWMuMzA0IDAgLjYwMy4wOC44NjcuMjMxbDEuMjkuNzM2Yy4wMzguMDIyLjA4LjAzMy4xMjQuMDMzaDIuMjM0YS43NS43NSAwIDAgMSAwIDEuNWgtLjQyN2wyLjExMSA0LjY5MmEuNzUuNzUgMCAwIDEtLjE1NC44MzhsLS41My0uNTMuNTI5LjUzMS0uMDAxLjAwMi0uMDAyLjAwMi0uMDA2LjAwNi0uMDA2LjAwNS0uMDEuMDEtLjA0NS4wNGMtLjIxLjE3Ni0uNDQxLjMyNy0uNjg2LjQ1QzE0LjU1NiAxMC43OCAxMy44OCAxMSAxMyAxMWE0LjQ5OCA0LjQ5OCAwIDAgMS0yLjAyMy0uNDU0IDMuNTQ0IDMuNTQ0IDAgMCAxLS42ODYtLjQ1bC0uMDQ1LS4wNC0uMDE2LS4wMTUtLjAwNi0uMDA2LS4wMDQtLjAwNHYtLjAwMWEuNzUuNzUgMCAwIDEtLjE1NC0uODM4TDEyLjE3OCA0LjVoLS4xNjJjLS4zMDUgMC0uNjA0LS4wNzktLjg2OC0uMjMxbC0xLjI5LS43MzZhLjI0NS4yNDUgMCAwIDAtLjEyNC0uMDMzSDguNzVWMTNoMi41YS43NS43NSAwIDAgMSAwIDEuNWgtNi41YS43NS43NSAwIDAgMSAwLTEuNWgyLjVWMy41aC0uOTg0YS4yNDUuMjQ1IDAgMCAwLS4xMjQuMDMzbC0xLjI4OS43MzdjLS4yNjUuMTUtLjU2NC4yMy0uODY5LjIzaC0uMTYybDIuMTEyIDQuNjkyYS43NS43NSAwIDAgMS0uMTU0LjgzOGwtLjUzLS41My41MjkuNTMxLS4wMDEuMDAyLS4wMDIuMDAyLS4wMDYuMDA2LS4wMTYuMDE1LS4wNDUuMDRjLS4yMS4xNzYtLjQ0MS4zMjctLjY4Ni40NUM0LjU1NiAxMC43OCAzLjg4IDExIDMgMTFhNC40OTggNC40OTggMCAwIDEtMi4wMjMtLjQ1NCAzLjU0NCAzLjU0NCAwIDAgMS0uNjg2LS40NWwtLjA0NS0uMDQtLjAxNi0uMDE1LS4wMDYtLjAwNi0uMDA0LS4wMDR2LS4wMDFhLjc1Ljc1IDAgMCAxLS4xNTQtLjgzOEwyLjE3OCA0LjVIMS43NWEuNzUuNzUgMCAwIDEgMC0xLjVoMi4yMzRhLjI0OS4yNDkgMCAwIDAgLjEyNS0uMDMzbDEuMjg4LS43MzdjLjI2NS0uMTUuNTY0LS4yMy44NjktLjIzaC45ODRWLjc1YS43NS43NSAwIDAgMSAxLjUgMFptMi45NDUgOC40NzdjLjI4NS4xMzUuNzE4LjI3MyAxLjMwNS4yNzNzMS4wMi0uMTM4IDEuMzA1LS4yNzNMMTMgNi4zMjdabS0xMCAwYy4yODUuMTM1LjcxOC4yNzMgMS4zMDUuMjczczEuMDItLjEzOCAxLjMwNS0uMjczTDMgNi4zMjdaIj48L3BhdGg%2BDQo8L3N2Zz4%3D&logoColor=fff&label=License)](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/blob/master/LICENSE) [![Support this project](https://img.shields.io/badge/Support%20this%20project-003087?logo=PayPal&logoColor=fff)](https://www.paypal.me/KirianCaumes)
 
-Another (better ?) NodeJs library to fetch data from Discogs marketplace. 💿
+A modern TypeScript/Node.js client for scraping and retrieving Discogs Marketplace listings — flexible, type safe, and easy to use. 💿
+> 💪 No Discogs API token required — this client scrapes public Marketplace data.
 
-## 📂 Installation (with npm)
-
-Run the following command in your project:
+## 🚀 Installation
 
 ```sh
-npm i discogs-marketplace-api-nodejs
+npm install discogs-marketplace-api-nodejs
 ```
 
-## ▶️ Quick Start
-
-Import `DiscogsMarketplace` into your project:
+## ⚡ Quick Start
 
 ```ts
 import { DiscogsMarketplace } from 'discogs-marketplace-api-nodejs'
+
+const result = await DiscogsMarketplace.search({
+  searchType: 'artist_id',
+  searchValue: 244819,
+  genre: 'Rock',
+  sort: 'price,asc',
+  limit: 50,
+  page: 1,
+})
+
+console.log(result.items)
 ```
 
-## 🤔 Examples
+## 📚 Usage Examples
 
-- Get top 250 items, of the 2nd page, filtered by Rock, listed by newest, for a given artist
+### 1. Get 250 latest listings by a specific artist in the Rock genre, page 2
 
 ```ts
 // https://www.discogs.com/sell/list?sort=listed,desc&limit=250&artist_id=244819&page=2&genre=Rock
 const result = await DiscogsMarketplace.search({
-    limit: 250,
-    page: 2,
-    genre: 'Rock',
-    sort: 'listed,desc',
     searchType: 'artist_id',
     searchValue: 244819,
+    genre: 'Rock',
+    sort: 'listed,desc',
+    limit: 250,
+    page: 2,
 })
 ```
 
-- Get top 50 items, of the 1st page, listed by price lowest, on a user wantlist
+### 2. Get listings of a user's wantlist, sorted by price, limit 50
 
 ```ts
 // https://www.discogs.com/sell/mywants?limit=50&user=Kirian_&sort=price,asc
 const result = await DiscogsMarketplace.search({
     limit: 50,
-    page: 1,
     sort: 'price,asc',
     searchType: 'user',
     searchValue: 'Kirian_',
 })
 ```
 
-- Get top 25 items, of the 1st page, listed by seller A-Z, on a release
+### 3. Get listings on a release, sorted by seller name
 
 ```ts
-// https://www.discogs.com/sell/list?release_id=767931&sort=seller,asc&limit=25&page=1
-// https://www.discogs.com/sell/release/767931?sort=seller,asc&limit=25&page=1
+// https://www.discogs.com/sell/list?release_id=767931&sort=seller,asc&limit=25
+// https://www.discogs.com/sell/release/767931?sort=seller,asc&limit=25
 const result = await DiscogsMarketplace.search({
-    sort: 'seller,asc',
-    page: 1,
     searchType: 'release_id',
     searchValue: '767931',
+    sort: 'seller,asc',
 })
 ```
 
-- Get top 100 items, of the 1st page, listed by newest, on a string search
+### 4. Get listings by a general search query (e.g., "in flames"), sorted by newest listings, limit 100
 
 ```ts
 // https://www.discogs.com/sell/list?sort=listed,desc&limit=100&q=in+flames&page=1
 const result = await DiscogsMarketplace.search({
-    limit: 100,
-    page: 1,
-    sort: 'listed,desc',
     searchType: 'q',
     searchValue: 'in flames',
+    sort: 'listed,desc',
+    limit: 100,
 })
 ```
 
-- Get top 25 items, of the 1st page, listed by newest, on a seller inventory
+### 5. Get newest listings on a seller inventory
 
 ```ts
-// https://www.discogs.com/sell/list?sort=listed,desc&limit=25&page=1&seller=Kirian_
-// https://www.discogs.com/seller/Kirian_/profile?sort=listed,desc&limit=25&page=1
+// https://www.discogs.com/sell/list?sort=listed,desc&seller=Kirian_
+// https://www.discogs.com/seller/Kirian_/profile?sort=listed,desc
 const result = await DiscogsMarketplace.search({
     sort: 'listed,desc',
-    page: 1,
     searchType: 'q',
     seller: 'Kirian_',
 })
 ```
 
-- Get top 25 items, of the 1st page, listed by newest, on a user wantlist, on a seller inventory
+### 6. Get newest listings of a user's wantlist, on a seller inventory
 
 ```ts
-// https://www.discogs.com/sell/mywants?sort=listed,desc&limit=25&page=1&seller=Kirian_&user=Kirian_
-// https://www.discogs.com/seller/Kirian_/mywants?sort=listed,desc&limit=25&user=Kirian_&page=1
+// https://www.discogs.com/sell/mywants?sort=listed,desc&seller=Kirian_&user=Kirian_
+// https://www.discogs.com/seller/Kirian_/mywants?sort=listed,desc&user=Kirian_
 const result = await DiscogsMarketplace.search({
     sort: 'listed,desc',
-    page: 1,
     searchType: 'user',
     searchValue: 'Kirian_',
     seller: 'Kirian_',
@@ -104,7 +107,7 @@ const result = await DiscogsMarketplace.search({
 
 ## 💁 Additional Features
 
-- If you are making a lot of requests, you can pass a playwright page instance to reuse it:
+### 1. Reuse a Playwright `Page` instance for faster scraping
 
 ```ts
 const browser = await playwright.launch()
@@ -117,7 +120,7 @@ await browserContext.close()
 await browser.close()
 ```
 
-- If you get lost trying to find the correct parameters to use, there is a little function that might help you:
+### 2. Extract correct parameters from URL
 
 ```ts
 const searchParams = DiscogsMarketplace.getSearchParamsFromUrl('https://www.discogs.com/fr/sell/list?sort=listed,desc&limit=250&artist_id=244819&page=2&genre=Rock')
@@ -132,115 +135,119 @@ const searchParams = DiscogsMarketplace.getSearchParamsFromUrl('https://www.disc
 // }
 ```
 
-## 📃 Data format
+## 🧩 API Reference
 
-You can provide parameters to `DiscogsMarketplace.search` function according to this interface:
+The `DiscogsMarketplace.search` function accepts parameters defined by the following interface:
 
 ```ts
 interface SearchParams {
     /**
-     * Type of elements to search.
-     * | Name       | Description                |
-     * |:---------: |:--------------------------:|
-     * | q          | Basic query search         |
-     * | master_id  | Search in a master release |
-     * | release_id | Search in a release        |
-     * | label_id   | Search in a label          |
-     * | artist_id  | Search in a artist         |
-     * | user       | Search in user wantlist    |
+     * The type of element to search.
+     * | Value       | Description                    |
+     * |-------------|--------------------------------|
+     * | `q`         | Basic query search             |
+     * | `master_id` | Search within a master release |
+     * | `release_id`| Search within a release        |
+     * | `label_id`  | Search within a label          |
+     * | `artist_id` | Search by artist               |
+     * | `user`      | Search a user's wantlist       |
      * @default 'q'
      */
     searchType: Search
     /**
-     * Value to search corresponding to the search type
+     * The search value corresponding to the selected `searchType`.
      */
     searchValue?: string | number
     /**
-     * Currency
+     * Currency code for price filtering.
      * @example 'USD'
      */
     currency?: Currency
     /**
-     * Genre
+     * Genre filter.
      * @example 'Rock'
      */
     genre?: Genre
     /**
-     * Styles
+     * List of styles.
      * @example ['Death Metal', 'Heavy Metal']
      */
     style?: Array<Style>
     /**
-     * Formats
+     * List of formats.
      * @example ['Vinyl', 'CD']
      */
     format?: Array<Format>
     /**
-     * Format descriptions
+     * List of format descriptions.
      * @example ['Limited Edition', 'Numbered']
      */
     formatDescription?: Array<FormatDescription>
     /**
-     * Media conditions
+     * List of media conditions.
      * @example ['Mint (M)', 'Very Good Plus (VG+)']
      */
     condition?: Array<Condition>
     /**
-     * Year (Do not use it with `years`)
+     * Release year.
+     * Do not use together with `years`.
      */
     year?: number
     /**
-     * Interval of years (Do not use it with `year`)
+     * Range of years.
+     * Do not use together with `year`.
      */
     years?: {
-        /** Min */
+        /** Minimum year */
         min: number
-        /** Max */
+        /** Maximum year */
         max: number
     }
     /**
-     * Is make an offer only ?
+     * If true, only listings that accept offers are returned.
      * @default false
      */
     isMakeAnOfferOnly?: boolean
     /**
-     * Expedition country
+     * Expedition country filter (2-letter country code).
      * @example 'US'
      */
     from?: From
     /**
-     * Seller name
+     * Seller's username filter.
      */
     seller?: string
     /**
-     * Hours range, only works on wantlist searches.
+     * Hours range for wantlist searches.
      * @example '0-24'
      */
     hoursRange?: HoursRange
     /**
-     * Sort elements by.
+     * Sort order for the results.
      * @default 'listed,desc'
      */
     sort?: Sort
     /**
-     * Limit of elements to search (25 | 50 | 100 | 250).
+     * Number of results to return per page.
+     * Allowed values: 25, 50, 100, 250.
      * @default 25
      */
     limit?: Limit
     /**
-     * Page (Must be < 401 or discogs will return an error 404).
+     * Page number of results.
+     * Must be less than 401 to avoid Discogs 404 errors.
      * @default 1
      */
     page?: number
     /**
-     * Lang to use for Discogs.
+     * Language code for Discogs interface.
      * @default 'en'
      */
     lang?: Lang
 }
 ```
 
-If success, it will return:
+On success, it returns a result matching this interface:
 
 ```ts
 interface SearchResult {
@@ -307,28 +314,17 @@ interface SearchResult {
 }
 ```
 
-## 💡 How to contribute
+## 🛠️ Development & Contribution
 
-There is a [devcontainer](https://code.visualstudio.com/docs/devcontainers/containers) on that project already configured, feel free to use it.
+- Clone the repo and use the included devcontainer/VSCode setup .
+- Run: `npm install`
+- Add your contribution.
+- Use `npm test` to run unit tests.
+- Open a pull request with your new additions! 🎉
 
-Install dependencies with:
+## 👉 Known Issues
 
-```sh
-npm install
-```
-
-You can open a pull request with your new additions.
-
-## 💪 Tips
-
-### Playwright
-
-Install system dependencies (see [Install system dependencies](https://playwright.dev/docs/browsers#install-system-dependencies)):
-
-```sh
-sudo npx playwright install-deps chromium
-```
-
-## 🐛 Issues
-
-👉 If you find a bug, feel free to [open an issue](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/issues/new).
+- Ensure all Playwright requirements are installed (see [Install system dependencies](https://playwright.dev/docs/browsers#install-system-dependencies)).
+- Requests hitting page >400 will result in a 404.
+- Some search parameters might not be compatible with every type of queries.
+- For other edge cases, feel free to open an [issue on GitHub](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/issues).
