@@ -316,7 +316,7 @@ interface SearchResult {
 
 ## 🛠️ Development & Contribution
 
-- Clone the repo and use the included devcontainer/VSCode setup .
+- Clone the repo and use the included devcontainer/VSCode setup.
 - Run: `npm install`
 - Add your contribution.
 - Use `npm test` to run unit tests.
@@ -328,3 +328,7 @@ interface SearchResult {
 - Requests hitting page >400 will result in a 404.
 - Some search parameters might not be compatible with every type of queries.
 - For other edge cases, feel free to open an [issue on GitHub](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/issues).
+
+## 📃 License
+
+Licensed under [MIT](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/blob/master/LICENSE).

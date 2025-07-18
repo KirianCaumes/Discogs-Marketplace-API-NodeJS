@@ -29,7 +29,7 @@ export default async function search(
         from,
         seller,
         hoursRange,
-        sort = 'listed,asc',
+        sort = 'listed,desc',
         limit = 25,
         page = 1,
         lang = 'en',
