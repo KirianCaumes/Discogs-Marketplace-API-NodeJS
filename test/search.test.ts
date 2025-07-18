@@ -5,7 +5,7 @@ import { chromium as playwright } from 'playwright-chromium'
 import UserAgent from 'user-agents'
 import { DiscogsMarketplace } from '../src/index'
 
-void describe('Test marketplace.ts', () => {
+void describe('Test search.ts', () => {
     void test('It should return success value', async () => {
         const res = await DiscogsMarketplace.search({ searchType: 'q', searchValue: '' })
 
@@ -86,6 +86,21 @@ void describe('Test marketplace.ts', () => {
         const res = await DiscogsMarketplace.search({
             searchType: 'artist_id',
             searchValue: 123456,
+        })
+        assert.notStrictEqual(res.result, null)
+        assert.notStrictEqual(res.page, null)
+        assert.notStrictEqual(res.page.current, null)
+        assert.notStrictEqual(res.page.total, null)
+        assert.notStrictEqual(res.result, null)
+        assert.notStrictEqual(res.result.total, null)
+        assert.notStrictEqual(res.result.perPage, null)
+        assert.notStrictEqual(res.urlGenerated, null)
+    })
+
+    void test('It should return success value with release', async () => {
+        const res = await DiscogsMarketplace.search({
+            searchType: 'release_id',
+            searchValue: '767931',
         })
         assert.notStrictEqual(res.result, null)
         assert.notStrictEqual(res.page, null)

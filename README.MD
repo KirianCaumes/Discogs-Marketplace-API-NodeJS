@@ -16,7 +16,7 @@ npm i discogs-marketplace-api-nodejs
 
 Import `DiscogsMarketplace` into your project:
 
-```js
+```ts
 import { DiscogsMarketplace } from 'discogs-marketplace-api-nodejs'
 ```
 
@@ -24,7 +24,7 @@ import { DiscogsMarketplace } from 'discogs-marketplace-api-nodejs'
 
 - Get top 250 items, of the 2nd page, filtered by Rock, listed by newest, for a given artist
 
-```js
+```ts
 // https://www.discogs.com/sell/list?sort=listed,desc&limit=250&artist_id=244819&page=2&genre=Rock
 const result = await DiscogsMarketplace.search({
     limit: 250,
@@ -38,7 +38,7 @@ const result = await DiscogsMarketplace.search({
 
 - Get top 50 items, of the 1st page, listed by price lowest, on a user wantlist
 
-```js
+```ts
 // https://www.discogs.com/sell/mywants?limit=50&user=Kirian_&sort=price,asc
 const result = await DiscogsMarketplace.search({
     limit: 50,
@@ -51,7 +51,8 @@ const result = await DiscogsMarketplace.search({
 
 - Get top 25 items, of the 1st page, listed by seller A-Z, on a release
 
-```js
+```ts
+// https://www.discogs.com/sell/list?release_id=767931&sort=seller,asc&limit=25&page=1
 // https://www.discogs.com/sell/release/767931?sort=seller,asc&limit=25&page=1
 const result = await DiscogsMarketplace.search({
     sort: 'seller,asc',
@@ -63,7 +64,7 @@ const result = await DiscogsMarketplace.search({
 
 - Get top 100 items, of the 1st page, listed by newest, on a string search
 
-```js
+```ts
 // https://www.discogs.com/sell/list?sort=listed,desc&limit=100&q=in+flames&page=1
 const result = await DiscogsMarketplace.search({
     limit: 100,
@@ -76,20 +77,21 @@ const result = await DiscogsMarketplace.search({
 
 - Get top 25 items, of the 1st page, listed by newest, on a seller inventory
 
-```js
+```ts
+// https://www.discogs.com/sell/list?sort=listed,desc&limit=25&page=1&seller=Kirian_
 // https://www.discogs.com/seller/Kirian_/profile?sort=listed,desc&limit=25&page=1
 const result = await DiscogsMarketplace.search({
     sort: 'listed,desc',
     page: 1,
     searchType: 'q',
-    searchValue: '',
     seller: 'Kirian_',
 })
 ```
 
 - Get top 25 items, of the 1st page, listed by newest, on a user wantlist, on a seller inventory
 
-```js
+```ts
+// https://www.discogs.com/sell/mywants?sort=listed,desc&limit=25&page=1&seller=Kirian_&user=Kirian_
 // https://www.discogs.com/seller/Kirian_/mywants?sort=listed,desc&limit=25&user=Kirian_&page=1
 const result = await DiscogsMarketplace.search({
     sort: 'listed,desc',
@@ -100,9 +102,11 @@ const result = await DiscogsMarketplace.search({
 })
 ```
 
+## 💁 Additional Features
+
 - If you are making a lot of requests, you can pass a playwright page instance to reuse it:
 
-```js
+```ts
 const browser = await playwright.launch()
 const browserContext = await browser.newContext()
 const browserPage = await browserContext.newPage()
@@ -111,6 +115,21 @@ const result = await DiscogsMarketplace.search({ searchType: 'q'}, browserPage)
 
 await browserContext.close()
 await browser.close()
+```
+
+- If you get lost trying to find the correct parameters to use, there is a little function that might help you:
+
+```ts
+const searchParams = DiscogsMarketplace.getSearchParamsFromUrl('https://www.discogs.com/fr/sell/list?sort=listed,desc&limit=250&artist_id=244819&page=2&genre=Rock')
+// {
+//     searchType: 'artist_id',
+//     searchValue: '244819',
+//     genre: 'Rock',
+//     sort: 'listed,desc',
+//     limit: 250,
+//     page: 2,
+//     lang: 'fr',
+// }
 ```
 
 ## 📃 Data format
@@ -300,16 +319,16 @@ npm install
 
 You can open a pull request with your new additions.
 
-## 🐛 Known issues/problems
+## 💪 Tips
 
 ### Playwright
 
-Install system dependencies:
+Install system dependencies (see [Install system dependencies](https://playwright.dev/docs/browsers#install-system-dependencies)):
 
 ```sh
 sudo npx playwright install-deps chromium
 ```
 
-More information [here](https://playwright.dev/docs/browsers#install-system-dependencies).
+## 🐛 Issues
 
-👉 If you find another problem, feel free to open an issue.
+👉 If you find a bug, feel free to [open an issue](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/issues/new).
