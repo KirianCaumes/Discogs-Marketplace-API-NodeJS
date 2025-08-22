@@ -1,21 +1,15 @@
-import type { CurrencyKeys, CurrencyType, CurrencyValues } from 'data/currency.data'
-import type { CountryKeys, CountryType } from 'data/country.data'
+import Currency from 'data/currency.data'
+import Country from 'data/country.data'
+import type { CurrencyKeys, CurrencyValues } from 'data/currency.data'
+import type { CountryKeys } from 'data/country.data'
 import type SearchResult from 'interfaces/search-result.interface'
-
-// These variables are injected by the browser context when the page is loaded.
-const { Country, Currency } = globalThis as typeof globalThis & {
-    /** Country */
-    Country: CountryType
-    /** Currency */
-    Currency: CurrencyType
-}
 
 /**
  * Parses the page and returns the items found.
- * This function is called by the browser context when the page is loaded.
+ * @param document Document
  * @returns Items found and total
  */
-export default function scrape(): Pick<SearchResult, 'items'> & {
+export default function scrape(document: Document): Pick<SearchResult, 'items'> & {
     /** Total items found */
     total: SearchResult['result']['total']
 } {

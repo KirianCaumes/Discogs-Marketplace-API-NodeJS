@@ -107,20 +107,7 @@ const result = await DiscogsMarketplace.search({
 
 ## 💁 Additional Features
 
-### 1. Reuse a Playwright `Page` instance for faster scraping
-
-```ts
-const browser = await playwright.launch()
-const browserContext = await browser.newContext()
-const browserPage = await browserContext.newPage()
-
-const result = await DiscogsMarketplace.search({ searchType: 'q'}, browserPage)
-
-await browserContext.close()
-await browser.close()
-```
-
-### 2. Extract correct parameters from URL
+### 1. Extract correct parameters from URL
 
 ```ts
 const searchParams = DiscogsMarketplace.getSearchParamsFromUrl('https://www.discogs.com/fr/sell/list?sort=listed,desc&limit=250&artist_id=244819&page=2&genre=Rock')
@@ -324,7 +311,6 @@ interface SearchResult {
 
 ## 👉 Known Issues
 
-- Ensure all Playwright requirements are installed (see [Install system dependencies](https://playwright.dev/docs/browsers#install-system-dependencies)).
 - Requests hitting page >400 will result in a 404.
 - Some search parameters might not be compatible with every type of queries.
 - For other edge cases, feel free to open an [issue on GitHub](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/issues).

@@ -1,41 +1,32 @@
-import UserAgent from 'user-agents'
-import { chromium as playwright, type Page } from 'playwright-chromium'
-import Currency from 'data/currency.data'
-import Country from 'data/country.data'
+import { parseHTML } from 'linkedom'
 import scrape from 'scrape'
 import type SearchParams from 'interfaces/search-params.interface'
 import type SearchResult from 'interfaces/search-result.interface'
 
 /**
  * Performs a search on the Discogs marketplace using the provided parameters.
- * @param pageInstance
- * Optional Playwright page instance to reuse for multiple requests. This can be useful for reducing overhead when making numerous requests.
- * If not provided, a new browser instance will be created and managed internally.
  * @returns A promise that resolves to the search results, including items found, pagination details, and the generated URL.
  */
-export default async function search(
-    {
-        searchType = 'q',
-        searchValue,
-        currency,
-        genre,
-        style,
-        format,
-        formatDescription,
-        condition,
-        year,
-        years,
-        isMakeAnOfferOnly = false,
-        from,
-        seller,
-        hoursRange,
-        sort = 'listed,desc',
-        limit = 25,
-        page = 1,
-        lang = 'en',
-    }: SearchParams,
-    pageInstance?: Page,
-): Promise<SearchResult> {
+export default async function search({
+    searchType = 'q',
+    searchValue,
+    currency,
+    genre,
+    style,
+    format,
+    formatDescription,
+    condition,
+    year,
+    years,
+    isMakeAnOfferOnly = false,
+    from,
+    seller,
+    hoursRange,
+    sort = 'listed,desc',
+    limit = 25,
+    page = 1,
+    lang = 'en',
+}: SearchParams): Promise<SearchResult> {
     /** Url to be called by the browser */
     const url = [
         generateUrl({ searchType, seller, lang }),
@@ -59,89 +50,27 @@ export default async function search(
         }),
     ].join('?')
 
-    // Get browser page by user input or generate a new one
-    const { browserPage, browser, browserContext } = pageInstance
-        ? { browserPage: pageInstance }
-        : await (async () => {
-              /** Init browser */
-              const browser = await playwright.launch({
-                  args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gl-drawing-for-tests'],
-              })
+    const response = await globalThis.fetch(url, {
+        headers: {
+            'User-Agent': 'Discogs',
+            'Content-Type': 'application/json',
+            'X-PJAX': 'true',
+        },
+        referrer: 'https://discogs.com',
+    })
 
-              /** Init context */
-              const browserContext = await browser.newContext({
-                  userAgent: new UserAgent({ platform: 'Win32' }).toString(),
-                  extraHTTPHeaders: {
-                      'X-PJAX': 'true',
-                  },
-                  javaScriptEnabled: false,
-              })
+    const content = await response.text()
 
-              /** Init page */
-              const browserPage = await browserContext.newPage()
+    const { document } = parseHTML(content)
 
-              return {
-                  browser,
-                  browserContext,
-                  browserPage,
-              }
-          })()
-
-    // Block all resources except document
-    await browserPage.route('**/*', route =>
-        [
-            'stylesheet',
-            'image',
-            'media',
-            'font',
-            'script',
-            'texttrack',
-            'xhr',
-            'fetch',
-            'eventsource',
-            'websocket',
-            'manifest',
-            'other',
-        ].includes(route.request().resourceType())
-            ? route.abort()
-            : route.continue(),
-    )
-
-    // Inject some globals to the page, so we can use them in the scraping function
-    await browserPage.addInitScript(g => Object.assign(globalThis, g), { Country, Currency })
-
-    /** Init page */
-    const response = await browserPage.goto(url, { waitUntil: 'domcontentloaded' })
-
-    /** Status code from the page */
-    const status = response?.status() ?? 500
-
-    // See current issue: https://github.com/evanw/esbuild/issues/2605
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-    await browserPage.evaluate(() => ((window as any).__name ??= (func: any) => func))
+    const { items, total } = scrape(document)
 
     // If error status, reject
-    if (status >= 400) {
-        const errorMessage =
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            (await browserPage.evaluate(() => document.querySelector('h1 + p')?.innerHTML.trim())) || `An error ${status} occurred.`
-
-        // Close browser
-        await browserContext?.close()
-        await browser?.close()
-
+    if (response.status >= 400) {
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        const errorMessage = document.querySelector('h1 + p')?.innerHTML.trim() || `An error ${response.status} occurred.`
         throw new Error(errorMessage)
     }
-
-    /** Url generated by the browser */
-    const urlGenerated = browserPage.url()
-
-    // Scrape data from the page
-    const { items, total } = await browserPage.evaluate(scrape)
-
-    // Close browser
-    await browserContext?.close()
-    await browser?.close()
 
     return {
         items,
@@ -153,7 +82,7 @@ export default async function search(
             current: page,
             total: Math.ceil(total / limit),
         },
-        urlGenerated,
+        urlGenerated: url,
     }
 }
 

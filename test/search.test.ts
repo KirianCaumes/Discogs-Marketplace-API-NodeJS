@@ -1,8 +1,6 @@
 import { describe, test } from 'node:test'
 import assert from 'node:assert'
 import url from 'url'
-import { chromium as playwright } from 'playwright-chromium'
-import UserAgent from 'user-agents'
 import { DiscogsMarketplace } from '../src/index'
 
 void describe('Test search.ts', () => {
@@ -270,32 +268,5 @@ void describe('Test search.ts', () => {
         assert.strictEqual(res.urlGenerated.includes('/mywants'), true)
         assert.strictEqual(res.urlGenerated.includes('/profile'), false)
         assert.strictEqual(params.user, 'TheUser')
-    })
-
-    void test('It should return success value with a pageInstance', async () => {
-        const browser = await playwright.launch({
-            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gl-drawing-for-tests'],
-        })
-
-        const browserContext = await browser.newContext({
-            userAgent: new UserAgent({ platform: 'Win32' }).toString(),
-            extraHTTPHeaders: {
-                'X-PJAX': 'true',
-            },
-            javaScriptEnabled: false,
-        })
-
-        const browserPage = await browserContext.newPage()
-
-        assert.notStrictEqual(browserPage, null)
-
-        const res = await DiscogsMarketplace.search({ searchType: 'q', searchValue: '' }, browserPage)
-
-        assert.notStrictEqual(res.result, null)
-        assert.notStrictEqual(res.urlGenerated, null)
-        assert.notStrictEqual(res.items[0]?.id, undefined)
-
-        await browserContext.close()
-        await browser.close()
     })
 })
