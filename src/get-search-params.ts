@@ -42,15 +42,12 @@ export default function getSearchParamsFromUrl(url: string): SearchParams {
     }
 
     // Retrieve basic search values
-    for (const key of ['currency', 'genre', 'ships_from', 'seller', 'sort', 'hours_range'] as const) {
+    for (const key of ['currency', 'genre', 'ships_from', 'seller', 'sort'] as const) {
         const value = urlSearchParams.get(key)
         if (value) {
             switch (key) {
                 case 'ships_from':
                     searchParams.from = value
-                    break
-                case 'hours_range':
-                    searchParams.hoursRange = value as SearchParams['hoursRange']
                     break
                 default:
                     searchParams[key] = value

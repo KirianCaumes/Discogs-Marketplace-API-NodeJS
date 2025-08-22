@@ -4,7 +4,6 @@ import type { FormatDescription } from 'types/format-description.type'
 import type { Format } from 'types/format.type'
 import type { From } from 'types/from.type'
 import type { Genre } from 'types/genre.type'
-import type { HoursRange } from 'types/hours-range.type'
 import type { Lang } from 'types/lang.type'
 import type { Limit } from 'types/limit.type'
 import type { Search } from 'types/search-type.type'
@@ -92,11 +91,6 @@ export default interface SearchParams {
      */
     seller?: string
     /**
-     * Hours range for wantlist searches.
-     * @example '0-24'
-     */
-    hoursRange?: HoursRange
-    /**
      * Sort order for the results.
      * @default 'listed,desc'
      */
@@ -118,4 +112,13 @@ export default interface SearchParams {
      * @default 'en'
      */
     lang?: Lang
+}
+
+export type SearchParamsDefaulted = SearchParams & {
+    searchType: NonNullable<SearchParams['searchType']> // eslint-disable-line jsdoc/require-jsdoc
+    isMakeAnOfferOnly: NonNullable<SearchParams['isMakeAnOfferOnly']> // eslint-disable-line jsdoc/require-jsdoc
+    sort: NonNullable<SearchParams['sort']> // eslint-disable-line jsdoc/require-jsdoc
+    limit: NonNullable<SearchParams['limit']> // eslint-disable-line jsdoc/require-jsdoc
+    page: NonNullable<SearchParams['page']> // eslint-disable-line jsdoc/require-jsdoc
+    lang: NonNullable<SearchParams['lang']> // eslint-disable-line jsdoc/require-jsdoc
 }

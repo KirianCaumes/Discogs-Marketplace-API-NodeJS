@@ -205,11 +205,6 @@ interface SearchParams {
      */
     seller?: string
     /**
-     * Hours range for wantlist searches.
-     * @example '0-24'
-     */
-    hoursRange?: HoursRange
-    /**
      * Sort order for the results.
      * @default 'listed,desc'
      */
@@ -247,6 +242,7 @@ interface SearchResult {
             formats: Array<string>
         }
         url: string
+        listedAt: Date | null
         labels: Array<string>
         catnos: Array<string>
         imageUrl: string

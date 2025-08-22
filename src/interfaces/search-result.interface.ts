@@ -22,6 +22,8 @@ export default interface SearchResult {
         }
         /** URL to the listing on Discogs */
         url: string
+        /** Date the item was listed */
+        listedAt: Date | null
         /** Array of label names */
         labels: Array<string>
         /** Array of catalog numbers */
