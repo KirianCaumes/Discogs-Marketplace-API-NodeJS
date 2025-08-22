@@ -12,7 +12,8 @@
     "verbatimModuleSyntax": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "allowJs": true
+    "allowJs": true,
+    "skipLibCheck": true
   },
   "include": ["./src", "./test", "eslint.config.mjs", "cspell.config.js", "knip.js", ".lintstagedrc.js", ".prettierrc.js"]
 }
