@@ -1,7 +1,7 @@
 import { parseHTML } from 'linkedom'
 import scrape from 'scrapers/modern.scraper'
 import type SearchResult from 'interfaces/search-result.interface'
-import type { SearchParamsDefaulted } from 'interfaces/search-params.interface'
+import type { SearchParamsModern } from 'interfaces/search-params.interface'
 
 const PER_PAGE = 250
 
@@ -10,25 +10,19 @@ const PER_PAGE = 250
  * @param searchParams Search parameters
  * @returns Items found and total
  */
-export default async function scrapeWantlist(searchParams: SearchParamsDefaulted): Promise<
+export default async function scrapeWantlist(searchParams: SearchParamsModern): Promise<
     Pick<SearchResult, 'items' | 'urlGenerated'> & {
         /** Total items found */
         total: SearchResult['result']['total']
     }
 > {
-    const { searchValue } = searchParams
-
-    if (!searchValue) {
-        return { items: [], urlGenerated: '', total: 0 }
-    }
-
     /** Fetch the first page of user wantlist */
     const firstPage = await (
         await globalThis.fetch(
             `https://www.discogs.com/wantlist?${new URLSearchParams({
                 page: '1',
                 limit: PER_PAGE.toString(),
-                user: searchValue.toString(),
+                user: searchParams.wantlist ?? '',
                 layout: 'sm',
             }).toString()}`,
             {
@@ -54,7 +48,7 @@ export default async function scrapeWantlist(searchParams: SearchParamsDefaulted
                               `https://www.discogs.com/wantlist?${new URLSearchParams({
                                   page: page.toString(),
                                   limit: PER_PAGE.toString(),
-                                  user: searchValue.toString(),
+                                  user: searchParams.wantlist ?? '',
                                   layout: 'sm',
                               }).toString()}`,
                               {
@@ -78,5 +72,5 @@ export default async function scrapeWantlist(searchParams: SearchParamsDefaulted
         return { items: [], total: 0, urlGenerated: '' }
     }
 
-    return scrape({ ...searchParams, releases: wantlistIds })
+    return scrape({ ...searchParams, releaseIds: wantlistIds, wantlist: undefined })
 }

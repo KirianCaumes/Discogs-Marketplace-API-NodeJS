@@ -11,6 +11,7 @@ module.exports = {
         'discogs',
         'wantlist',
         'catnos',
+        'catno',
         'devcontainer',
         'gitmojis',
         'mywants',

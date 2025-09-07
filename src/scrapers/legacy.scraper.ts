@@ -1,51 +1,29 @@
 import { parseHTML } from 'linkedom'
 import Currency from 'data/currency.data'
 import Country from 'data/country.data'
-import type { CurrencyKeys, CurrencyValues } from 'data/currency.data'
+import { DEFAULT_LIMIT, DEFAULT_PAGE, DEFAULT_SORT } from 'search'
+import type { CurrencyKeys } from 'data/currency.data'
 import type { CountryKeys } from 'data/country.data'
 import type SearchResult from 'interfaces/search-result.interface'
-import type SearchParams from 'interfaces/search-params.interface'
-import type { SearchParamsDefaulted } from 'interfaces/search-params.interface'
+import type { SearchParamsLegacy } from 'interfaces/search-params.interface'
 
 /**
  * Generate URL to be parsed
  * @returns Url
  */
 function generateUrl({
-    searchType,
     seller,
     lang,
-}: Required<Pick<SearchParams, 'searchType' | 'lang'>> & Pick<SearchParams, 'seller'>): string {
+    user,
+}: Required<Pick<SearchParamsLegacy, 'lang'>> & Pick<SearchParamsLegacy, 'seller' | 'user'>): string {
     const baseUrl = `https://www.discogs.com/${lang}`
 
     if (seller) {
-        const path = searchType === 'user' ? 'mywants' : 'profile'
+        const path = user ? 'mywants' : 'profile'
         return `${baseUrl}/seller/${seller}/${path}`
     } else {
-        const path = searchType === 'user' ? 'mywants' : 'list'
-        return `${baseUrl}/sell/${path}`
+        return `${baseUrl}/sell/list`
     }
-}
-
-/**
- * Serialize params URL
- * @param params Object of GET parameters
- * @returns Url
- */
-function serializeParams(params: Record<string, unknown>): string {
-    return Object.entries(params)
-        .flatMap(([key, value]) => {
-            if (value === undefined || value === null) {
-                return []
-            }
-
-            if (Array.isArray(value)) {
-                return value.map(v => `${key}=${encodeURIComponent(v as string)}`)
-            }
-
-            return [`${key}=${encodeURIComponent(value as string)}`]
-        })
-        .join('&')
 }
 
 /**
@@ -53,14 +31,14 @@ function serializeParams(params: Record<string, unknown>): string {
  * @param value String to clean
  * @returns Cleaned-up string
  */
-function convertCurrency(value: string): `${number} ${CurrencyValues}` | '' {
+function convertCurrency(value: string): SearchResult['items'][0]['price']['base'] | SearchResult['items'][0]['price']['shipping'] {
     if (!value) {
-        return ''
+        return null
     }
 
     const currencyFound = Object.keys(Currency).find(key => value.includes(key)) as CurrencyKeys | undefined
     if (!currencyFound) {
-        return ''
+        return null
     }
 
     const currencyClean = Currency[currencyFound]
@@ -69,13 +47,13 @@ function convertCurrency(value: string): `${number} ${CurrencyValues}` | '' {
         .replace(currencyFound, '') // Remove original currency
         .replace(/\s\s+/g, '') // Remove spaces
 
-    const amountParsed = Number.parseFloat(amount)
+    const amountParsed = currencyClean === 'JPY' ? Number.parseInt(amount) : Number.parseFloat(amount)
 
     if (Number.isNaN(amountParsed)) {
-        return ''
+        return null
     }
 
-    return `${amountParsed} ${currencyClean}`
+    return currencyClean === 'JPY' ? `${amountParsed} ${currencyClean}` : (`${amountParsed.toFixed(2)} ${currencyClean}` as never)
 }
 
 /**
@@ -94,24 +72,27 @@ function safeParseInt(value: string | undefined): number {
  * @returns Items found and total
  */
 export default async function scrapeLegacy({
-    searchType,
-    searchValue,
     currency,
     genre,
-    style,
-    format,
-    formatDescription,
+    styles,
+    formats,
+    formatDescriptions,
     condition,
-    year,
     years,
-    isMakeAnOfferOnly,
+    isMakeAnOfferOnly = false,
     from,
+    sort = DEFAULT_SORT,
+    limit = DEFAULT_LIMIT,
+    page = DEFAULT_PAGE,
     seller,
-    sort,
-    limit,
-    page,
-    lang,
-}: SearchParamsDefaulted): Promise<
+    lang = 'en',
+    masterId,
+    labelId,
+    artistId,
+    releaseId,
+    user,
+    query,
+}: SearchParamsLegacy): Promise<
     Pick<SearchResult, 'items' | 'urlGenerated'> & {
         /** Total items found */
         total: SearchResult['result']['total']
@@ -119,32 +100,44 @@ export default async function scrapeLegacy({
 > {
     /** Url to be called by the browser */
     const urlGenerated = [
-        generateUrl({ searchType, seller, lang }),
-        serializeParams({
-            [searchType]: searchValue,
-            currency,
-            genre,
-            style: style?.length ? style : null,
-            format: format?.length ? format : null,
-            format_desc: formatDescription?.length ? formatDescription : null,
-            condition: condition?.length ? condition : null,
-            year: year && !years ? year : null,
-            year1: years?.min && !year ? years.min : null,
-            year2: years?.max && !year ? years.max : null,
-            offers: isMakeAnOfferOnly ? 1 : null,
-            ships_from: from,
-            limit,
-            page,
-            sort,
-        }),
+        generateUrl({ seller, lang, user }),
+        new URLSearchParams(
+            [
+                ['master_id', masterId?.toString() ?? ''],
+                ['label_id', labelId?.toString() ?? ''],
+                ['artist_id', artistId?.toString() ?? ''],
+                ['release_id', releaseId?.toString() ?? ''],
+                ['user', user?.toString() ?? ''],
+                ['q', query ?? ''],
+                ['currency', currency ?? ''],
+                ['genre', genre ?? ''],
+                ...(styles?.map(s => ['style', s]) ?? []),
+                ...(formats?.map(f => ['format', f]) ?? []),
+                ...(formatDescriptions?.map(fd => ['format_desc', fd]) ?? []),
+                ['condition', condition ?? ''],
+                ['year1', years?.min ? years.min.toString() : ''],
+                ['year2', years?.max ? years.max.toString() : ''],
+                ['offers', isMakeAnOfferOnly ? '1' : ''],
+                ['ships_from', Object.keys(Country).find(key => from === Country[key as CountryKeys]) ?? ''],
+                ['limit', limit.toString()],
+                ['page', page.toString()],
+                ['sort', sort],
+            ].filter(([, p]) => !!p),
+        ).toString(),
     ].join('?')
 
+    const headers = new Headers({
+        'User-Agent': 'Discogs',
+        'Content-Type': 'application/json',
+    })
+
+    // If there a seller and user, we cannot use PJAX otherwise 404 error
+    if (!(seller && user)) {
+        headers.set('X-PJAX', 'true')
+    }
+
     const response = await globalThis.fetch(urlGenerated, {
-        headers: {
-            'User-Agent': 'Discogs',
-            'Content-Type': 'application/json',
-            'X-PJAX': 'true',
-        },
+        headers,
         referrer: 'https://discogs.com',
     })
 
@@ -192,28 +185,40 @@ export default async function scrapeLegacy({
 
         return {
             id: safeParseInt(itemHref.split('/').pop()),
-            title: {
-                original: originalTitle,
-                artist: firstIndexOfDash > -1 ? originalTitle.substring(0, firstIndexOfDash) : '',
-                item:
+            title: originalTitle,
+            artists: [
+                {
+                    id: null,
+                    name: firstIndexOfDash > -1 ? originalTitle.substring(0, firstIndexOfDash) : '',
+                    url: null,
+                },
+            ],
+            release: {
+                id: safeParseInt(releaseHref.split('release/').pop()?.split('-').shift()),
+                name:
                     firstIndexOfDash > -1 && lastIndexOfParenthesis > -1
                         ? originalTitle.substring(firstIndexOfDash + 3, lastIndexOfParenthesis)
                         : '',
-                formats:
-                    lastIndexOfParenthesis > -1
-                        ? originalTitle.substring(lastIndexOfParenthesis + 2, originalTitle.length - 1).split(', ')
-                        : [],
+                url: `https://www.discogs.com${releaseHref}`,
             },
+            formats:
+                lastIndexOfParenthesis > -1
+                    ? originalTitle.substring(lastIndexOfParenthesis + 2, originalTitle.length - 1).split(', ')
+                    : [],
+            labels: [...el.querySelectorAll(".label_and_cat a[href^='https://www.discogs.com/']")]
+                .map(x => ({
+                    id: safeParseInt(x.getAttribute('href')?.split('label/').pop()?.split('-').shift()),
+                    name: x.textContent?.trim() ?? '',
+                    url: `https://www.discogs.com${x.getAttribute('href') ?? ''}`,
+                }))
+                .filter((value, index, self) => self.findIndex(v => v.name === value.name) === index),
             url: `https://www.discogs.com${itemHref}`,
             listedAt: null,
-            labels: [...el.querySelectorAll(".label_and_cat a[href^='https://www.discogs.com/']")]
-                .map(x => x.textContent?.trim() ?? '')
-                .filter((value, index, self) => self.indexOf(value) === index),
             catnos: getTextContent('.label_and_cat .item_catno', el) // cspell:disable-line
                 .split(', ')
                 .filter(x => x !== 'none'),
-            imageUrl: el.querySelector('.marketplace_image')?.getAttribute('data-src') ?? '',
-            description: getTextContent('.item_condition + *', el),
+            imageUrl: el.querySelector('.marketplace_image')?.getAttribute('data-src') ?? null,
+            description: getTextContent('.item_condition + *', el) || null,
             isAcceptingOffer: getTextContent('.item_add_to_cart p a strong', el).split('/').length > 1,
             isAvailable: !el.classList.contains('unavailable'),
             condition: {
@@ -222,18 +227,19 @@ export default async function scrapeLegacy({
                     short: /\(([^)]+)\)/.exec(mediaCondition)?.[1] ?? '',
                 },
                 sleeve: {
-                    full: sleeveCondition,
-                    short: /\(([^)]+)\)/.exec(sleeveCondition)?.[1] ?? '',
+                    full: sleeveCondition || null,
+                    short: /\(([^)]+)\)/.exec(sleeveCondition)?.[1] ?? null,
                 },
             },
             seller: {
                 name: getTextContent('.seller_info a', el),
                 url: `https://www.discogs.com${el.querySelector<HTMLLinkElement>('.seller_info a')?.getAttribute('href') ?? ''}`,
-                score: getTextContent('.seller_info li:nth-child(2) strong', el),
-                notes: safeParseInt(getTextContent('.seller_info li:nth-child(2) .section_link', el)),
+                score: getTextContent('.seller_info li:nth-child(2) strong', el) || null,
+                notes: safeParseInt(getTextContent('.seller_info li:nth-child(2) .section_link', el)) || null,
             },
             price: {
-                base: convertCurrency(getTextContent('.price', el).replace(/,/, '.')),
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                base: convertCurrency(getTextContent('.price', el).replace(/,/, '.'))!,
                 shipping: convertCurrency(
                     getTextContent('.item_shipping', el)
                         .replace(/(\s+|\+)/g, ' ')
@@ -248,12 +254,8 @@ export default async function scrapeLegacy({
                 have: safeParseInt(getTextContent('.community_summary .community_result:nth-child(1) .community_number', el)),
                 want: safeParseInt(getTextContent('.community_summary .community_result:nth-child(2) .community_number', el)),
             },
-            release: {
-                id: safeParseInt(releaseHref.split('release/').pop()?.split('-').shift()),
-                url: `https://www.discogs.com${releaseHref}`,
-            },
-        }
-    }) satisfies SearchResult['items']
+        } satisfies SearchResult['items'][0]
+    })
 
     return { total, items, urlGenerated }
 }

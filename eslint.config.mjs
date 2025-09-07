@@ -104,7 +104,7 @@ export default [
             'no-extend-native': ['error'],
             'no-nested-ternary': 'error',
             'prefer-template': 'error',
-            'capitalized-comments': ['warn', 'always', { ignorePattern: 'cspell|prettier' }],
+            // 'capitalized-comments': ['warn', 'always', { ignorePattern: 'cspell|prettier' }],
             camelcase: ['error', { properties: 'never', ignoreDestructuring: false }],
             'no-restricted-syntax': [
                 'error',

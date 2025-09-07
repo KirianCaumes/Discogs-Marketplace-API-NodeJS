@@ -9,29 +9,47 @@ export default interface SearchResult {
     items: Array<{
         /** Unique identifier for the listing */
         id: number
-        /** Title details */
-        title: {
-            /** Full original title */
-            original: string
+        /** Full title of the listing */
+        title: string
+        /** Artists details */
+        artists: Array<{
+            /** Artist ID */
+            id: number | null
             /** Artist name */
-            artist: string
-            /** Item description */
-            item: string
-            /** Array of format names */
-            formats: Array<string>
+            name: string
+            /** Artist URL */
+            url: string | null
+        }>
+        /** Release details */
+        release: {
+            /** Release ID */
+            id: number
+            /** Release name */
+            name: string
+            /** Release URL */
+            url: string
         }
+        /** List of formats */
+        formats: Array<string>
+        /** labels */
+        labels: Array<{
+            /** Label ID */
+            id: number
+            /** Label name */
+            name: string
+            /** Label URL */
+            url: string
+        }>
         /** URL to the listing on Discogs */
         url: string
         /** Date the item was listed */
         listedAt: Date | null
-        /** Array of label names */
-        labels: Array<string>
         /** Array of catalog numbers */
         catnos: Array<string>
         /** URL to the item's image */
-        imageUrl: string
+        imageUrl: string | null
         /** Text description of the item */
-        description: string
+        description: string | null
         /** Indicates if offers are accepted */
         isAcceptingOffer: boolean
         /** Availability status of the item */
@@ -48,9 +66,9 @@ export default interface SearchResult {
             /** Sleeve condition */
             sleeve: {
                 /** Full description */
-                full: string
+                full: string | null
                 /** Short code */
-                short: string
+                short: string | null
             }
         }
         /** Seller information */
@@ -60,9 +78,9 @@ export default interface SearchResult {
             /** Seller's profile URL */
             url: string
             /** Seller rating/score */
-            score: string
+            score: string | null
             /** Number of notes/reviews */
-            notes: number
+            notes: number | null
         }
         /** Pricing details */
         price: {
@@ -70,12 +88,12 @@ export default interface SearchResult {
              * Base price as a string combining amount and currency.
              * @example '12.34 USD'
              */
-            base: `${number} ${CurrencyValues}` | ''
+            base: `${number} ${CurrencyValues}`
             /**
              * Shipping cost as a string combining amount and currency.
              * @example '5.67 USD'
              */
-            shipping: `${number} ${CurrencyValues}` | ''
+            shipping: `${number} ${CurrencyValues}` | null
         }
         /** Shipping origin country */
         country: {
@@ -93,13 +111,6 @@ export default interface SearchResult {
             have: number
             /** Number of users who want this item */
             want: number
-        }
-        /** Release details */
-        release: {
-            /** Release ID */
-            id: number
-            /** Release URL */
-            url: string
         }
     }>
     /** Pagination information */
