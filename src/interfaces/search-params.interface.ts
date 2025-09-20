@@ -36,12 +36,6 @@ interface SearchParamsBase {
      */
     isMakeAnOfferOnly?: boolean
     /**
-     * Number of results to return per page.
-     * Allowed values: 25, 50, 100, 250.
-     * @default 25
-     */
-    limit?: Limit
-    /**
      * Page number of results.
      * Must be less than 401 to avoid Discogs 404 errors.
      * @default 1
@@ -90,6 +84,12 @@ interface SearchParamsLegacyBase extends SearchParamsBase {
      * @default 'listed,desc'
      */
     sort?: Sort
+    /**
+     * Number of results to return per page.
+     * Allowed values: 25, 50, 100, 250.
+     * @default 25
+     */
+    limit?: Limit
     /**
      * Seller's name.
      */
@@ -172,6 +172,11 @@ interface SearchParamsModernBase extends SearchParamsBase {
      * @default 'listed,desc'
      */
     sort?: Exclude<Sort, 'label,asc' | 'label,desc'>
+    /**
+     * Number of results to return per page.
+     * @default 25
+     */
+    limit?: number
     /**
      * List of artist IDs.
      */
