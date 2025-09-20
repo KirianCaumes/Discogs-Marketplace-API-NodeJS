@@ -69,7 +69,7 @@ export default async function scrapeWantlist(searchParams: SearchParamsModern): 
 
     // If there's nothing for sale
     if (wantlistIds.length === 0) {
-        return { items: [], total: 0, urlGenerated: '' }
+        return scrape({ ...searchParams, releaseIds: [0], wantlist: undefined })
     }
 
     return scrape({ ...searchParams, releaseIds: wantlistIds, wantlist: undefined })
