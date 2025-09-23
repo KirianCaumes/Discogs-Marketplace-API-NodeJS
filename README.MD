@@ -170,6 +170,7 @@ Both share common search filters and extend them with API-specific options via t
 | `genres`                | `Genre[]`           | Filter by multiple genres.         | `['Rock', 'Jazz']`      | –       |
 | `from`                  | `From[]`            | Filter by seller’s countries.      | `['FR', 'DE']`          | –       |
 | `sort`                  | `Sort`              | Sort and sort order.               | `'listed,desc'`         | `'listed,desc'` |
+| `limit`                 | `number`            | Number of results per page.        | `100`                   | `25`    |
 | `artistIds`             | `number[]`          | Filter by artist IDs.              | `[123, 456]`            | –       |
 | `sellerIds`             | `number[]`          | Filter by seller IDs.              | `[789, 1011]`           | –       |
 | `priceRange.min`/`max`  | `number`            | Filter by price range.             | `{ min: 10, max: 100 }` | –       |
@@ -195,6 +196,7 @@ Both share common search filters and extend them with API-specific options via t
 | `styles`     | `Style[]`       | Filter by style.                   | `['Death Metal', 'Heavy Metal']` | –     |
 | `from`       | `From`          | Filter by seller’s country.        | `'FR'`                         | –       |
 | `sort`       | `Sort`          | Sort order for results.            | `'listed,desc'`                | `'listed,desc'` |
+| `limit`      | `25 \| 50 \| 100 \| 250`     | Number of results per page.  | `100`                   | `25`    |
 | `seller`     | `string`        | Filter by seller username.         | `"seller_name"`                | –       |
 | `user`       | `string`        | Filter by user.                    | `"my_username"`                | –       |
 | `lang`       | `Lang`          | Discogs interface language.        | `'en'`                         | `'en'`  |
@@ -213,7 +215,6 @@ Both share common search filters and extend them with API-specific options via t
 | `formatDescriptions`  | `FormatDescription[]`        | List of format descriptions.                   | `['Limited Edition', 'Numbered']`      | –       |
 | `years.min` / `max`   | `number`                     | Year range.                                    | `{ min: 1980, max: 1990 }`             | –       |
 | `isMakeAnOfferOnly`   | `boolean`                    | Only return listings that accept offers.       | –                                      | `false` |
-| `limit`               | `25 \| 50 \| 100 \| 250`     | Number of results per page.                    | `100`                                  | `25`    |
 | `page`                | `number`                     | Page number (must be `< 401` to avoid 404).    | `2`                                    | `1`     |
 
 On success, a `SearchResult` interface is returned:
