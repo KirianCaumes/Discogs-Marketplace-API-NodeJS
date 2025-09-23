@@ -93,41 +93,49 @@ export default async function scrape({
         ).toString(),
     ].join('?')
 
-    const result = (await (
-        await globalThis.fetch(urlGenerated, {
-            method: 'GET',
-            headers: {
-                'User-Agent': 'Discogs',
-                'Content-Type': 'application/json',
-            },
-            referrer: 'https://discogs.com',
-        })
-    ).json()) as ShopResultApi
+    const response = await globalThis.fetch(urlGenerated, {
+        method: 'GET',
+        headers: {
+            'User-Agent': 'Discogs',
+            'Content-Type': 'application/json',
+        },
+        referrer: 'https://discogs.com',
+    })
 
-    const detailsResult = (await (
-        await globalThis.fetch('https://www.discogs.com/graphql', {
-            method: 'POST',
-            headers: {
-                'User-Agent': 'Discogs',
-                'Content-Type': 'application/json',
+    if (!response.ok) {
+        throw new Error(response.statusText || `An error ${response.status} occurred.`)
+    }
+
+    const result = (await response.json()) as ShopResultApi
+
+    const detailsResponse = await globalThis.fetch('https://www.discogs.com/graphql', {
+        method: 'POST',
+        headers: {
+            'User-Agent': 'Discogs',
+            'Content-Type': 'application/json',
+        },
+        referrer: 'https://discogs.com',
+        body: JSON.stringify({
+            // eslint-disable-next-line max-len
+            query: 'query Releases($discogsIds: [Int], $first: Int) {\n  releases(discogsIds: $discogsIds) {\n    inWantlistCount\n    inCollectionCount\n    images(first: $first) {\n      edges {\n        node {\n          thumbnail {\n            webpUrl\n          }\n        }\n      }\n    }\n    ratings(first: 1) {\n      averageRating\n    }\n    discogsId\n  }\n}',
+            variables: {
+                discogsIds: result.items?.map(z => z.release?.releaseId ?? 0).filter((x, i, self) => x && self.indexOf(x) === i),
+                first: 1,
             },
-            referrer: 'https://discogs.com',
-            body: JSON.stringify({
-                // eslint-disable-next-line max-len
-                query: 'query Releases($discogsIds: [Int], $first: Int) {\n  releases(discogsIds: $discogsIds) {\n    inWantlistCount\n    inCollectionCount\n    images(first: $first) {\n      edges {\n        node {\n          thumbnail {\n            webpUrl\n          }\n        }\n      }\n    }\n    ratings(first: 1) {\n      averageRating\n    }\n    discogsId\n  }\n}',
-                variables: {
-                    discogsIds: result.items?.map(z => z.release?.releaseId ?? 0).filter((x, i, self) => x && self.indexOf(x) === i),
-                    first: 1,
+            extensions: {
+                persistedQuery: {
+                    version: 1,
+                    sha256Hash: 'ee9d48441023ebd1e6ca169e550581b45de216e88b40711acb6617e49e1bb0cb',
                 },
-                extensions: {
-                    persistedQuery: {
-                        version: 1,
-                        sha256Hash: 'ee9d48441023ebd1e6ca169e550581b45de216e88b40711acb6617e49e1bb0cb',
-                    },
-                },
-            }),
-        })
-    ).json()) as ShopDetailsResultApi
+            },
+        }),
+    })
+
+    if (!detailsResponse.ok) {
+        throw new Error(detailsResponse.statusText || `An error ${detailsResponse.status} occurred.`)
+    }
+
+    const detailsResult = (await detailsResponse.json()) as ShopDetailsResultApi
 
     const details = Object.fromEntries(
         detailsResult.data?.releases?.map(release => [

@@ -17,20 +17,24 @@ export default async function scrapeWantlist(searchParams: SearchParamsModern): 
     }
 > {
     /** Fetch the first page of user wantlist */
-    const firstPage = await (
-        await globalThis.fetch(
-            `https://www.discogs.com/wantlist?${new URLSearchParams({
-                page: '1',
-                limit: PER_PAGE.toString(),
-                user: searchParams.wantlist ?? '',
-                layout: 'sm',
-            }).toString()}`,
-            {
-                headers: { 'User-Agent': 'Discogs', 'Content-Type': 'application/json' },
-                referrer: 'https://discogs.com',
-            },
-        )
-    ).text()
+    const firstPageResponse = await globalThis.fetch(
+        `https://www.discogs.com/wantlist?${new URLSearchParams({
+            page: '1',
+            limit: PER_PAGE.toString(),
+            user: searchParams.wantlist ?? '',
+            layout: 'sm',
+        }).toString()}`,
+        {
+            headers: { 'User-Agent': 'Discogs', 'Content-Type': 'application/json' },
+            referrer: 'https://discogs.com',
+        },
+    )
+
+    if (!firstPageResponse.ok && firstPageResponse.status !== 404) {
+        throw new Error(firstPageResponse.statusText || `An error ${firstPageResponse.status} occurred.`)
+    }
+
+    const firstPage = await firstPageResponse.text()
 
     const { document: firstPageDocument } = parseHTML(firstPage)
 

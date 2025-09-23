@@ -145,8 +145,7 @@ export default async function scrapeLegacy({
 
     const { document } = parseHTML(content)
 
-    // If error status, reject
-    if (response.status >= 400) {
+    if (!response.ok) {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         const errorMessage = document.querySelector('h1 + p')?.innerHTML.trim() || `An error ${response.status} occurred.`
         throw new Error(errorMessage)
@@ -203,7 +202,10 @@ export default async function scrapeLegacy({
             },
             formats:
                 lastIndexOfParenthesis > -1
-                    ? originalTitle.substring(lastIndexOfParenthesis + 2, originalTitle.length - 1).split(', ')
+                    ? originalTitle
+                          .substring(lastIndexOfParenthesis + 2, originalTitle.length - 1)
+                          .split(', ')
+                          .filter(x => x)
                     : [],
             labels: [...el.querySelectorAll(".label_and_cat a[href^='https://www.discogs.com/']")]
                 .map(x => ({
