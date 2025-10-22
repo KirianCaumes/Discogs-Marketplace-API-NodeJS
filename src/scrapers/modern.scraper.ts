@@ -138,14 +138,19 @@ export default async function scrape({
     const detailsResult = (await detailsResponse.json()) as ShopDetailsResultApi
 
     const details = Object.fromEntries(
-        detailsResult.data?.releases?.map(release => [
-            release.discogsId ?? 0,
-            {
-                imageUrl: release.images?.edges?.[0]?.node?.thumbnail?.webpUrl ?? null,
-                want: release.inWantlistCount ?? 0,
-                have: release.inCollectionCount ?? 0,
-            },
-        ]) ?? [],
+        detailsResult.data?.releases?.map(release => {
+            if (!release?.discogsId) {
+                return [0, { imageUrl: null, want: 0, have: 0 }]
+            }
+            return [
+                release.discogsId ?? 0,
+                {
+                    imageUrl: release.images?.edges?.[0]?.node?.thumbnail?.webpUrl ?? null,
+                    want: release.inWantlistCount ?? 0,
+                    have: release.inCollectionCount ?? 0,
+                },
+            ]
+        }) ?? [],
     )
 
     const items =

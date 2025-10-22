@@ -29,6 +29,6 @@ export default interface ShopDetailsResultApi {
             }
             /** DiscogsId */
             discogsId?: number
-        }>
+        } | null>
     }
 }
