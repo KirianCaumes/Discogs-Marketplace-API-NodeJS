@@ -31,4 +31,21 @@ export default interface ShopDetailsResultApi {
             discogsId?: number
         } | null>
     }
+    /** Errors */
+    errors?: Array<{
+        /** Message */
+        message?: string
+        /** Path */
+        path?: [string, number]
+    }>
+    /** Extensions */
+    extensions?: {
+        /** ValueCompletion */
+        valueCompletion?: Array<{
+            /** Message */
+            message?: string
+            /** Path */
+            path?: [string, number]
+        }>
+    }
 }

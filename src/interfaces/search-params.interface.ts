@@ -174,6 +174,7 @@ interface SearchParamsModernBase extends SearchParamsBase {
     sort?: Exclude<Sort, 'label,asc' | 'label,desc'>
     /**
      * Number of results to return per page.
+     * It must be less than or equal to 250.
      * @default 25
      */
     limit?: number

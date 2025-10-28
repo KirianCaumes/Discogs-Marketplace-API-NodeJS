@@ -5,6 +5,7 @@ import type { CurrencyValues } from 'data/currency.data'
 import type { CountryKeys } from 'data/country.data'
 import type SearchResult from 'interfaces/search-result.interface'
 import type ShopResultApi from 'interfaces/api/shop-result.api.interface'
+import type ShopResultErrorApi from 'interfaces/api/shop-result-error.api.interface'
 import type ShopDetailsResultApi from 'interfaces/api/shop-details-result.api.interface'
 import type { SearchParamsModern } from 'interfaces/search-params.interface'
 
@@ -103,7 +104,10 @@ export default async function scrape({
     })
 
     if (!response.ok) {
-        throw new Error(response.statusText || `An error ${response.status} occurred.`)
+        const message = response.headers.get('Content-Type')?.includes('application/json')
+            ? ((await response.json()) as ShopResultErrorApi).detail
+            : ''
+        throw new Error(message || response.statusText || `An error ${response.status} occurred.`)
     }
 
     const result = (await response.json()) as ShopResultApi
