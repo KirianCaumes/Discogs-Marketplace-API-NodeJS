@@ -175,8 +175,8 @@ Both share common search filters and extend them with API-specific options via t
 | `sellerIds`             | `number[]`          | Filter by seller IDs.              | `[789, 1011]`           | –       |
 | `priceRange.min`/`max`  | `number`            | Filter by price range.             | `{ min: 10, max: 100 }` | –       |
 | `sellerRatingMin`       | `number (0–100)`    | Minimum seller rating.             | `90`                    | `0`     |
-| `includeGenericSleeves` | `boolean`           | Include generic sleeves.           | –                       | `true`  |
-| `includeSleevelessMedia`| `boolean`           | Include sleeveless media.          | –                       | `true`  |
+| `hideGenericSleeves`    | `boolean`           | Hide generic sleeves.              | –                       | `false`  |
+| `hideSleevelessMedia`   | `boolean`           | Hide sleeveless media.             | –                       | `false`  |
 | `showUnavailable`       | `boolean`           | Show unavailable items.            | –                       | `true`  |
 | `sellerRatingCountMin`  | `number`            | Minimum number of seller ratings.  | `50`                    | `0`     |
 | `wantlist`*             | `string`            | Search by wantlist username.       | `"username"`            | –       |

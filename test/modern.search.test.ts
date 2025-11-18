@@ -194,15 +194,15 @@ void describe('Test modern search functionality (v2 API)', () => {
     void test('It should handle sleeve and media options', async () => {
         const res = await DiscogsMarketplace.search({
             api: 'v2',
-            includeGenericSleeves: false,
-            includeSleevelessMedia: false,
+            hideGenericSleeves: true,
+            hideSleevelessMedia: true,
             showUnavailable: false,
             releaseIds: [767931],
         })
 
         const params = url.parse(res.urlGenerated, true).query
-        assert.strictEqual(params.includeGenericSleeves, 'false')
-        assert.strictEqual(params.includeSleevelessMedia, 'false')
+        assert.strictEqual(params.hideGenericSleeves, 'true')
+        assert.strictEqual(params.hideSleevelessMedia, 'true')
         assert.strictEqual(params.showUnavailable, 'false')
     })
 
@@ -290,8 +290,8 @@ void describe('Test modern search functionality (v2 API)', () => {
 
         const params = url.parse(res.urlGenerated, true).query
         assert.strictEqual(params.sellerRatingMin, '0')
-        assert.strictEqual(params.includeGenericSleeves, 'true')
-        assert.strictEqual(params.includeSleevelessMedia, 'true')
+        assert.strictEqual(params.hideGenericSleeves, 'false')
+        assert.strictEqual(params.hideSleevelessMedia, 'false')
         assert.strictEqual(params.showUnavailable, 'true')
         assert.strictEqual(params.sellerRatingCountMin, '0')
     })

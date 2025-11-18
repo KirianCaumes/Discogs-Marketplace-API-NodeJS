@@ -203,15 +203,15 @@ interface SearchParamsModernBase extends SearchParamsBase {
      */
     sellerRatingMin?: number
     /**
-     * Include generic sleeves.
-     * @default true
+     * Hide generic sleeves.
+     * @default false
      */
-    includeGenericSleeves?: boolean
+    hideGenericSleeves?: boolean
     /**
-     * Include sleeveless media.
-     * @default true
+     * Hide sleeveless media.
+     * @default false
      */
-    includeSleevelessMedia?: boolean
+    hideSleevelessMedia?: boolean
     /**
      * Show unavailable items.
      * @default true

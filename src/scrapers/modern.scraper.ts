@@ -31,8 +31,8 @@ export default async function scrape({
     artistIds,
     priceRange,
     sellerRatingMin = 0,
-    includeGenericSleeves = true,
-    includeSleevelessMedia = true,
+    hideGenericSleeves = false,
+    hideSleevelessMedia = false,
     showUnavailable = true,
     sellerRatingCountMin = 0,
 }: SearchParamsModern): Promise<
@@ -48,8 +48,8 @@ export default async function scrape({
         new URLSearchParams(
             [
                 ['sellerRatingMin', sellerRatingMin.toString()],
-                ['includeGenericSleeves', includeGenericSleeves.toString()],
-                ['includeSleevelessMedia', includeSleevelessMedia.toString()],
+                ['hideGenericSleeves', hideGenericSleeves.toString()],
+                ['hideSleevelessMedia', hideSleevelessMedia.toString()],
                 ['showUnavailable', showUnavailable.toString()],
                 ['sellerRatingCountMin', sellerRatingCountMin.toString()],
                 [
