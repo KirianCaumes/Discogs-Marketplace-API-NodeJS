@@ -1,6 +1,6 @@
 {
   "name": "discogs-marketplace-api-nodejs",
-  "version": "1.16.0",
+  "version": "1.16.1",
   "description": "Another (better ?) NodeJs library to fetch data from Discogs marketplace",
   "keywords": [
     "discogs",
