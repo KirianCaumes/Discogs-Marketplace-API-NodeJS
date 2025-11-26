@@ -22,6 +22,5 @@ module.exports = {
         'localtime',
         'lintstagedrc',
         'gitmojirc',
-        'linkedom',
     ],
 }

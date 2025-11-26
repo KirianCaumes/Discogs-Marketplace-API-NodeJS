@@ -9,6 +9,9 @@ A modern TypeScript/Node.js client for scraping and retrieving Discogs Marketpla
 
 ```sh
 npm install discogs-marketplace-api-nodejs
+
+# Because we use Playwright to scrape the data, you may also need to run:
+# npx playwright install --with-deps chromium
 ```
 
 ## ⚡ Quick Start

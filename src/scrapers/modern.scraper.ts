@@ -8,34 +8,39 @@ import type ShopResultApi from 'interfaces/api/shop-result.api.interface'
 import type ShopResultErrorApi from 'interfaces/api/shop-result-error.api.interface'
 import type ShopDetailsResultApi from 'interfaces/api/shop-details-result.api.interface'
 import type { SearchParamsModern } from 'interfaces/search-params.interface'
+import type { BrowserContext } from 'playwright-chromium'
 
 /**
  * Parses the page and returns the items found.
  * @param SearchParams Search parameters
+ * @param browserContext Playwright browser context
  * @returns Items found and total
  */
-export default async function scrape({
-    currencies,
-    genres,
-    formats,
-    formatDescriptions,
-    conditions,
-    years,
-    isMakeAnOfferOnly = false,
-    from,
-    sort = DEFAULT_SORT,
-    limit = DEFAULT_LIMIT,
-    page = DEFAULT_PAGE,
-    releaseIds,
-    sellerIds,
-    artistIds,
-    priceRange,
-    sellerRatingMin = 0,
-    hideGenericSleeves = false,
-    hideSleevelessMedia = false,
-    showUnavailable = true,
-    sellerRatingCountMin = 0,
-}: SearchParamsModern): Promise<
+export default async function scrape(
+    {
+        currencies,
+        genres,
+        formats,
+        formatDescriptions,
+        conditions,
+        years,
+        isMakeAnOfferOnly = false,
+        from,
+        sort = DEFAULT_SORT,
+        limit = DEFAULT_LIMIT,
+        page = DEFAULT_PAGE,
+        releaseIds,
+        sellerIds,
+        artistIds,
+        priceRange,
+        sellerRatingMin = 0,
+        hideGenericSleeves = false,
+        hideSleevelessMedia = false,
+        showUnavailable = true,
+        sellerRatingCountMin = 0,
+    }: SearchParamsModern,
+    browserContext: BrowserContext,
+): Promise<
     Pick<SearchResult, 'items' | 'urlGenerated'> & {
         /** Total items found */
         total: SearchResult['result']['total']
@@ -94,32 +99,35 @@ export default async function scrape({
         ).toString(),
     ].join('?')
 
-    const response = await globalThis.fetch(urlGenerated, {
-        method: 'GET',
+    const browserPage = await browserContext.newPage()
+    const response = await browserPage.request.get(urlGenerated, {
         headers: {
             'User-Agent': 'Discogs',
             'Content-Type': 'application/json',
+            Referrer: 'https://discogs.com',
         },
-        referrer: 'https://discogs.com',
     })
 
-    if (!response.ok) {
-        const message = response.headers.get('Content-Type')?.includes('application/json')
-            ? ((await response.json()) as ShopResultErrorApi).detail
+    if (!response.ok()) {
+        const message = response.headers()['content-type']?.includes('application/json')
+            ? ((await response.json()) as ShopResultErrorApi | undefined)?.detail
             : ''
-        throw new Error(message || response.statusText || `An error ${response.status} occurred.`)
+
+        await browserPage.close()
+
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        throw new Error(message || `An error ${response.status()} occurred.`)
     }
 
     const result = (await response.json()) as ShopResultApi
 
-    const detailsResponse = await globalThis.fetch('https://www.discogs.com/graphql', {
-        method: 'POST',
+    const detailsResponse = await browserPage.request.post('https://www.discogs.com/graphql', {
         headers: {
             'User-Agent': 'Discogs',
             'Content-Type': 'application/json',
+            Referrer: 'https://discogs.com',
         },
-        referrer: 'https://discogs.com',
-        body: JSON.stringify({
+        data: {
             // eslint-disable-next-line max-len
             query: 'query Releases($discogsIds: [Int], $first: Int) {\n  releases(discogsIds: $discogsIds) {\n    inWantlistCount\n    inCollectionCount\n    images(first: $first) {\n      edges {\n        node {\n          thumbnail {\n            webpUrl\n          }\n        }\n      }\n    }\n    ratings(first: 1) {\n      averageRating\n    }\n    discogsId\n  }\n}',
             variables: {
@@ -132,14 +140,16 @@ export default async function scrape({
                     sha256Hash: 'ee9d48441023ebd1e6ca169e550581b45de216e88b40711acb6617e49e1bb0cb',
                 },
             },
-        }),
+        },
     })
 
-    if (!detailsResponse.ok) {
-        throw new Error(detailsResponse.statusText || `An error ${detailsResponse.status} occurred.`)
+    if (!detailsResponse.ok()) {
+        throw new Error(`An error ${detailsResponse.status()} occurred.`)
     }
 
     const detailsResult = (await detailsResponse.json()) as ShopDetailsResultApi
+
+    await browserPage.close()
 
     const details = Object.fromEntries(
         detailsResult.data?.releases?.map(release => {
