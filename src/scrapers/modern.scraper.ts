@@ -104,7 +104,6 @@ export default async function scrape(
         headers: {
             'User-Agent': 'Discogs',
             'Content-Type': 'application/json',
-            Referrer: 'https://discogs.com',
         },
     })
 
@@ -125,7 +124,6 @@ export default async function scrape(
         headers: {
             'User-Agent': 'Discogs',
             'Content-Type': 'application/json',
-            Referrer: 'https://discogs.com',
         },
         data: {
             // eslint-disable-next-line max-len
