@@ -99,8 +99,7 @@ export default async function scrape(
         ).toString(),
     ].join('?')
 
-    const browserPage = await browserContext.newPage()
-    const response = await browserPage.request.get(urlGenerated, {
+    const response = await browserContext.request.get(urlGenerated, {
         headers: {
             'User-Agent': 'Discogs',
             'Content-Type': 'application/json',
@@ -112,15 +111,13 @@ export default async function scrape(
             ? ((await response.json()) as ShopResultErrorApi | undefined)?.detail
             : ''
 
-        await browserPage.close()
-
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         throw new Error(message || `An error ${response.status()} occurred.`)
     }
 
     const result = (await response.json()) as ShopResultApi
 
-    const detailsResponse = await browserPage.request.post('https://www.discogs.com/graphql', {
+    const detailsResponse = await browserContext.request.post('https://www.discogs.com/graphql', {
         headers: {
             'User-Agent': 'Discogs',
             'Content-Type': 'application/json',
@@ -146,8 +143,6 @@ export default async function scrape(
     }
 
     const detailsResult = (await detailsResponse.json()) as ShopDetailsResultApi
-
-    await browserPage.close()
 
     const details = Object.fromEntries(
         detailsResult.data?.releases?.map(release => {
