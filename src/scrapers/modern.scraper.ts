@@ -99,20 +99,17 @@ export default async function scrape(
         ).toString(),
     ].join('?')
 
-    const response = await browserContext.request.get(urlGenerated, {
-        headers: {
-            'User-Agent': 'Discogs',
-            'Content-Type': 'application/json',
-        },
-    })
+    const browserPage = await browserContext.newPage()
 
-    if (!response.ok()) {
-        const message = response.headers()['content-type']?.includes('application/json')
+    const response = await browserPage.goto(urlGenerated)
+
+    if (!response?.ok()) {
+        const message = response?.headers()['content-type']?.includes('application/json')
             ? ((await response.json()) as ShopResultErrorApi | undefined)?.detail
             : ''
 
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        throw new Error(message || `An error ${response.status()} occurred.`)
+        throw new Error(message || `An error ${response?.status() ?? '?'} occurred.`)
     }
 
     const result = (await response.json()) as ShopResultApi
