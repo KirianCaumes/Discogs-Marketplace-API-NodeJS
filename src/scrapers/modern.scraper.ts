@@ -116,7 +116,7 @@ export default async function scrape(
 
     const result = (await response.json()) as ShopResultApi
 
-    const detailsResponse = await browserPage.evaluate(
+    const { json: detailsResult, ...detailsResponse } = await browserPage.evaluate(
         async discogsIds => {
             const res = await fetch('https://www.discogs.com/graphql', {
                 method: 'POST',
@@ -136,13 +136,7 @@ export default async function scrape(
             return {
                 ok: res.ok,
                 status: res.status,
-                json: (() => {
-                    try {
-                        return res.json()
-                    } catch {
-                        return {}
-                    }
-                })(),
+                json: (await res.json().catch(() => ({}))) as ShopDetailsResultApi,
             }
         },
         result.items?.map(z => z.release?.releaseId ?? 0).filter((x, i, self) => x && self.indexOf(x) === i),
@@ -151,8 +145,6 @@ export default async function scrape(
     if (!detailsResponse.ok) {
         throw new Error(`An error ${detailsResponse.status} occurred.`)
     }
-
-    const detailsResult = detailsResponse.json as ShopDetailsResultApi
 
     const details = Object.fromEntries(
         detailsResult.data?.releases?.map(release => {
