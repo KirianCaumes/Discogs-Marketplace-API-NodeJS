@@ -101,8 +101,6 @@ export default async function scrape(
 
     const browserPage = await browserContext.newPage()
 
-    await browserPage.goto('https://www.discogs.com/shop/mywants')
-
     const response = await browserPage.goto(urlGenerated)
 
     if (!response?.ok()) {
@@ -141,6 +139,8 @@ export default async function scrape(
         },
         result.items?.map(z => z.release?.releaseId ?? 0).filter((x, i, self) => x && self.indexOf(x) === i),
     )
+
+    await browserPage.close()
 
     if (!detailsResponse.ok) {
         throw new Error(`An error ${detailsResponse.status} occurred.`)
