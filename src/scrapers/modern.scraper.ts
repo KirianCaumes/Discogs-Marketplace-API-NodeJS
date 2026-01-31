@@ -101,6 +101,11 @@ export default async function scrape(
 
     const browserPage = await browserContext.newPage()
 
+    await browserPage.setExtraHTTPHeaders({
+        'User-Agent': 'Discogs',
+        'Content-Type': 'application/json',
+    })
+
     const response = await browserPage.goto(urlGenerated)
 
     if (!response?.ok()) {
@@ -115,7 +120,7 @@ export default async function scrape(
     const result = (await response.json()) as ShopResultApi
 
     const { json: detailsResult, ...detailsResponse } = await browserPage.evaluate(
-        async discogsIds => {
+        async (discogsIds = [0]) => {
             const res = await fetch('https://www.discogs.com/graphql', {
                 method: 'POST',
                 headers: {
