@@ -67,7 +67,7 @@ export default function extractLegacy(): {
      * @returns Cleaned text content or an empty string
      */
     const getTextContent = (selector: string, context: Element | Document = document): string =>
-        context.querySelector(selector)?.textContent?.trim() ?? ''
+        context.querySelector(selector)?.textContent.trim() ?? ''
 
     const total = safeParseInt(
         getTextContent('.pagination_total')
@@ -119,7 +119,7 @@ export default function extractLegacy(): {
             labels: [...el.querySelectorAll(".label_and_cat a[href^='https://www.discogs.com/']")]
                 .map(x => ({
                     id: safeParseInt(x.getAttribute('href')?.split('label/').pop()?.split('-').shift()),
-                    name: x.textContent?.trim() ?? '',
+                    name: x.textContent.trim(),
                     url: `https://www.discogs.com${x.getAttribute('href') ?? ''}`,
                 }))
                 .filter((value, index, self) => self.findIndex(v => v.name === value.name) === index),

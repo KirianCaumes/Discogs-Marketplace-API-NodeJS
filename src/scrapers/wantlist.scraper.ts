@@ -28,6 +28,10 @@ export default async function scrapeWantlist(
     const getPageContent = async (pageNumber: number) => {
         const browserPage = await browserContext.newPage()
 
+        await browserPage.setExtraHTTPHeaders({
+            'User-Agent': 'Discogs',
+        })
+
         await browserPage.route('**/*', route => (route.request().resourceType() === 'document' ? route.continue() : route.abort()))
 
         const response = await browserPage.goto(
@@ -41,7 +45,7 @@ export default async function scrapeWantlist(
 
         const [total, ids] = await Promise.all([
             browserPage.evaluate(
-                () => +(document.querySelector('.pagination_total')?.textContent?.split(' of ').pop()?.replace(',', '') ?? '0'),
+                () => +(document.querySelector('.pagination_total')?.textContent.split(' of ').pop()?.replace(',', '') ?? '0'),
             ),
             browserPage.evaluate(() => {
                 /** Extract the links to the items in the wantlist, if there's no link it's not for sale */
