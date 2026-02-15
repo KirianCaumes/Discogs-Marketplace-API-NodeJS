@@ -26,22 +26,25 @@ export default async function scrapeWantlist(
      * @returns Links and total items found
      */
     const getPageContent = async (pageNumber: number) => {
+        const url = `https://www.discogs.com/wantlist?${new URLSearchParams({
+            page: pageNumber.toString(),
+            limit: PER_PAGE.toString(),
+            user: searchParams.wantlist ?? '',
+            layout: 'sm',
+        }).toString()}`
+
         const browserPage = await browserContext.newPage()
 
         await browserPage.setExtraHTTPHeaders({
             'User-Agent': 'Discogs',
+            Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.7,fr-FR;q=0.8',
+            Referer: url,
         })
 
         await browserPage.route('**/*', route => (route.request().resourceType() === 'document' ? route.continue() : route.abort()))
 
-        const response = await browserPage.goto(
-            `https://www.discogs.com/wantlist?${new URLSearchParams({
-                page: pageNumber.toString(),
-                limit: PER_PAGE.toString(),
-                user: searchParams.wantlist ?? '',
-                layout: 'sm',
-            }).toString()}`,
-        )
+        const response = await browserPage.goto(url)
 
         const [total, ids] = await Promise.all([
             browserPage.evaluate(
