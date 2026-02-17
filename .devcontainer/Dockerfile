@@ -31,7 +31,7 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo 
 RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 RUN sudo apt-get update 
 RUN sudo apt-get install nodejs -y
-RUN sudo npm i -g np@10.2.0
+RUN sudo npm i -g np@11.0.2
 RUN sudo npm i -g gitmoji-cli@9.5.0
 
 RUN npx playwright install --with-deps chromium
