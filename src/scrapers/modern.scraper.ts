@@ -101,6 +101,8 @@ export default async function scrape(
 
     const browserPage = await browserContext.newPage()
 
+    await browserPage.goto('https://www.discogs.com/shop/mywants', { waitUntil: 'commit' })
+
     await browserPage.setExtraHTTPHeaders({
         'User-Agent': 'Discogs',
         Accept: 'application/json',
@@ -108,7 +110,7 @@ export default async function scrape(
         Referer: 'https://www.discogs.com/shop/mywants',
     })
 
-    const response = await browserPage.goto(urlGenerated)
+    const response = await browserPage.goto(urlGenerated, { waitUntil: 'domcontentloaded' })
 
     if (!response?.ok()) {
         const message = response?.headers()['content-type']?.includes('application/json')

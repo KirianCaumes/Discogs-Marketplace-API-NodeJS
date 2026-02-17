@@ -44,7 +44,7 @@ export default async function scrapeWantlist(
 
         await browserPage.route('**/*', route => (route.request().resourceType() === 'document' ? route.continue() : route.abort()))
 
-        const response = await browserPage.goto(url)
+        const response = await browserPage.goto(url, { waitUntil: 'domcontentloaded' })
 
         const [total, ids] = await Promise.all([
             browserPage.evaluate(
