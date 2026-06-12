@@ -6,14 +6,17 @@
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "baseUrl": "./src",
+    "paths": {
+      "*": ["./src/*"]
+    },
     "moduleDetection": "force",
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "allowJs": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["node"]
   },
   "include": ["./src", "./test", "eslint.config.mjs", "cspell.config.js", "knip.js", ".lintstagedrc.js", ".prettierrc.js"]
 }

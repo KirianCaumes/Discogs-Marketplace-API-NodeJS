@@ -61,9 +61,7 @@ void describe('Test legacy search functionality', () => {
             },
             {
                 name: 'Error',
-                message:
-                    // eslint-disable-next-line max-len
-                    'Please visit <a href="https://status.discogs.com" target="_blank" rel="noreferrer noopener">status.discogs.com</a> for the latest updates on site availability.', // cspell: disable-line
+                message: 'An error 502 occurred.', // cspell: disable-line
             },
         )
     })
