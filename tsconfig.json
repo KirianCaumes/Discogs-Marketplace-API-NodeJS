@@ -7,7 +7,11 @@
     "strict": true,
     "esModuleInterop": true,
     "paths": {
-      "*": ["./src/*"]
+      "search": ["./src/search"],
+      "data/*": ["./src/data/*"],
+      "types/*": ["./src/types/*"],
+      "interfaces/*": ["./src/interfaces/*"],
+      "scrapers/*": ["./src/scrapers/*"]
     },
     "moduleDetection": "force",
     "isolatedModules": true,
