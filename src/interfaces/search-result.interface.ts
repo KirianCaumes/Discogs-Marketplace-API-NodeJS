@@ -1,5 +1,5 @@
 import type { CountryValues } from 'data/country.data'
-import type { CurrencyValues } from 'data/currency.data'
+import type { Currency } from 'types/currency.type'
 
 /**
  * Result returned from a Discogs Marketplace search.
@@ -28,6 +28,12 @@ export default interface SearchResult {
             name: string
             /** Release URL */
             url: string
+            /** Release year */
+            year: number | null
+            /** Release country */
+            country: string | null
+            /** Average rating of the release by the community, from 0 to 5 */
+            rating: number | null
         }
         /** List of formats */
         formats: Array<string>
@@ -46,8 +52,10 @@ export default interface SearchResult {
         listedAt: Date | null
         /** Array of catalog numbers */
         catnos: Array<string>
-        /** URL to the item's image */
+        /** URL to the release's image */
         imageUrl: string | null
+        /** URLs of the photos of the item, taken by the seller */
+        photos: Array<string>
         /** Text description of the item */
         description: string | null
         /** Indicates if offers are accepted */
@@ -73,6 +81,8 @@ export default interface SearchResult {
         }
         /** Seller information */
         seller: {
+            /** Seller's ID, to use in `sellerIds` */
+            id: number
             /** Seller's username */
             name: string
             /** Seller's profile URL */
@@ -81,6 +91,8 @@ export default interface SearchResult {
             score: string | null
             /** Number of notes/reviews */
             notes: number | null
+            /** Whether the seller is an independent record store */
+            isIndependent: boolean
         }
         /** Pricing details */
         price: {
@@ -88,12 +100,12 @@ export default interface SearchResult {
              * Base price as a string combining amount and currency.
              * @example '12.34 USD'
              */
-            base: `${number} ${CurrencyValues}`
+            base: `${number} ${Currency}`
             /**
              * Shipping cost as a string combining amount and currency.
              * @example '5.67 USD'
              */
-            shipping: `${number} ${CurrencyValues}` | null
+            shipping: `${number} ${Currency}` | null
         }
         /** Shipping origin country */
         country: {
@@ -113,20 +125,10 @@ export default interface SearchResult {
             want: number
         }
     }>
-    /** Pagination information */
-    page: {
-        /** Current page number */
-        current: number
-        /** Total number of pages */
-        total: number
-    }
-    /** Overall search result metadata */
-    result: {
-        /** Total number of results found */
-        total: number
-        /** Number of results per page */
-        perPage: number
-    }
-    /** The generated URL used for the search */
+    /** Total number of results found */
+    total: number
+    /** Cursor of the next page, to pass as `after`, or null on the last page */
+    nextCursor: string | null
+    /** URL of the same search on Discogs */
     urlGenerated: string
 }

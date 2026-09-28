@@ -1,180 +1,76 @@
 import { describe, test } from 'node:test'
 import assert from 'node:assert'
 import url from 'url'
+import { chromium } from 'patchright'
 import { DiscogsMarketplace } from '../src/index'
 
-void describe('Test wantlist search functionality', () => {
-    void test("It should return good params with user's wantlist search", async () => {
-        const res = await DiscogsMarketplace.search({
-            api: 'v2',
-            wantlist: 'Kirian_',
-        })
+void describe('Test wantlist functionality', () => {
+    void test("It should get the releases of a user's wantlist", async () => {
+        const ids = await DiscogsMarketplace.getWantlistReleaseIds('Kirian_')
 
-        const params = url.parse(res.urlGenerated, true).query
-        assert.strictEqual(res.urlGenerated.includes('/shop-page-api/sell_item'), true)
-        assert.strictEqual(res.urlGenerated.includes('/list'), false)
-        assert.notEqual(params.release, null)
-        assert.ok((params.release?.length ?? 0) > 0)
+        assert.ok(ids.length > 0)
+        assert.ok(ids.every(x => Number.isInteger(x) && x > 0))
+        assert.strictEqual(new Set(ids).size, ids.length)
     })
 
-    void test("It should return good params with user's wantlist search against user's selling items", async () => {
-        const res = await DiscogsMarketplace.search({
-            api: 'v2',
-            wantlist: 'Kirian_',
-            sellerIds: [123456],
-        })
+    void test("It should get only the releases for sale of a user's wantlist", async () => {
+        const [ids, idsForSale] = await Promise.all([
+            DiscogsMarketplace.getWantlistReleaseIds('Kirian_'),
+            DiscogsMarketplace.getWantlistReleaseIds('Kirian_', { onlyForSale: true }),
+        ])
 
-        assert.strictEqual(res.urlGenerated.includes('/shop-page-api/sell_item'), true)
-
-        const params = url.parse(res.urlGenerated, true).query
-
-        assert.notStrictEqual(params, null)
-        assert.strictEqual(params.seller, '123456')
-        assert.notEqual(params.release, null)
-        assert.ok((params.release?.length ?? 0) > 0)
+        assert.ok(idsForSale.length > 0)
+        assert.ok(idsForSale.length <= ids.length)
+        assert.ok(idsForSale.every(x => ids.includes(x)))
     })
 
-    void test('It should handle wantlist with additional filters', async () => {
-        const res = await DiscogsMarketplace.search({
-            api: 'v2',
-            wantlist: 'Kirian_',
-            currencies: ['USD'],
-            conditions: ['Mint (M)'],
-            limit: 50,
-            page: 1,
-        })
+    void test('It should use the provided browser for the releases for sale, and not close it', async () => {
+        const browser = await chromium.launch({ headless: true, chromiumSandbox: false })
 
-        assert.strictEqual(res.result.perPage, 50)
-        assert.strictEqual(res.page.current, 1)
+        try {
+            const ids = await DiscogsMarketplace.getWantlistReleaseIds('Kirian_', { onlyForSale: true }, browser)
 
-        const params = url.parse(res.urlGenerated, true).query
-        assert.notStrictEqual(params, null)
-        assert.ok(params.release)
-        assert.strictEqual(params.currency, 'USD')
-        assert.strictEqual(params.mediaCondition, 'Mint (M)')
-        assert.strictEqual(params.count, '50')
-        assert.strictEqual(params.offset, '0')
-    })
-
-    void test('It should handle wantlist with price range', async () => {
-        const res = await DiscogsMarketplace.search({
-            api: 'v2',
-            wantlist: 'Kirian_',
-            priceRange: { min: 5, max: 100 },
-        })
-
-        const params = url.parse(res.urlGenerated, true).query
-        assert.strictEqual(params.priceRangeLow, '5')
-        assert.strictEqual(params.priceRangeHigh, '100')
-    })
-
-    void test('It should handle wantlist with seller ratings', async () => {
-        const res = await DiscogsMarketplace.search({
-            api: 'v2',
-            wantlist: 'Kirian_',
-            sellerRatingMin: 90,
-            sellerRatingCountMin: 50,
-        })
-
-        const params = url.parse(res.urlGenerated, true).query
-        assert.strictEqual(params.sellerRatingMin, '90')
-        assert.strictEqual(params.sellerRatingCountMin, '50')
-    })
-
-    void test('It should handle wantlist with make offer filter', async () => {
-        const res = await DiscogsMarketplace.search({
-            api: 'v2',
-            wantlist: 'Kirian_',
-            isMakeAnOfferOnly: true,
-        })
-
-        const params = url.parse(res.urlGenerated, true).query
-        assert.strictEqual(params.allowsOffers, 'true')
-    })
-
-    void test('It should handle wantlist with shipping countries', async () => {
-        const res = await DiscogsMarketplace.search({
-            api: 'v2',
-            wantlist: 'Kirian_',
-            from: ['US', 'GB'],
-        })
-
-        const params = url.parse(res.urlGenerated, true).query
-        assert.ok(params.shipsFrom)
-    })
-
-    void test('It should handle wantlist with sort option', async () => {
-        const res = await DiscogsMarketplace.search({
-            api: 'v2',
-            wantlist: 'Kirian_',
-            sort: 'price,asc',
-        })
-
-        const params = url.parse(res.urlGenerated, true).query
-        assert.ok(params.sort)
-        assert.ok(params.sortOrder)
-    })
-
-    void test('It should handle empty wantlist gracefully', async () => {
-        const res = await DiscogsMarketplace.search({
-            api: 'v2',
-            // cspell: disable-next-line
-            wantlist: 'nonexistentuser12345',
-        })
-
-        assert.ok(res.result.total === 0)
-    })
-
-    void test('It should combine wantlist with seller search correctly', async () => {
-        const res = await DiscogsMarketplace.search({
-            api: 'v2',
-            wantlist: 'Kirian_',
-            sellerIds: [123456, 789012],
-        })
-
-        const params = url.parse(res.urlGenerated, true).query
-        assert.ok(params.release)
-        assert.ok(params.seller)
-    })
-
-    void test('It should validate item structure in wantlist results', async () => {
-        const res = await DiscogsMarketplace.search({
-            api: 'v2',
-            wantlist: 'Kirian_',
-        })
-
-        const item = res.items[0]
-        if (!item) {
-            return
+            assert.ok(ids.length > 0)
+            assert.ok(browser.isConnected())
+        } finally {
+            await browser.close()
         }
-
-        assert.strictEqual(typeof item.id, 'number')
-        assert.strictEqual(typeof item.title, 'string')
-        assert.ok(Array.isArray(item.artists))
-        assert.strictEqual(typeof item.release.id, 'number')
-        assert.ok(Array.isArray(item.formats))
-        assert.strictEqual(typeof item.url, 'string')
-        assert.ok(item.listedAt instanceof Date)
-        assert.strictEqual(typeof item.isAcceptingOffer, 'boolean')
-        assert.strictEqual(typeof item.isAvailable, 'boolean')
-        assert.strictEqual(typeof item.seller.name, 'string')
-        assert.strictEqual(typeof item.country.code, 'string')
-        assert.strictEqual(item.country.code.length, 2)
     })
 
-    void test('It should handle wantlist pagination correctly', async () => {
-        const res = await DiscogsMarketplace.search({
-            api: 'v2',
-            wantlist: 'Kirian_',
-            limit: 25,
-            page: 2,
+    void test('It should not allow a token with the releases for sale', async () => {
+        await assert.rejects(async () => {
+            // @ts-expect-error The token cannot be used with `onlyForSale`
+            await DiscogsMarketplace.getWantlistReleaseIds('Kirian_', { token: 'token', onlyForSale: true })
+            throw new Error('Type only check')
         })
+    })
 
-        assert.strictEqual(res.result.perPage, 25)
-        assert.strictEqual(res.page.current, 2)
+    void test('It should fail on an unknown user', async () => {
+        await assert.rejects(DiscogsMarketplace.getWantlistReleaseIds('nonexistentuser12345'), {
+            message: 'User does not exist or may have been deleted.',
+        })
+    })
 
-        const params = url.parse(res.urlGenerated, true).query
-        assert.strictEqual(params.count, '25')
-        assert.strictEqual(params.offset, '25')
+    void test('It should return nothing for sale for an unknown user', async () => {
+        const ids = await DiscogsMarketplace.getWantlistReleaseIds('nonexistentuser12345', { onlyForSale: true })
+
+        assert.deepStrictEqual(ids, [])
+    })
+
+    void test("It should search the listings of a user's wantlist", async () => {
+        const releaseIds = await DiscogsMarketplace.getWantlistReleaseIds('Kirian_', { onlyForSale: true })
+        const res = await DiscogsMarketplace.search({ releaseIds, limit: 50 })
+
+        assert.ok(res.total > 0)
+        assert.ok(res.items.every(x => releaseIds.includes(x.release.id)))
+        assert.strictEqual(url.parse(res.urlGenerated, true).query.release?.length, releaseIds.length)
+    })
+
+    void test("It should combine a user's wantlist with a seller", async () => {
+        const releaseIds = await DiscogsMarketplace.getWantlistReleaseIds('Kirian_')
+        const res = await DiscogsMarketplace.search({ releaseIds, sellerIds: [1240899] })
+
+        assert.ok(res.items.every(x => x.seller.id === 1240899 && releaseIds.includes(x.release.id)))
+        assert.strictEqual(url.parse(res.urlGenerated, true).query.seller, '1240899')
     })
 })

@@ -8,6 +8,7 @@
     "esModuleInterop": true,
     "paths": {
       "search": ["./src/search"],
+      "wantlist": ["./src/wantlist"],
       "data/*": ["./src/data/*"],
       "types/*": ["./src/types/*"],
       "interfaces/*": ["./src/interfaces/*"],

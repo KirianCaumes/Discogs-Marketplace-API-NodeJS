@@ -329,7 +329,7 @@ const Country = {
     ...CountryDiscogs,
 } as const
 
-export type CountryType = typeof Country
+type CountryType = typeof Country
 export type CountryKeys = keyof CountryType
 export type CountryValues = CountryType[CountryKeys]
 

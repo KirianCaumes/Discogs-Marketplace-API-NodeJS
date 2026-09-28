@@ -10,8 +10,20 @@ A modern TypeScript/Node.js client for scraping and retrieving Discogs Marketpla
 ```sh
 npm install discogs-marketplace-api-nodejs
 
-# Because we use Playwright to scrape the data, you may also need to run:
-# npx playwright install --with-deps chromium
+# Because we use Patchright (an undetected Playwright fork) to scrape the data, you may also need to run:
+# npx patchright install --with-deps chromium
+```
+
+The searches go through the API of the Discogs shop (`https://www.discogs.com/shop/list`), from a headless browser.
+
+You can also pass your own [Patchright](https://github.com/Kaliiiiiiiiii-Vinyzu/patchright) browser as second parameter of `search`. You then manage its lifecycle.
+
+```ts
+import { chromium } from 'patchright'
+
+const browser = await chromium.launch({ headless: true })
+const result = await DiscogsMarketplace.search({ artistIds: [244819] }, browser)
+await browser.close()
 ```
 
 ## ⚡ Quick Start
@@ -20,12 +32,10 @@ npm install discogs-marketplace-api-nodejs
 import { DiscogsMarketplace } from 'discogs-marketplace-api-nodejs'
 
 const result = await DiscogsMarketplace.search({
-    api: 'v2',
     artistIds: [244819],
     genres: ['Rock'],
     sort: 'price,asc',
     limit: 50,
-    page: 1,
 })
 
 console.log(result.items)
@@ -33,192 +43,143 @@ console.log(result.items)
 
 ## 📚 Usage Examples
 
-This library offers two API modes to access Discogs Marketplace data. The required `api` parameter determines which endpoint to use:
+### 1. Get 250 latest listings by a specific artist in the Rock genre, then the next 250
 
-- **`api: 'v2'`** (Modern JSON API) - Recommended for most use cases, offers advanced filtering
-- **`api: 'legacy'`** (HTML scraping) - Required for certain search types and general queries
-
-Each API has different capabilities and available parameters. See the [API Reference](#-api-reference) section for complete details.
-
-### 1. Get 250 latest listings by a specific artist in the Rock genre, page 2
+Discogs paginates with cursors: each result gives the `nextCursor` to pass as `after` to get the next page.
 
 ```ts
-// https://www.discogs.com/sell/list?sort=listed,desc&limit=250&artist_id=244819&page=2&genre=Rock
-const result = await DiscogsMarketplace.search({
-    api: 'legacy',
-    artistId: 244819,
-    genre: 'Rock',
-    sort: 'listed,desc',
-    limit: 250,
-    page: 2,
-})
-// OR
-const result = await DiscogsMarketplace.search({
-    api: 'v2',
+// https://www.discogs.com/shop/list?artist=244819&genre=Rock&sort=date-listed&sortOrder=descending&size=250
+const firstPage = await DiscogsMarketplace.search({
     artistIds: [244819],
     genres: ['Rock'],
     sort: 'listed,desc',
     limit: 250,
-    page: 2,
 })
+
+if (firstPage.nextCursor) {
+    const secondPage = await DiscogsMarketplace.search({
+        artistIds: [244819],
+        genres: ['Rock'],
+        sort: 'listed,desc',
+        limit: 250,
+        after: firstPage.nextCursor,
+    })
+}
 ```
 
-### 2. Get listings of a user's wantlist, sorted by price, limit 50
+### 2. Go through several pages with the cursor
+
+```ts
+import { DiscogsMarketplace, type SearchResult } from 'discogs-marketplace-api-nodejs'
+
+const items: SearchResult['items'] = []
+let after: string | undefined
+
+do {
+    const result = await DiscogsMarketplace.search({ artistIds: [244819], limit: 250, after })
+    items.push(...result.items)
+    after = result.nextCursor ?? undefined
+} while (after && items.length < 1000) // Stop after 1000 items, or at the last page
+```
+
+### 3. Get listings of a user's wantlist, sorted by price, limit 50
+
+Get the release IDs of the wantlist, then search them as `releaseIds` (at most 2000). You can keep the IDs on your side to reuse them in the next searches.
 
 ```ts
 // https://www.discogs.com/shop/mywants
-const result = await DiscogsMarketplace.search({
-    api: 'v2',
-    limit: 50,
-    sort: 'price,asc',
-    wantlist: 'Kirian_',
-})
+// Every release of the wantlist, from the Discogs API (no browser needed)
+const releaseIds = await DiscogsMarketplace.getWantlistReleaseIds('Kirian_')
+// Or only the ones currently for sale, from the wantlist page (fewer IDs to search)
+const releaseIdsForSale = await DiscogsMarketplace.getWantlistReleaseIds('Kirian_', { onlyForSale: true })
+
+// An empty list means no filter, as for every other filter: there is nothing to search if the wantlist is empty
+if (releaseIdsForSale.length) {
+    const result = await DiscogsMarketplace.search({
+        releaseIds: releaseIdsForSale,
+        sort: 'price,asc',
+        limit: 50,
+    })
+}
 ```
 
-### 3. Get listings on a release, sorted by seller name
+### 4. Get listings on a release, sorted by seller name
 
 ```ts
-// https://www.discogs.com/sell/list?release_id=767931&sort=seller,asc&limit=25
-// https://www.discogs.com/sell/release/767931?sort=seller,asc&limit=25
+// https://www.discogs.com/shop/list?release=767931&sort=seller&sortOrder=ascending
 const result = await DiscogsMarketplace.search({
-    api: 'legacy',
-    releaseId: 767931,
-    sort: 'seller,asc',
-})
-// OR
-const result = await DiscogsMarketplace.search({
-    api: 'v2',
     releaseIds: [767931],
     sort: 'seller,asc',
 })
 ```
 
-### 4. Get listings by a general search query (e.g., "in flames"), sorted by newest listings, limit 100
+### 5. Get listings by a general search query (e.g., "in flames"), sorted by newest listings, limit 100
 
 ```ts
-// https://www.discogs.com/sell/list?sort=listed,desc&limit=100&q=in+flames&page=1
+// https://www.discogs.com/shop/list?q=in+flames&sort=date-listed&sortOrder=descending&size=100
 const result = await DiscogsMarketplace.search({
-    api: 'legacy',
     query: 'in flames',
     sort: 'listed,desc',
     limit: 100,
 })
 ```
 
-### 5. Get newest listings on a seller inventory
-
-```ts
-// https://www.discogs.com/sell/list?sort=listed,desc&seller=Kirian_
-// https://www.discogs.com/seller/Kirian_/profile?sort=listed,desc
-const result = await DiscogsMarketplace.search({
-    api: 'legacy',
-    sort: 'listed,desc',
-    seller: 'Kirian_',
-})
-// OR
-const result = await DiscogsMarketplace.search({
-    api: 'v2',
-    sort: 'listed,desc',
-    sellerIds: [6562907],
-})
-```
-
 ### 6. Get newest listings of a user's wantlist, on a seller inventory
 
 ```ts
-// https://www.discogs.com/seller/Kirian_/mywants?sort=listed,desc&user=Kirian_
+// The seller ID can be found via the Discogs API: https://api.discogs.com/users/Kirian_
 const result = await DiscogsMarketplace.search({
-    api: 'legacy',
     sort: 'listed,desc',
-    seller: 'Kirian_',
-    user: 'Kirian_',
-})
-// OR
-const result = await DiscogsMarketplace.search({
-    api: 'v2',
-    sort: 'listed,desc',
-    wantlist: 'Kirian_',
+    releaseIds: await DiscogsMarketplace.getWantlistReleaseIds('Kirian_', { onlyForSale: true }),
     sellerIds: [6562907],
 })
 ```
 
-### 7. Get listings by a general search query (e.g., "red"), sorted by newest listings, on a master release
+### 7. Get listings with photos, by a general search query (e.g., "red"), on a master release
 
 ```ts
-// https://www.discogs.com/sell/list?master_id=28291&q=red
+// https://www.discogs.com/shop/list?q=red&master=2167270&hasItemPhotos=true
 const result = await DiscogsMarketplace.search({
-    api: 'legacy',
-    sort: 'listed,desc',
-    masterId: 2167270,
     query: 'red',
+    masterIds: [2167270],
+    hasItemPhotos: true,
 })
 ```
 
 ## 🧩 API Reference
 
-This library provides two different ways to search the Discogs Marketplace:
+### `DiscogsMarketplace.search(searchParams, browserInstance?)`
 
-- **Modern API (`api: 'v2'`)** → JSON API, used by the Discogs "My Wants" page.
-- **Legacy API (`api: 'legacy'`)** → HTML scraping, required for some cases.
+| Field                   | Type                  | Description                                    | Example                           | Default         |
+|-------------------------|-----------------------|------------------------------------------------|-----------------------------------|-----------------|
+| `query`                 | `string`              | Search string.                                 | `'in flames'`                     | –               |
+| `artistIds`             | `number[]`            | Filter by artist IDs.                          | `[244819]`                        | –               |
+| `labelIds`              | `number[]`            | Filter by label IDs.                           | `[11499]`                         | –               |
+| `masterIds`             | `number[]`            | Filter by master release IDs.                  | `[33474]`                         | –               |
+| `releaseIds`            | `number[]`            | Filter by release IDs (at most 2000).          | `[12345, 67890]`                  | –               |
+| `sellerIds`             | `number[]`            | Filter by seller IDs.                          | `[6562907]`                       | –               |
+| `genres`                | `Genre[]`             | Filter by genres.                              | `['Rock', 'Jazz']`                | –               |
+| `styles`                | `Style[]`             | Filter by styles.                              | `['Death Metal', 'Heavy Metal']`  | –               |
+| `formats`               | `Format[]`            | Filter by formats.                             | `['Vinyl', 'CD']`                 | –               |
+| `formatDescriptions`    | `FormatDescription[]` | Filter by format descriptions.                 | `['Limited Edition', 'Numbered']` | –               |
+| `mediaConditions`       | `Condition[]`         | Filter by media conditions.                    | `['Mint (M)']`                    | –               |
+| `sleeveConditions`      | `SleeveCondition[]`   | Filter by sleeve conditions.                   | `['Mint (M)', 'Generic']`         | –               |
+| `from`                  | `From[]`              | Filter by seller’s countries.                  | `['FR', 'DE']`                    | –               |
+| `currencies`            | `Currency[]`          | Filter by currencies.                          | `['USD', 'EUR']`                  | –               |
+| `priceRange.min`/`max`  | `number`              | Filter by price range.                         | `{ min: 10, max: 100 }`           | –               |
+| `years.min`/`max`       | `number`              | Filter by year range.                          | `{ min: 1980, max: 1990 }`        | –               |
+| `sellerRatingMin`       | `number (0–100)`      | Minimum seller rating (unrated sellers kept).  | `99`                              | `0`             |
+| `sellerRatingCountMin`  | `number`              | Minimum number of seller ratings.              | `50`                              | `0`             |
+| `isMakeAnOfferOnly`     | `boolean`             | Only return listings that accept offers.       | –                                 | `false`         |
+| `hasItemPhotos`         | `boolean`             | Only return listings with photos of the item.  | –                                 | `false`         |
+| `hideGenericSleeves`    | `boolean`             | Hide generic sleeves.                          | –                                 | `false`         |
+| `hideSleevelessMedia`   | `boolean`             | Hide sleeveless media.                         | –                                 | `false`         |
+| `showUnavailable`       | `boolean`             | Show unavailable items.                        | –                                 | `true`          |
+| `sort`                  | `Sort`                | Sort and sort order (see below).               | `'price,asc'`                     | `'listed,desc'` |
+| `limit`                 | `number`              | Number of results per page (at most 250).      | `100`                             | `25`            |
+| `after`                 | `string`              | Cursor of the page, from `nextCursor`.         | –                                 | –               |
 
-Both share common search filters and extend them with API-specific options via the `SearchParams` interface.
-
-### Modern API (`api: "v2"`), recommended for most use cases
-
-| Field                   | Type                | Description                        | Example                 | Default |
-|-------------------------|---------------------|------------------------------------|-------------------------|---------|
-| `api`                   | `'v2'`              | Selects the modern API.            | `'v2'`                  | –       |
-| `currencies`            | `Currency[]`        | Filter by multiple currencies.     | `['USD', 'EUR']`        | –       |
-| `conditions`            | `Condition[]`       | List of media/sleeve conditions.   | `['Mint (M)']`          | –       |
-| `genres`                | `Genre[]`           | Filter by multiple genres.         | `['Rock', 'Jazz']`      | –       |
-| `from`                  | `From[]`            | Filter by seller’s countries.      | `['FR', 'DE']`          | –       |
-| `sort`                  | `Sort`              | Sort and sort order.               | `'listed,desc'`         | `'listed,desc'` |
-| `limit`                 | `number`            | Number of results per page.        | `100`                   | `25`    |
-| `artistIds`             | `number[]`          | Filter by artist IDs.              | `[123, 456]`            | –       |
-| `sellerIds`             | `number[]`          | Filter by seller IDs.              | `[789, 1011]`           | –       |
-| `priceRange.min`/`max`  | `number`            | Filter by price range.             | `{ min: 10, max: 100 }` | –       |
-| `sellerRatingMin`       | `number (0–100)`    | Minimum seller rating.             | `90`                    | `0`     |
-| `hideGenericSleeves`    | `boolean`           | Hide generic sleeves.              | –                       | `false`  |
-| `hideSleevelessMedia`   | `boolean`           | Hide sleeveless media.             | –                       | `false`  |
-| `showUnavailable`       | `boolean`           | Show unavailable items.            | –                       | `true`  |
-| `sellerRatingCountMin`  | `number`            | Minimum number of seller ratings.  | `50`                    | `0`     |
-| `wantlist`*             | `string`            | Search by wantlist username.       | `"username"`            | –       |
-| `releaseIds`*           | `number[]`          | Search by release IDs.             | `[12345, 67890]`        | –       |
-
-\* Only **one** of `wantlist` or `releaseIds` can be used.
-
-### Legacy API (`api: "legacy"`)
-
-| Field        | Type            | Description                        | Example                        | Default |
-|--------------|-----------------|------------------------------------|--------------------------------|---------|
-| `api`        | `'legacy'`      | Selects the legacy API.            | `'legacy'`                     | –       |
-| `query`      | `string`        | Search string.                     | `"something"`                  | –       |
-| `currency`   | `Currency`      | Currency code for price filtering. | `'USD'`                        | –       |
-| `condition`  | `Condition`     | Media/sleeve conditions.           | `'Mint (M)'`                   | –       |
-| `genre`      | `Genre`         | Filter by genre.                   | `'Rock'`                       | –       |
-| `styles`     | `Style[]`       | Filter by style.                   | `['Death Metal', 'Heavy Metal']` | –     |
-| `from`       | `From`          | Filter by seller’s country.        | `'FR'`                         | –       |
-| `sort`       | `Sort`          | Sort order for results.            | `'listed,desc'`                | `'listed,desc'` |
-| `limit`      | `25 \| 50 \| 100 \| 250`     | Number of results per page.  | `100`                   | `25`    |
-| `seller`     | `string`        | Filter by seller username.         | `"seller_name"`                | –       |
-| `user`       | `string`        | Filter by user.                    | `"my_username"`                | –       |
-| `lang`       | `Lang`          | Discogs interface language.        | `'en'`                         | `'en'`  |
-| `masterId`*  | `number`        | Search by master release ID.       | `12345`                        | –       |
-| `labelId`*   | `number`        | Search by label ID.                | `67890`                        | –       |
-| `releaseId`* | `number`        | Search by release ID.              | `11111`                        | –       |
-| `artistId`*  | `number`        | Search by artist ID.               | `22222`                        | –       |
-
-\* Only **one** of `masterId`, `labelId`, `releaseId`, or `artistId` can be used.
-
-### Common Parameters (all searches)
-
-| Field                 | Type                         | Description                                    | Example                                | Default |
-|-----------------------|------------------------------|------------------------------------------------|----------------------------------------|---------|
-| `formats`             | `Format[]`                   | List of formats.                               | `['Vinyl', 'CD']`                      | –       |
-| `formatDescriptions`  | `FormatDescription[]`        | List of format descriptions.                   | `['Limited Edition', 'Numbered']`      | –       |
-| `years.min` / `max`   | `number`                     | Year range.                                    | `{ min: 1980, max: 1990 }`             | –       |
-| `isMakeAnOfferOnly`   | `boolean`                    | Only return listings that accept offers.       | –                                      | `false` |
-| `page`                | `number`                     | Page number (must be `< 401` to avoid 404).    | `2`                                    | `1`     |
+`sort` is a field followed by `asc` or `desc` (e.g. `'price,asc'`), the field being one of `listed`, `condition` (media), `sleeveCondition`, `artist`, `title`, `year`, `releaseCountry`, `seller`, `sellerRating`, `sellerRatingCount`, `shipsFrom` or `price`.
 
 On success, a `SearchResult` interface is returned:
 
@@ -236,6 +197,9 @@ interface SearchResult {
             id: number
             name: string
             url: string
+            year: number | null
+            country: string | null
+            rating: number | null
         }
         formats: Array<string>
         labels: Array<{
@@ -247,6 +211,7 @@ interface SearchResult {
         listedAt: Date | null
         catnos: Array<string>
         imageUrl: string | null
+        photos: Array<string>
         description: string | null
         isAcceptingOffer: boolean
         isAvailable: boolean
@@ -261,16 +226,18 @@ interface SearchResult {
             }
         }
         seller: {
+            id: number
             name: string
             url: string
             score: string | null
             notes: number | null
+            isIndependent: boolean
         }
         price: {
             /** @example '12.34 USD' */
-            base: `${number} ${CurrencyValues}`
+            base: `${number} ${Currency}`
             /** @example '5.67 USD' */
-            shipping: `${number} ${CurrencyValues}` | null
+            shipping: `${number} ${Currency}` | null
         }
         country: {
             name: string
@@ -282,14 +249,8 @@ interface SearchResult {
             want: number
         }
     }>
-    page: {
-        current: number
-        total: number
-    }
-    result: {
-        total: number
-        perPage: number
-    }
+    total: number
+    nextCursor: string | null
     urlGenerated: string
 }
 ```
@@ -304,7 +265,6 @@ interface SearchResult {
 
 ## 👉 Known Issues
 
-- Requests hitting page >400 will result in a 404 on the legacy API.
 - Some search parameters might not be compatible with every type of queries.
 - For other edge cases, feel free to open an [issue on GitHub](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/issues).
 

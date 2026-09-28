@@ -1,72 +1,22 @@
-import { chromium as playwright } from 'playwright-extra'
-import playwrightStealth from 'puppeteer-extra-plugin-stealth'
-import scrapeLegacy from 'scrapers/legacy.scraper'
-import scrapeWantlist from 'scrapers/wantlist.scraper'
-import scrape from 'scrapers/modern.scraper'
+import withBrowserContext from 'scrapers/browser-context'
+import scrapeMarketplace from 'scrapers/marketplace.scraper'
 import type { SearchParams } from 'interfaces/search-params.interface'
 import type SearchResult from 'interfaces/search-result.interface'
-import type { Browser } from 'playwright-chromium'
+import type { Browser } from 'patchright'
 
-export const DEFAULT_LIMIT = 25
-export const DEFAULT_PAGE = 1
-export const DEFAULT_SORT = 'listed,desc'
+/** Release IDs a single search can filter on at most */
+const MAX_RELEASE_IDS = 2000
 
 /**
  * Performs a search on the Discogs marketplace using the provided parameters.
- * @param searchParams - The search parameters, including API type, query, pagination, and filters.
- * @param browserInstance - Optional Playwright browser instance. If provided, you must manage its lifecycle.
- * @returns A promise that resolves to the search results, including items, pagination info, and the generated URL.
+ * @param searchParams - The search parameters, including query, pagination, and filters.
+ * @param browserInstance - Optional Patchright browser instance. If provided, you must manage its lifecycle.
+ * @returns A promise that resolves to the search results, including items, total, next cursor and the generated URL.
  */
 export default async function search(searchParams: SearchParams, browserInstance?: Browser): Promise<SearchResult> {
-    const browser =
-        browserInstance ??
-        (await (() => {
-            playwright.use(playwrightStealth())
-            return playwright.launch({
-                headless: true,
-                chromiumSandbox: false,
-                args: ['--no-sandbox', '--disable-setuid-sandbox'],
-            })
-        })())
-
-    const browserContext = await browser.newContext({
-        javaScriptEnabled: false,
-        extraHTTPHeaders:
-            searchParams.api === 'legacy' && !(searchParams.seller && searchParams.user)
-                ? {
-                      'X-PJAX': 'true',
-                  }
-                : undefined,
-    })
-
-    try {
-        const { items, total, urlGenerated } = await (() => {
-            if (searchParams.api === 'v2' && searchParams.wantlist) {
-                return scrapeWantlist(searchParams, browserContext)
-            }
-            if (searchParams.api === 'v2') {
-                return scrape(searchParams, browserContext)
-            }
-            return scrapeLegacy(searchParams, browserContext)
-        })()
-
-        return {
-            items,
-            result: {
-                total,
-                perPage: searchParams.limit ?? DEFAULT_LIMIT,
-            },
-            page: {
-                current: searchParams.page ?? DEFAULT_PAGE,
-                total: Math.ceil(total / (searchParams.limit ?? DEFAULT_LIMIT)),
-            },
-            urlGenerated,
-        }
-    } finally {
-        await browserContext.close()
-
-        if (!browserInstance) {
-            await browser.close()
-        }
+    if ((searchParams.releaseIds?.length ?? 0) > MAX_RELEASE_IDS) {
+        throw new Error(`At most ${MAX_RELEASE_IDS} release IDs are supported.`)
     }
+
+    return withBrowserContext(browserInstance, browserContext => scrapeMarketplace(searchParams, browserContext))
 }

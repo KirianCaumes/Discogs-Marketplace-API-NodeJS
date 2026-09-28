@@ -1,5 +1,8 @@
 /* cspell: disable */
-export default interface ShopDetailsResultApi {
+/**
+ * Response of the `Releases` GraphQL query
+ */
+export default interface ReleasesResultApi {
     /** Data */
     data?: {
         /** Releases */

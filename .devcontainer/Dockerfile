@@ -30,6 +30,6 @@ RUN sudo apt-get install nodejs -y
 RUN sudo npm i -g np@11.0.2
 RUN sudo npm i -g gitmoji-cli@9.5.0
 
-RUN npx playwright install --with-deps chromium
+RUN npx patchright install --with-deps chromium
 
 WORKDIR /app_discogs-marketplace-api-nodejs

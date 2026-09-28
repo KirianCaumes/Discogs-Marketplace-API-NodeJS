@@ -22,5 +22,8 @@ module.exports = {
         'localtime',
         'lintstagedrc',
         'gitmojirc',
+        'patchright',
+        'nevermind',
+        'nonexistentuser',
     ],
 }

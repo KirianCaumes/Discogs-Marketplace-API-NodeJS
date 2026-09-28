@@ -12,3 +12,8 @@ export type Condition =
     | 'Very Good (VG)'
     | 'Very Good Plus (VG+)'
     | ({} & string)
+
+/**
+ * Sleeve conditions
+ */
+export type SleeveCondition = Condition | 'Generic' | 'No Cover' | 'Not Graded'
