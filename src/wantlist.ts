@@ -114,7 +114,13 @@ function scrapeWantlist(username: string, browserContext: BrowserContext): Promi
             }
 
             if (!response?.ok()) {
-                throw new Error(`An error ${response?.status() ?? '?'} occurred.`)
+                const status = response?.status() ?? '?'
+                const { 'cf-mitigated': cfMitigated, 'cf-ray': cfRay = '?' } = response?.headers() ?? {}
+                throw new Error(
+                    cfMitigated
+                        ? `An error ${status} occurred: blocked by Cloudflare (${cfMitigated}, cf-ray ${cfRay}).`
+                        : `An error ${status} occurred.`,
+                )
             }
 
             const { total, ids } = await browserPage.evaluate(() => ({

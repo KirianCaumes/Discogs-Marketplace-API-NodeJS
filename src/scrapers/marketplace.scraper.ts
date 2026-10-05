@@ -68,19 +68,28 @@ async function queryGraphql<T extends MarketplaceSearchResultApi | ReleasesResul
     operationName: keyof typeof HASHES,
     variables: object,
 ): Promise<T> {
-    const { status, json } = await page.evaluate(
+    const { status, cfMitigated, cfRay, json } = await page.evaluate(
         async body => {
             const res = await fetch('/graphql', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body),
             })
-            return { status: res.status, json: (await res.json().catch(() => null)) as unknown }
+            return {
+                status: res.status,
+                cfMitigated: res.headers.get('cf-mitigated'),
+                cfRay: res.headers.get('cf-ray'),
+                json: (await res.json().catch(() => null)) as unknown,
+            }
         },
         { operationName, variables, extensions: { persistedQuery: { version: 1, sha256Hash: HASHES[operationName] } } },
     )
 
     const result = json as T | null
+
+    if (cfMitigated) {
+        throw new Error(`An error ${status} occurred: blocked by Cloudflare (${cfMitigated}, cf-ray ${cfRay ?? '?'}).`)
+    }
 
     if (!result?.data) {
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
