@@ -16,14 +16,16 @@ npm install discogs-marketplace-api-nodejs
 
 The searches go through the API of the Discogs shop (`https://www.discogs.com/shop/list`), from a headless browser.
 
-You can also pass your own [Patchright](https://github.com/Kaliiiiiiiiii-Vinyzu/patchright) browser as second parameter of `search`. You then manage its lifecycle.
+You can also pass your own [Patchright](https://github.com/Kaliiiiiiiiii-Vinyzu/patchright) browser context as second parameter of
+`search`, used as is: it keeps the clearance of Cloudflare (`cf_clearance` cookie) from one search to another. You then
+manage its lifecycle.
 
 ```ts
 import { chromium } from 'patchright'
 
-const browser = await chromium.launch({ headless: true })
-const result = await DiscogsMarketplace.search({ artistIds: [244819] }, browser)
-await browser.close()
+const context = await chromium.launchPersistentContext('./profile', { channel: 'chrome', headless: false, viewport: null })
+const result = await DiscogsMarketplace.search({ artistIds: [244819] }, context)
+await context.close()
 ```
 
 ## ⚡ Quick Start
@@ -148,7 +150,7 @@ const result = await DiscogsMarketplace.search({
 
 ## 🧩 API Reference
 
-### `DiscogsMarketplace.search(searchParams, browserInstance?)`
+### `DiscogsMarketplace.search(searchParams, browserContext?)`
 
 | Field                   | Type                  | Description                                    | Example                           | Default         |
 |-------------------------|-----------------------|------------------------------------------------|-----------------------------------|-----------------|

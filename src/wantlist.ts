@@ -1,6 +1,6 @@
 import withBrowserContext from 'scrapers/browser-context'
 import type WantlistResultApi from 'interfaces/api/wantlist-result.api.interface'
-import type { Browser, BrowserContext } from 'patchright'
+import type { BrowserContext } from 'patchright'
 
 /** Wants per page of the Discogs API */
 const API_PER_PAGE = 500
@@ -143,16 +143,16 @@ function scrapeWantlist(username: string, browserContext: BrowserContext): Promi
  * By default, it reads the public Discogs API (limited to 25 requests per minute without token, 60 with).
  * @param username - Username whose wantlist is read.
  * @param options - Options.
- * @param browserInstance - Optional Patchright browser instance, only used with `onlyForSale`. If provided, you must manage its lifecycle.
+ * @param browserContext - Optional Patchright browser context, only used with `onlyForSale`. If provided, you must manage its lifecycle.
  * @returns A promise that resolves to the release IDs.
  */
 export default async function getWantlistReleaseIds(
     username: string,
     { token, onlyForSale = false }: WantlistOptions = {},
-    browserInstance?: Browser,
+    browserContext?: BrowserContext,
 ): Promise<Array<number>> {
     if (onlyForSale) {
-        return withBrowserContext(browserInstance, browserContext => scrapeWantlist(username, browserContext))
+        return withBrowserContext(browserContext, x => scrapeWantlist(username, x))
     }
 
     return fetchWantlist(username, token)

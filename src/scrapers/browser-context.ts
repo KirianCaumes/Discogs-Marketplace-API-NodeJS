@@ -29,30 +29,26 @@ async function getChromeIdentity(browser: Browser): Promise<{
 }
 
 /**
- * Run a function in a headless browser context suited to call Discogs, closing what it opened afterwards.
+ * Run a function in a browser context suited to call Discogs, closing what it opened afterwards.
  * It looks like a regular Chrome with JavaScript enabled, which Cloudflare lets through more often than the User-Agent
  * of the Discogs apps without JavaScript, especially from datacenter IPs.
- * @param browserInstance Browser to use, launched and closed here when not provided
+ * @param browserContext Browser context to use as is, launched and closed here when not provided
  * @param fn Function to run
  * @returns Result of the function
  */
 export default async function withBrowserContext<T>(
-    browserInstance: Browser | undefined,
+    browserContext: BrowserContext | undefined,
     fn: (browserContext: BrowserContext) => Promise<T>,
 ): Promise<T> {
-    const browser = browserInstance ?? (await chromium.launch({ headless: true, chromiumSandbox: false }))
+    if (browserContext) {
+        return fn(browserContext)
+    }
+
+    const browser = await chromium.launch({ headless: true, chromiumSandbox: false })
 
     try {
-        const browserContext = await browser.newContext(await getChromeIdentity(browser))
-
-        try {
-            return await fn(browserContext)
-        } finally {
-            await browserContext.close()
-        }
+        return await fn(await browser.newContext(await getChromeIdentity(browser)))
     } finally {
-        if (!browserInstance) {
-            await browser.close()
-        }
+        await browser.close()
     }
 }

@@ -57,6 +57,21 @@ const CONDITIONS: Record<string, string> = {
 }
 
 /**
+ * Get a new clearance of Cloudflare (`cf_clearance` cookie), the page staying on the Discogs origin
+ * @param page Page
+ */
+async function renewClearance(page: Page): Promise<void> {
+    const hasClearance = async () => (await page.context().cookies('https://www.discogs.com')).some(x => x.name === 'cf_clearance')
+
+    // Only an HTML page gets it, without one already, sometimes after its load
+    await page.context().clearCookies({ name: 'cf_clearance', domain: '.discogs.com' })
+    await page.goto('https://www.discogs.com/shop/list', { waitUntil: 'commit' })
+    for (let i = 0; i < 100 && !(await hasClearance()); i++) {
+        await page.waitForTimeout(100)
+    }
+}
+
+/**
  * Run a GraphQL query of the Discogs shop from the page, which must be on the Discogs origin.
  * @param page Page
  * @param operationName Name of the persisted query
@@ -68,23 +83,33 @@ async function queryGraphql<T extends MarketplaceSearchResultApi | ReleasesResul
     operationName: keyof typeof HASHES,
     variables: object,
 ): Promise<T> {
-    const { status, cfMitigated, cfRay, json } = await page.evaluate(
-        async body => {
-            const res = await fetch('/graphql', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
-            })
-            return {
-                status: res.status,
-                cfMitigated: res.headers.get('cf-mitigated'),
-                cfRay: res.headers.get('cf-ray'),
-                json: (await res.json().catch(() => null)) as unknown,
-            }
-        },
-        { operationName, variables, extensions: { persistedQuery: { version: 1, sha256Hash: HASHES[operationName] } } },
-    )
+    const run = () =>
+        page.evaluate(
+            async body => {
+                const res = await fetch('/graphql', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body),
+                })
+                return {
+                    status: res.status,
+                    cfMitigated: res.headers.get('cf-mitigated'),
+                    cfRay: res.headers.get('cf-ray'),
+                    json: (await res.json().catch(() => null)) as unknown,
+                }
+            },
+            { operationName, variables, extensions: { persistedQuery: { version: 1, sha256Hash: HASHES[operationName] } } },
+        )
 
+    let response = await run()
+
+    // Without a clearance of Cloudflare, or a refused one (new IP…)
+    if (response.cfMitigated) {
+        await renewClearance(page)
+        response = await run()
+    }
+
+    const { status, cfMitigated, cfRay, json } = response
     const result = json as T | null
 
     if (cfMitigated) {

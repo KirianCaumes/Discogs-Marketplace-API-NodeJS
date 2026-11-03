@@ -24,14 +24,18 @@ void describe('Test wantlist functionality', () => {
         assert.ok(idsForSale.every(x => ids.includes(x)))
     })
 
-    void test('It should use the provided browser for the releases for sale, and not close it', async () => {
-        const browser = await chromium.launch({ headless: true, chromiumSandbox: false })
+    void test('It should use the provided browser context for the releases for sale, and not close it', async () => {
+        // A regular Chrome, as a context is used as is
+        const browser = await chromium.launch({ channel: 'chrome', headless: false })
 
         try {
-            const ids = await DiscogsMarketplace.getWantlistReleaseIds('Kirian_', { onlyForSale: true }, browser)
+            const context = await browser.newContext()
+            const ids = await DiscogsMarketplace.getWantlistReleaseIds('Kirian_', { onlyForSale: true }, context)
 
             assert.ok(ids.length > 0)
-            assert.ok(browser.isConnected())
+
+            // Still open
+            await (await context.newPage()).close()
         } finally {
             await browser.close()
         }
