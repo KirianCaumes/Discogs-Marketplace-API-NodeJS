@@ -133,6 +133,12 @@ export interface SearchParams {
      */
     showUnavailable?: boolean
     /**
+     * Get the community stats of the releases (`community` and `release.rating`), at the cost of a second request.
+     * If false, `community` is 0 and `release.rating` is null.
+     * @default true
+     */
+    withCommunityStats?: boolean
+    /**
      * Sort order for the results.
      * @default 'listed,desc'
      */

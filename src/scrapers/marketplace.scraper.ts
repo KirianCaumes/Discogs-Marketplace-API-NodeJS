@@ -203,6 +203,7 @@ export default async function scrapeMarketplace(
         hideGenericSleeves = false,
         hideSleevelessMedia = false,
         showUnavailable = true,
+        withCommunityStats = true,
         sort = 'listed,desc',
         limit = 25,
         after,
@@ -315,10 +316,10 @@ export default async function scrapeMarketplace(
 
         const nodes = result?.edges?.map(x => x.node ?? {}) ?? []
 
-        const releaseIdsFound = [...new Set(nodes.map(x => x.release?.discogsId ?? 0).filter(x => !!x))]
+        // The community stats and the rating of the releases are not part of the listings
+        const releaseIdsFound = withCommunityStats ? [...new Set(nodes.map(x => x.release?.discogsId ?? 0).filter(x => !!x))] : []
         const { data: details } = releaseIdsFound.length
-            ? // The community stats and the rating of the releases are not part of the listings
-              await queryGraphql<ReleasesResultApi>(browserPage, 'Releases', { discogsIds: releaseIdsFound, first: 1 })
+            ? await queryGraphql<ReleasesResultApi>(browserPage, 'Releases', { discogsIds: releaseIdsFound, first: 1 })
             : { data: undefined }
         const releaseDetails = new Map(details?.releases?.map(x => [x?.discogsId ?? 0, x]) ?? [])
 

@@ -72,6 +72,13 @@ void describe('Test search functionality', () => {
         assert.ok(res.items.every(x => (x.release.rating ?? 0) > 0 && (x.release.rating ?? 0) <= 5))
     })
 
+    void test('It should skip the community stats', async () => {
+        const res = await DiscogsMarketplace.search({ releaseIds: [6889243], limit: 5, withCommunityStats: false })
+
+        assert.ok(res.items.length > 0)
+        assert.ok(res.items.every(x => x.community.have === 0 && x.community.want === 0 && x.release.rating === null))
+    })
+
     void test('It should search by seller', async () => {
         const res = await DiscogsMarketplace.search({ sellerIds: [1240899], limit: 5 })
 

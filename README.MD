@@ -177,6 +177,7 @@ const result = await DiscogsMarketplace.search({
 | `hideGenericSleeves`    | `boolean`             | Hide generic sleeves.                          | –                                 | `false`         |
 | `hideSleevelessMedia`   | `boolean`             | Hide sleeveless media.                         | –                                 | `false`         |
 | `showUnavailable`       | `boolean`             | Show unavailable items.                        | –                                 | `true`          |
+| `withCommunityStats`    | `boolean`             | Get `community` and `release.rating` (slower). | –                                 | `true`          |
 | `sort`                  | `Sort`                | Sort and sort order (see below).               | `'price,asc'`                     | `'listed,desc'` |
 | `limit`                 | `number`              | Number of results per page (at most 250).      | `100`                             | `25`            |
 | `after`                 | `string`              | Cursor of the page, from `nextCursor`.         | –                                 | –               |
