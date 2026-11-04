@@ -63,6 +63,7 @@ function fetchWantlist(username: string, token?: string): Promise<Array<number>>
                 per_page: API_PER_PAGE.toString(),
             }).toString()}`,
             {
+                signal: AbortSignal.timeout(30_000),
                 headers: {
                     'User-Agent': `DiscogsMarketplaceApiNodeJS-${username}`,
                     ...(token ? { Authorization: `Discogs token=${token}` } : {}),
