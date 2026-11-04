@@ -25,5 +25,10 @@ module.exports = {
         'patchright',
         'nevermind',
         'nonexistentuser',
+        'headful',
+        'swiftshader',
+        'tini',
+        'XAUTHORITY',
+        'xauth',
     ],
 }

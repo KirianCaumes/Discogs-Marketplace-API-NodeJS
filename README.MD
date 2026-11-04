@@ -1,11 +1,11 @@
-# 🎧 Discogs Marketplace API NodeJS
+# Discogs Marketplace API NodeJS
 
 [![NPM Version](https://img.shields.io/npm/v/discogs-marketplace-api-nodejs?logo=npm&color=CB3837)](https://www.npmjs.com/package/discogs-marketplace-api-nodejs) ![GitHub Repo stars](https://img.shields.io/github/stars/KirianCaumes/Discogs-Marketplace-API-NodeJS?style=flat&logo=github&label=Stars&color=%23181717) [![GitHub License](https://img.shields.io/github/license/KirianCaumes/Discogs-Marketplace-API-NodeJS?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI%2FPg0KPHN2ZyBmaWxsPSIjZmZmIiBhcmlhLWhpZGRlbj0idHJ1ZSIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2IiB2ZXJzaW9uPSIxLjEiIHdpZHRoPSIxNiIgZGF0YS12aWV3LWNvbXBvbmVudD0idHJ1ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgPg0KICAgIDxwYXRoIGQ9Ik04Ljc1Ljc1VjJoLjk4NWMuMzA0IDAgLjYwMy4wOC44NjcuMjMxbDEuMjkuNzM2Yy4wMzguMDIyLjA4LjAzMy4xMjQuMDMzaDIuMjM0YS43NS43NSAwIDAgMSAwIDEuNWgtLjQyN2wyLjExMSA0LjY5MmEuNzUuNzUgMCAwIDEtLjE1NC44MzhsLS41My0uNTMuNTI5LjUzMS0uMDAxLjAwMi0uMDAyLjAwMi0uMDA2LjAwNi0uMDA2LjAwNS0uMDEuMDEtLjA0NS4wNGMtLjIxLjE3Ni0uNDQxLjMyNy0uNjg2LjQ1QzE0LjU1NiAxMC43OCAxMy44OCAxMSAxMyAxMWE0LjQ5OCA0LjQ5OCAwIDAgMS0yLjAyMy0uNDU0IDMuNTQ0IDMuNTQ0IDAgMCAxLS42ODYtLjQ1bC0uMDQ1LS4wNC0uMDE2LS4wMTUtLjAwNi0uMDA2LS4wMDQtLjAwNHYtLjAwMWEuNzUuNzUgMCAwIDEtLjE1NC0uODM4TDEyLjE3OCA0LjVoLS4xNjJjLS4zMDUgMC0uNjA0LS4wNzktLjg2OC0uMjMxbC0xLjI5LS43MzZhLjI0NS4yNDUgMCAwIDAtLjEyNC0uMDMzSDguNzVWMTNoMi41YS43NS43NSAwIDAgMSAwIDEuNWgtNi41YS43NS43NSAwIDAgMSAwLTEuNWgyLjVWMy41aC0uOTg0YS4yNDUuMjQ1IDAgMCAwLS4xMjQuMDMzbC0xLjI4OS43MzdjLS4yNjUuMTUtLjU2NC4yMy0uODY5LjIzaC0uMTYybDIuMTEyIDQuNjkyYS43NS43NSAwIDAgMS0uMTU0LjgzOGwtLjUzLS41My41MjkuNTMxLS4wMDEuMDAyLS4wMDIuMDAyLS4wMDYuMDA2LS4wMTYuMDE1LS4wNDUuMDRjLS4yMS4xNzYtLjQ0MS4zMjctLjY4Ni40NUM0LjU1NiAxMC43OCAzLjg4IDExIDMgMTFhNC40OTggNC40OTggMCAwIDEtMi4wMjMtLjQ1NCAzLjU0NCAzLjU0NCAwIDAgMS0uNjg2LS40NWwtLjA0NS0uMDQtLjAxNi0uMDE1LS4wMDYtLjAwNi0uMDA0LS4wMDR2LS4wMDFhLjc1Ljc1IDAgMCAxLS4xNTQtLjgzOEwyLjE3OCA0LjVIMS43NWEuNzUuNzUgMCAwIDEgMC0xLjVoMi4yMzRhLjI0OS4yNDkgMCAwIDAgLjEyNS0uMDMzbDEuMjg4LS43MzdjLjI2NS0uMTUuNTY0LS4yMy44NjktLjIzaC45ODRWLjc1YS43NS43NSAwIDAgMSAxLjUgMFptMi45NDUgOC40NzdjLjI4NS4xMzUuNzE4LjI3MyAxLjMwNS4yNzNzMS4wMi0uMTM4IDEuMzA1LS4yNzNMMTMgNi4zMjdabS0xMCAwYy4yODUuMTM1LjcxOC4yNzMgMS4zMDUuMjczczEuMDItLjEzOCAxLjMwNS0uMjczTDMgNi4zMjdaIj48L3BhdGg%2BDQo8L3N2Zz4%3D&logoColor=fff&label=License)](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/blob/master/LICENSE) [![Support this project](https://img.shields.io/badge/Support%20this%20project-003087?logo=PayPal&logoColor=fff)](https://www.paypal.me/KirianCaumes)
 
-A modern TypeScript/Node.js client for scraping and retrieving Discogs Marketplace listings — flexible, type safe, and easy to use. 💿
-> 💪 No Discogs API token required — this client scrapes public Marketplace data.
+A modern TypeScript/Node.js client for scraping and retrieving Discogs Marketplace listings — flexible, type safe, and easy to use.
+> No Discogs API token required — this client scrapes public Marketplace data.
 
-## 🚀 Installation
+## Installation
 
 ```sh
 npm install discogs-marketplace-api-nodejs
@@ -15,20 +15,9 @@ npm install discogs-marketplace-api-nodejs
 ```
 
 The searches go through the API of the Discogs shop (`https://www.discogs.com/shop/list`), from a headless browser.
+For many searches, or on a server, see [Browser](#browser).
 
-You can also pass your own [Patchright](https://github.com/Kaliiiiiiiiii-Vinyzu/patchright) browser context as second parameter of
-`search`, used as is: it keeps the clearance of Cloudflare (`cf_clearance` cookie) from one search to another. You then
-manage its lifecycle.
-
-```ts
-import { chromium } from 'patchright'
-
-const context = await chromium.launchPersistentContext('./profile', { channel: 'chrome', headless: false, viewport: null })
-const result = await DiscogsMarketplace.search({ artistIds: [244819] }, context)
-await context.close()
-```
-
-## ⚡ Quick Start
+## Quick Start
 
 ```ts
 import { DiscogsMarketplace } from 'discogs-marketplace-api-nodejs'
@@ -43,7 +32,7 @@ const result = await DiscogsMarketplace.search({
 console.log(result.items)
 ```
 
-## 📚 Usage Examples
+## Usage Examples
 
 ### 1. Get 250 latest listings by a specific artist in the Rock genre, then the next 250
 
@@ -148,7 +137,59 @@ const result = await DiscogsMarketplace.search({
 })
 ```
 
-## 🧩 API Reference
+## Browser
+
+By default, each call launches a headless Chromium and closes it. Every search then starts without the clearance of
+Cloudflare (`cf_clearance` cookie), and is blocked more often, especially from a datacenter IP.
+
+For many searches, or on a server, pass your own [Patchright](https://github.com/Kaliiiiiiiiii-Vinyzu/patchright)
+browser context as last parameter of `search` and `getWantlistReleaseIds`. It keeps the clearance from one search to
+another, and you manage its lifecycle.
+
+```ts
+import { chromium } from 'patchright'
+
+const context = await chromium.launchPersistentContext('./profile', {
+    channel: 'chrome',
+    headless: false,
+    viewport: null,
+    args: ['--no-sandbox', '--disable-dev-shm-usage'],
+})
+const result = await DiscogsMarketplace.search({ artistIds: [244819] }, context)
+await context.close()
+```
+
+- **One context for the whole app**, not one per search, so that every search benefits from the clearance.
+- **Real Chrome, headful** (`channel: 'chrome'`, `headless: false`): it passes Cloudflare far more often. Install it
+  with `npx patchright install --with-deps chrome`.
+- **Persistent profile** (`'./profile'`), so the clearance survives restarts. After a crash, delete its `Singleton*`
+  files, or Chrome refuses to start.
+- **Without GPU** (server, Docker), add `--disable-gpu --enable-unsafe-swiftshader` to `args`, so Chrome does not hang
+  and keeps WebGL.
+- **`env`**: Chrome gets your whole environment, secrets included. Pass only what it needs (`PATH`, `HOME`, `DISPLAY`,
+  `XAUTHORITY`...), and its language with `LANG` rather than the `locale` option.
+- **Still blocked?** The IP is the problem: go through a residential proxy (`proxy` option).
+
+On a server, headful Chrome needs a display: run your app under Xvfb (`xvfb-run -a node index.js`). With Docker:
+
+```dockerfile
+FROM node:24-slim
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl tini xauth xvfb \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci && npx patchright install --with-deps chrome
+COPY . .
+
+# -g passes the stop signal to the app, which xvfb-run does not
+ENTRYPOINT ["/usr/bin/tini", "-g", "--", "xvfb-run", "-a"]
+CMD ["node", "index.js"]
+```
+
+## API Reference
 
 ### `DiscogsMarketplace.search(searchParams, browserContext?)`
 
@@ -258,19 +299,19 @@ interface SearchResult {
 }
 ```
 
-## 🛠️ Development & Contribution
+## Development & Contribution
 
 - Clone the repo and use the included devcontainer/VSCode setup.
 - Run: `npm install`
 - Add your contribution.
 - Use `npm test` to run unit tests.
-- Open a pull request with your new additions! 🎉
+- Open a pull request with your new additions!
 
-## 👉 Known Issues
+## Known Issues
 
 - Some search parameters might not be compatible with every type of queries.
 - For other edge cases, feel free to open an [issue on GitHub](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/issues).
 
-## 📃 License
+## License
 
 Licensed under [MIT](https://github.com/KirianCaumes/Discogs-Marketplace-API-NodeJS/blob/master/LICENSE).
