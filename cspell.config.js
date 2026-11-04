@@ -29,6 +29,6 @@ module.exports = {
         'swiftshader',
         'tini',
         'XAUTHORITY',
-        'xauth',
+        'nolisten',
     ],
 }

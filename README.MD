@@ -170,23 +170,35 @@ await context.close()
   `XAUTHORITY`...), and its language with `LANG` rather than the `locale` option.
 - **Still blocked?** The IP is the problem: go through a residential proxy (`proxy` option).
 
-On a server, headful Chrome needs a display: run your app under Xvfb (`xvfb-run -a node index.js`). With Docker:
+On a server, headful Chrome needs a display: run your app under Xvfb (`xvfb-run -a node index.js`). With Docker, start
+Xvfb from an entrypoint that then `exec`s your app, so that it gets the stop signal:
 
 ```dockerfile
 FROM node:24-slim
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates curl tini xauth xvfb \
+    && apt-get install -y --no-install-recommends ca-certificates curl tini xvfb \
     && rm -rf /var/lib/apt/lists/*
+
+ENV DISPLAY=:99
 
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci && npx patchright install --with-deps chrome
 COPY . .
 
-# -g passes the stop signal to the app, which xvfb-run does not
-ENTRYPOINT ["/usr/bin/tini", "-g", "--", "xvfb-run", "-a"]
+ENTRYPOINT ["/usr/bin/tini", "--", "sh", "/app/entrypoint.sh"]
 CMD ["node", "index.js"]
+```
+
+```sh
+# entrypoint.sh
+Xvfb "$DISPLAY" -screen 0 1280x1024x24 -ac -nolisten tcp >/dev/null 2>&1 &
+
+# Wait for the display, 6 seconds at most
+for i in $(seq 30); do [ -e "/tmp/.X11-unix/X${DISPLAY#:}" ] && break; sleep 0.2; done
+
+exec "$@"
 ```
 
 ## API Reference
