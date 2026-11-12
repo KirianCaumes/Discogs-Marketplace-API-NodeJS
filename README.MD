@@ -221,7 +221,7 @@ exec "$@"
 | `sleeveConditions`      | `SleeveCondition[]`   | Filter by sleeve conditions.                   | `['Mint (M)', 'Generic']`         | –               |
 | `from`                  | `From[]`              | Filter by seller’s countries.                  | `['FR', 'DE']`                    | –               |
 | `currencies`            | `Currency[]`          | Filter by currencies.                          | `['USD', 'EUR']`                  | –               |
-| `priceRange.min`/`max`  | `number`              | Filter by price range.                         | `{ min: 10, max: 100 }`           | –               |
+| `priceRange.min`/`max`  | `number`              | Filter by price range, in US dollars.          | `{ min: 10, max: 100 }`           | –               |
 | `years.min`/`max`       | `number`              | Filter by year range.                          | `{ min: 1980, max: 1990 }`        | –               |
 | `sellerRatingMin`       | `number (0–100)`      | Minimum seller rating (unrated sellers kept).  | `99`                              | `0`             |
 | `sellerRatingCountMin`  | `number`              | Minimum number of seller ratings.              | `50`                              | `0`             |

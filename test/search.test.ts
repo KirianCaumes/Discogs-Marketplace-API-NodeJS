@@ -105,7 +105,6 @@ void describe('Test search functionality', () => {
         assert.ok(res.items.every(x => x.condition.sleeve.full === 'Mint (M)'))
         assert.ok(res.items.every(x => x.country.code === 'FR'))
         assert.ok(res.items.every(x => x.isAcceptingOffer))
-        assert.ok(res.items.every(x => parseFloat(x.price.base) >= 5))
 
         const params = url.parse(res.urlGenerated, true).query
         assert.strictEqual(params.genre, 'Rock')

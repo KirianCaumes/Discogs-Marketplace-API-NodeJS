@@ -80,7 +80,7 @@ export interface SearchParams {
      */
     currencies?: Array<Currency>
     /**
-     * Price range filter.
+     * Price range filter, in US dollars: Discogs converts the price of each listing.
      */
     priceRange?: {
         /** Minimum price */
