@@ -1,4 +1,6 @@
 #!/bin/sh
 # gitmoji as a commit hook
+# gitmoji prompts on the terminal: without one (Claude Code, a GUI client), the message is kept as written
+if ! true 2>/dev/null < /dev/tty; then exit 0; fi
 exec < /dev/tty
 gitmoji --hook $1 $2
