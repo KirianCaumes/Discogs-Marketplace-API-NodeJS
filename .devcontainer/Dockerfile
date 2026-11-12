@@ -21,10 +21,10 @@ RUN sudo apt-get clean \
     && sudo apt-get -y install curl nano git ca-certificates gnupg
 RUN export EDITOR="/usr/bin/nano"
 
-# install nodejs 24.x
+# install nodejs 26.x
 RUN sudo mkdir -p /etc/apt/keyrings  
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_24.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_26.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 RUN sudo apt-get update 
 RUN sudo apt-get install nodejs -y
 RUN sudo npm i -g np@11.0.2
