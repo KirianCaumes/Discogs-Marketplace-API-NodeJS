@@ -1,6 +1,6 @@
 import Country from 'data/country.data'
 import Style from 'data/style.data'
-import type { CountryKeys } from 'data/country.data'
+import type { CountryKeys, CountryValues } from 'data/country.data'
 import type { StyleKeys } from 'data/style.data'
 import type { Currency } from 'types/currency.type'
 import type { SearchParams } from 'interfaces/search-params.interface'
@@ -389,7 +389,7 @@ export default async function scrapeMarketplace(
                 },
                 country: {
                     name: node.sellerInfo?.shipsFrom ?? '',
-                    code: Country[node.sellerInfo?.shipsFrom as CountryKeys],
+                    code: (Country as Partial<Record<string, CountryValues>>)[node.sellerInfo?.shipsFrom ?? ''] ?? null,
                 },
                 community: {
                     have: releaseDetail?.inCollectionCount ?? 0,

@@ -115,7 +115,7 @@ export default interface SearchResult {
              * ISO country code
              * @example 'US'
              */
-            code: CountryValues
+            code: CountryValues | null
         }
         /** Community stats */
         community: {

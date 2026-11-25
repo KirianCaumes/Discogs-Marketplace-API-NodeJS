@@ -298,7 +298,7 @@ interface SearchResult {
         country: {
             name: string
             /** @example 'US' */
-            code: CountryValues
+            code: CountryValues | null
         }
         community: {
             have: number

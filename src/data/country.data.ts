@@ -278,7 +278,7 @@ const CountryDiscogs = {
     'Former Czechoslovakia': 'CZ',
     'Former USSR': 'RU',
     'France (European Territory)': 'FR',
-    'French Guyana': 'GY',
+    'French Guyana': 'GF',
     'Guadeloupe (French)': 'GP',
     'Guam (USA)': 'GU',
     'Guinea Bissau': 'GW',
@@ -295,7 +295,7 @@ const CountryDiscogs = {
     'New Caledonia (French)': 'NC',
     'Pitcairn Island': 'PN',
     'Polynesia (French)': 'PF',
-    'Reunion (French)': 'RE', //
+    'Reunion (French)': 'RE',
     'S. Georgia & S. Sandwich Isls.': 'GS',
     'Saint Helena': 'SH',
     'Saint Kitts & Nevis Anguilla': 'KN',
@@ -303,7 +303,7 @@ const CountryDiscogs = {
     'Saint Vincent & Grenadines': 'VC',
     'Slovak Republic': 'SK',
     'South Korea': 'KR',
-    'Spain (Canary Islands)': 'IC', //
+    'Spain (Canary Islands)': 'ES',
     'Svalbard and Jan Mayen Islands': 'SJ',
     Swaziland: 'SZ',
     Syria: 'SY',
@@ -312,7 +312,7 @@ const CountryDiscogs = {
     Tanzania: 'TZ',
     'United Kingdom': 'GB',
     'Northern Ireland': 'GB',
-    'United Kingdom (Channel Islands)': '',
+    'United Kingdom (Channel Islands)': 'GB',
     'United States': 'US',
     'USA Minor Outlying Islands': 'UM',
     'Vatican City State': 'VA',
@@ -320,7 +320,7 @@ const CountryDiscogs = {
     Vietnam: 'VN',
     'Virgin Islands (USA)': 'VI',
     'Wallis and Futuna Islands': 'WF',
-    Yugoslavia: 'GR',
+    Yugoslavia: 'RS',
     Zaire: 'CD',
 } as const
 
